@@ -1,5 +1,5 @@
 import Home from '~/pages/Home'
-import Login from '~/pages/Login'
+import Login from '~/pages/login/Login'
 import Logout from '~/pages/Logout'
 
 export const publicRoute = {
