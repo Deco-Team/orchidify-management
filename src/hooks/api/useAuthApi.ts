@@ -77,7 +77,7 @@ export const useAuthApi = <T>() => {
           error = newApiError!.response.data as ErrorResponseDto
         }
 
-        notifyError('An error occurred while processing your request. Please try again later.')
+        notifyError('Đã xảy ra lỗi khi xử lý yêu cầu của bạn. Vui lòng thử lại sau.')
 
         return
       }
@@ -90,7 +90,7 @@ export const useAuthApi = <T>() => {
       error = apiError!.response.data as ErrorResponseDto
     }
 
-    notifyError('An error occurred while processing your request. Please try again later.')
+    notifyError('Đã xảy ra lỗi khi xử lý yêu cầu của bạn. Vui lòng thử lại sau.')
   }
 
   return { data, error, callAuthApi }
