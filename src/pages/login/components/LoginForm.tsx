@@ -1,13 +1,16 @@
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import ControlledTextField from '~/components/form/ControlledTextField'
+import ControlledOutlinedInput from '~/components/form/ControlledOutlinedInput'
 import { StyledForm } from './LoginForm.styled'
 import { PrimaryButton } from '~/components/button/Button.styled'
 import ControlledSelect from '~/components/form/ControlledSelect'
 import { UserRole } from '~/global/constants'
 import useAuth from '~/auth/useAuth'
 import { notifyError, notifySuccess } from '~/utils/toastify'
+import { useState } from 'react'
+import { IconButton, InputAdornment } from '@mui/material'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 
 type FormValues = {
   role: UserRole
@@ -32,6 +35,16 @@ const validationSchema = z.object({
 })
 
 const LoginForm = () => {
+  const [showPassword, setShowPassword] = useState(false)
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword)
+  }
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+  }
+
   const {
     handleSubmit,
     control,
@@ -66,16 +79,28 @@ const LoginForm = () => {
         fullWidth
         sx={{ marginBottom: '0.7rem' }}
       />
-      <ControlledTextField
+      <ControlledOutlinedInput
         controller={{ name: 'email', control: control }}
         label='Email'
         placeholder='Nhập địa chỉ email'
         fullWidth
         sx={{ marginBottom: '0.7rem' }}
       />
-      <ControlledTextField
+      <ControlledOutlinedInput
         controller={{ name: 'password', control: control }}
-        type='password'
+        type={showPassword ? 'text' : 'password'}
+        endAdornment={
+          <InputAdornment position='end'>
+            <IconButton
+              aria-label='toggle password visibility'
+              onClick={handleClickShowPassword}
+              onMouseDown={handleMouseDownPassword}
+              edge='end'
+            >
+              {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          </InputAdornment>
+        }
         label='Mật khẩu'
         placeholder='Nhập mật khẩu'
         fullWidth
