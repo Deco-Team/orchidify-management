@@ -1,16 +1,14 @@
-import LogoutIcon from '@mui/icons-material/Logout'
-import StarIcon from '@mui/icons-material/Star'
-import { Button } from '@mui/material'
+import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { OptionsStaff } from './Option'
+import { OptionsStaff } from './options'
+import { UserRole } from '~/global/constants'
 
-const OptionList = () => {
-  enum UserRole {
-    ADMIN = 'ADMIN',
-    GARDENMNG = 'GARDENMNG',
-    STAFF = 'STAFF'
-  }
+interface OptionListProps {
+  open: boolean
+}
+
+const OptionList = ({ open }: OptionListProps) => {
 
   const role = /*(user?.role.toLocaleUpperCase() as UserRole) ||*/ 'STAFF'
 
@@ -45,58 +43,49 @@ const OptionList = () => {
 
   return (
     <>
-      {options.map((option) => (
-        <Link
-          key={option.id}
-          to={`/${option.link}`}
-          style={{
-            width: '100%',
-            minHeight: 'fit-content'
-          }}
-        >
-          <Button
-            onClick={() => handleClick(option.id)}
-            sx={{
-              width: '100%',
-              height: '100%',
-              color: option.id === button ? '#2EC4B6' : '#3C3C4399',
-              borderRadius: 0,
-              padding: '5% 10%',
-              justifyContent: 'flex-start',
-              textTransform: 'none',
-              fontFamily: 'inherit',
-              fontWeight: 'bold',
-              backgroundColor: 'white',
-              boxShadow: 'none',
-              borderLeft: option.id === button ? '4px solid #2EC4B6' : 'none',
-              ':hover': {
-                backgroundColor: '#dffffbb3'
-              }
-            }}
-            startIcon={<StarIcon />}
-            variant={option.id === button ? 'contained' : 'text'}
-          >
-            {option.text}
-          </Button>
-        </Link>
-      ))}
-      <Button
-        endIcon={<LogoutIcon />}
-        sx={{
-          width: '300px',
-          color: '#ff022399',
-          position: 'fixed',
-          bottom: 10,
-          textTransform: 'none',
-          fontFamily: 'inherit',
-          alignSelf: 'center',
-          ':hover': { backgroundColor: 'none' },
-          justifyContent: 'space-around'
-        }}
-        // onClick={logout}
-      >
-        Đăng xuất
-      </Button>
+      <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <List>
+          {options.map(({ Icon, ...option }) => (
+            <ListItem
+              key={option.id}
+              disablePadding
+              sx={{
+                display: 'block',
+                borderLeft: option.id === button ? 4 : 0,
+                borderColor: '#2EC4B6',
+                bgcolor: option.id === button ? '#FFFFFF' : 'inherit'
+              }}
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5
+                }}
+                onClick={() => handleClick(option.id)}
+                component={Link}
+                to={`/${option.link}`}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 24,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                    color: option.id === button ? '#2EC4B6' : '#3c3c4399'
+                  }}
+                >
+                  <Icon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={option.text}
+                  primaryTypographyProps={{ fontWeight: 500, color: option.id === button ? '#2EC4B6' : '#3c3c4399' }}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Box>
     </>
   )
 }

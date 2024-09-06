@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom'
 import useAuth from '~/auth/useAuth'
+import Layout from '~/components/layout/Layout'
 
 interface ProtectedRouteProps {
   Component: () => JSX.Element
@@ -12,5 +13,9 @@ export default function ProtectedRoute({ Component }: ProtectedRouteProps) {
     return <Navigate to='/login' replace={true} />
   }
 
-  return <Component />
+  return (
+    <Layout>
+      <Component />
+    </Layout>
+  )
 }

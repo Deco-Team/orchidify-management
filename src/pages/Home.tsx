@@ -1,9 +1,9 @@
-import Sidebar from '~/components/sidebar/Sidebar'
+import { Typography } from '@mui/material'
 
 export default function Home() {
   return (
     <>
-      <Sidebar />
+      <Typography variant='h1'>h1. Home</Typography>
     </>
   )
 }
