@@ -32,7 +32,11 @@ const validationSchema = z.object({
 })
 
 const LoginForm = () => {
-  const { handleSubmit, control } = useForm<FormValues>({
+  const {
+    handleSubmit,
+    control,
+    formState: { isSubmitting }
+  } = useForm<FormValues>({
     defaultValues: defaultFormValues,
     resolver: zodResolver(validationSchema)
   })
@@ -77,7 +81,7 @@ const LoginForm = () => {
         fullWidth
         sx={{ marginBottom: '0.7rem' }}
       />
-      <PrimaryButton variant='contained' type='submit' fullWidth sx={{ marginTop: '0.7rem' }}>
+      <PrimaryButton disabled={isSubmitting} variant='contained' type='submit' fullWidth sx={{ marginTop: '0.7rem' }}>
         Đăng nhập
       </PrimaryButton>
     </StyledForm>

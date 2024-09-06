@@ -5,7 +5,10 @@ import { callApi } from '~/utils/apiCaller'
 import { notifyError } from '~/utils/toastify'
 
 const handleRefreshToken = async (refreshToken: string): Promise<RefreshTokenResponseDto | null> => {
-  const { response } = await callApi('/auth/refresh', 'POST', {}, {}, { refreshToken })
+  const { response } = await callApi('/auth/refresh', 'POST', {
+    Authorization: `Bearer ${refreshToken}`
+  })
+
   if (response) {
     return response.data.data as RefreshTokenResponseDto
   }

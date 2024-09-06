@@ -1,7 +1,7 @@
 import { InputLabel, TextField, TextFieldProps } from '@mui/material'
 import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 
-interface IControlledTextFieldProps<TFieldValues extends FieldValues> {
+interface ControlledTextFieldProps<TFieldValues extends FieldValues> {
   controller: UseControllerProps<TFieldValues>
   label: string
 }
@@ -10,7 +10,7 @@ const ControlledTextField = <TFieldValues extends FieldValues>({
   controller,
   label,
   ...props
-}: IControlledTextFieldProps<TFieldValues> & TextFieldProps) => {
+}: ControlledTextFieldProps<TFieldValues> & TextFieldProps) => {
   const {
     field,
     fieldState: { error }
