@@ -44,13 +44,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   }, [accessToken])
 
   const login = async (role: UserRole, email: string, password: string) => {
-    let endpoint = '/auth/staff/login'
-
-    if (role === UserRole.GARDEN_MANAGER) {
-      endpoint = '/auth/garden-manager/login'
-    }
-
-    const { response, error } = await callApi(endpoint, 'POST', {}, {}, { email, password })
+    const { response, error } = await callApi('/auth/management/login', 'POST', {}, {}, { role, email, password })
     if (response) {
       const { accessToken, refreshToken } = response.data.data as LoginResponseDto
       localStorage.setItem('accessToken', accessToken)
