@@ -1,5 +1,5 @@
 {
-  "name": "orchidify-management",
+  "name": "orchidify-instructor",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -16,6 +16,7 @@
     "@emotion/styled": "11.13",
     "@fontsource/roboto": "5",
     "@hookform/resolvers": "3.9",
+    "@mui/icons-material": "5.16",
     "@mui/material": "5",
     "axios": "1.7",
     "jose": "5",
