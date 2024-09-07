@@ -62,7 +62,7 @@ const OptionList = ({ open }: OptionListProps) => {
               }}
               onClick={() => handleClick(option.id)}
               component={Link}
-              to={`/${option.link}`}
+              to={option.link}
             >
               <ListItemIcon
                 sx={{
