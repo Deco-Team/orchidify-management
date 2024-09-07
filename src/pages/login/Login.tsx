@@ -9,7 +9,7 @@ export default function Login() {
   const { accessToken } = useAuth()
 
   if (accessToken) {
-    return <Navigate to='/' replace={true} />
+    return <Navigate to='/dashboard' replace={true} />
   }
 
   return (

@@ -1,7 +1,11 @@
+import { lazy, Suspense, useState } from 'react'
 import { DrawerHeader, Logo, LogoWrapper, StyledDrawer } from './Sidebar.styled'
 import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import OptionList from './OptionList'
 import { Logout } from '@mui/icons-material'
+import Loading from '../loading/Loading'
+
+const LogoutConfirmation = lazy(() => import('./LogoutConfirmation'))
 
 interface SidebarProps {
   open: boolean
@@ -9,6 +13,16 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
+  const [openDialog, setOpenDialog] = useState<boolean>(false)
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true)
+  }
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false)
+  }
+
   return (
     <StyledDrawer
       variant='permanent'
@@ -37,10 +51,10 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
               justifyContent: open ? 'initial' : 'center',
               px: 2.5
             }}
-            // onClick={logout}
+            onClick={handleOpenDialog}
           >
             <ListItemText
-              primary={'Đăng xuất'}
+              primary='Đăng xuất'
               primaryTypographyProps={{ fontWeight: 500, color: '#F66868' }}
               sx={{ opacity: open ? 1 : 0 }}
             />
@@ -56,6 +70,9 @@ const Sidebar = ({ open, drawerWidth }: SidebarProps) => {
           </ListItemButton>
         </ListItem>
       </List>
+      <Suspense fallback={<Loading />}>
+        <LogoutConfirmation open={openDialog} handleClose={handleCloseDialog} />
+      </Suspense>
     </StyledDrawer>
   )
 }
