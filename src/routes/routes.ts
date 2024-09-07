@@ -1,21 +1,18 @@
-import Home from '~/pages/Home'
-import Login from '~/pages/login/Login'
-import Logout from '~/pages/Logout'
+import { lazy } from 'react'
+
+const Home = lazy(() => import('~/pages/Home'))
+const Login = lazy(() => import('~/pages/login/Login'))
 
 export const publicRoute = {
   login: {
-    path: '/login',
-    component: Login
+    path: '/',
+    Component: Login
   }
 }
 
 export const protectedRoute = {
-  home: {
-    path: '/',
-    component: Home
-  },
-  logout: {
-    path: '/logout',
-    component: Logout
+  dashboard: {
+    path: '/dashboard',
+    Component: Home
   }
 }
