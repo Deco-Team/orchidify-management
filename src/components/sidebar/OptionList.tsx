@@ -1,15 +1,17 @@
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { OptionsStaff } from './options'
+import { OptionsGardenManager, OptionsStaff } from './options'
 import { UserRole } from '~/global/constants'
+import useAuth from '~/auth/useAuth'
 
 interface OptionListProps {
   open: boolean
 }
 
 const OptionList = ({ open }: OptionListProps) => {
-  const role = /*(user?.role.toLocaleUpperCase() as UserRole) ||*/ 'STAFF'
+  const { userTokenPayload } = useAuth()
+  const role = /*(user?.role.toLocaleUpperCase() as UserRole) ||*/ userTokenPayload?.role
 
   const options = (() => {
     switch (role) {
@@ -17,8 +19,8 @@ const OptionList = ({ open }: OptionListProps) => {
       //     return OptionsAdmin
       case UserRole.STAFF:
         return OptionsStaff
-      //   case UserRole.GARDENMNG:
-      //     return OptionsGardenMng
+      case UserRole.GARDEN_MANAGER:
+        return OptionsGardenManager
       default:
         throw new Error('Unknown role')
     }
@@ -32,7 +34,7 @@ const OptionList = ({ open }: OptionListProps) => {
 
   const location = useLocation()
   useEffect(() => {
-    const option = options.find((option) => location.pathname.includes(`/${option.link}`))
+    const option = options.find((option) => location.pathname.includes(option.link))
     if (option) {
       setButton(option.id)
     } else {

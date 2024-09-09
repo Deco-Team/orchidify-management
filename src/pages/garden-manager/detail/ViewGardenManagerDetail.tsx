@@ -1,8 +1,6 @@
 import { Box, Button, Grid, Theme, Typography, useTheme } from '@mui/material'
-import { ReactNode, useEffect, useState } from 'react'
+import { lazy, ReactNode, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import ActivateDialog from './components/ActivateDialog'
-import DeactivateDialog from './components/DeactivateDialog'
 import { Avatar, ContentText, ContentWrapper, Image, Label, Line, TitleWrapper } from './ViewGardenManagerDetail.styled'
 import { notifyError } from '~/utils/toastify'
 import { map } from 'lodash'
@@ -12,6 +10,11 @@ import { UserStatus } from '~/global/app-status'
 import { GardenManager } from '~/data/gardenManager.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import Loading from '~/components/loading/Loading'
+import { protectedRoute } from '~/routes/routes'
+import Breadcrumbs from '~/components/breadscrumbs/Breadscrumbs'
+const ActivateDialog = lazy(() => import('./components/ActivateDialog'))
+const DeactivateDialog = lazy(() => import('./components/DeactivateDialog'))
+
 interface FieldProps {
   label: string
   content: ReactNode
@@ -39,6 +42,8 @@ const ViewGardenManagerDetail = () => {
 
   const [openActivateDialog, setOpenActivateDialog] = useState<boolean>(false)
   const [openDeactivateDialog, setOpenDeactivateDialog] = useState<boolean>(false)
+
+  const breadcrumbsItems = [protectedRoute.gardenManagerList, protectedRoute.addGardenManager]
 
   const handleOpenActivateDialog = () => {
     setOpenActivateDialog(true)
@@ -85,9 +90,12 @@ const ViewGardenManagerDetail = () => {
   return data ? (
     <>
       <TitleWrapper>
-        <Typography variant='h5' fontSize={34} fontWeight={700}>
-          Thông tin quản lý vườn
-        </Typography>
+        <div>
+          <Typography variant='h5' fontSize={34} fontWeight={700}>
+            Thông tin quản lý vườn
+          </Typography>
+          <Breadcrumbs items={breadcrumbsItems} />
+        </div>
         <div style={{ display: 'flex' }}>
           <Button color='warning' onClick={handleUpdateButton} sx={{ marginRight: '24px' }}>
             Cập nhật
