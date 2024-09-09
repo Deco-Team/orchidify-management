@@ -5,20 +5,28 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#2ec4b6',
-      contrastText: '#ffffff'
+      contrastText: '#ffffff',
+      light: '#bfffefc6'
     },
     secondary: {
       main: '#5b72ee'
     },
     info: {
-      main: '#aeaeb2'
+      main: '#aeaeb2',
+      light: '#e0e0e0'
     },
     warning: {
       main: '#f88C3D'
     },
     error: {
       main: '#f66868',
-      contrastText: '#ffffff'
+      contrastText: '#ffffff',
+      light: '#fbd8db'
+    },
+    success: {
+      main: '#1a9882',
+      contrastText: '#ffffff',
+      light: '#d3f4ef'
     }
   },
   components: {
