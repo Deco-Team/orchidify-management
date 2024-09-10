@@ -1,9 +1,7 @@
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material'
-import { Suspense, useState } from 'react'
+import { useState } from 'react'
 import PrimaryButton from '~/components/button/PrimaryButton'
-import Loading from '~/components/loading/Loading'
 import { GardenManagerStatus } from '~/global/constants'
-import { IGardenManager } from '~/global/interfaces/gardenManagerInterface'
 import { gardenManager } from '~/mock/gardenManagers'
 import ActiveDialog from '../dialogs/ActiveDialog'
 import DeactiveDialog from '../dialogs/DeactiveDialog'
@@ -12,6 +10,18 @@ interface FieldProps {
   label: string
   content: string
   theme: Theme
+}
+
+interface IGardenManager {
+  id: number
+  name: string
+  role: string
+  url?: string
+  info: {
+    email: string
+    garden: string
+    status: string
+  }
 }
 
 const Field: React.FC<FieldProps> = ({ label, content, theme }) => (
@@ -41,7 +51,7 @@ const ViewGardenManagerDetail = () => {
     alert('update')
   }
   return (
-    <Suspense fallback={<Loading />}>
+    <>
       <TitleWrapper>
         <Typography variant='h5' fontSize={34} fontWeight={700}>
           Thông tin quản lý vườn
@@ -109,7 +119,7 @@ const ViewGardenManagerDetail = () => {
       </ContentWrapper>
       <DeactiveDialog open={openDialog} handleClose={handleCloseDialog} />
       <ActiveDialog open={openDialog} handleClose={handleCloseDialog} />
-    </Suspense>
+    </>
   )
 }
 

@@ -1,7 +1,11 @@
 import AlertDialog from '~/components/dialog/AlertDialog'
 import { APP_MESSAGE } from '~/global/app-message'
-import { DialogProps } from '~/global/interfaces/commonInterface'
 import { notifySuccess } from '~/utils/toastify'
+
+interface DialogProps {
+  open: boolean
+  handleClose: () => void
+}
 
 const ActiveDialog = ({ open, handleClose }: DialogProps) => {
   const handleDeactive = () => {
