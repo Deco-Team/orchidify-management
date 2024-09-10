@@ -9,3 +9,8 @@ export interface ICustomButtonProps {
   type: 'button' | 'submit' | 'reset'
   disable?: boolean
 }
+
+export interface DialogProps {
+  open: boolean
+  handleClose: () => void
+}

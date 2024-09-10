@@ -6,6 +6,6 @@ export const gardenManager = {
   info: {
     email: 'HaoNguyen@gmail.com',
     garden: 'Nhà vườn A',
-    status: 'Active'
+    status: 'INACTIVE'
   }
 }
