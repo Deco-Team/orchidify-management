@@ -1,27 +1,18 @@
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import PrimaryButton from '~/components/button/PrimaryButton'
 import { GardenManagerStatus } from '~/global/constants'
-import { gardenManager } from '~/mock/gardenManagers'
 import ActiveDialog from '../dialogs/ActiveDialog'
 import DeactiveDialog from '../dialogs/DeactiveDialog'
 import { Avatar, ContentText, ContentWrapper, Image, Label, Line, TitleWrapper } from './ViewGardenManagerDetail.styled'
+import { notifyError } from '~/utils/toastify'
+import { map } from 'lodash'
+import { useGetGardenManagerByIdApi } from '~/hooks/api/garden-manager/useGetGardenManagerByIdApi'
 interface FieldProps {
   label: string
-  content: string
+  content: string | Array<{ _id: string; name: string }>
   theme: Theme
-}
-
-interface IGardenManager {
-  id: number
-  name: string
-  role: string
-  url?: string
-  info: {
-    email: string
-    garden: string
-    status: string
-  }
 }
 
 const Field: React.FC<FieldProps> = ({ label, content, theme }) => (
@@ -30,26 +21,50 @@ const Field: React.FC<FieldProps> = ({ label, content, theme }) => (
       <Label theme={theme}>{label}</Label>
     </Grid>
     <Grid item xs={4}>
-      <ContentText>{content}</ContentText>
+      <ContentText>{Array.isArray(content) ? JSON.stringify(content) : String(content)}</ContentText>
     </Grid>
   </Grid>
 )
 
 const ViewGardenManagerDetail = () => {
   const theme = useTheme()
-  const [gardenManagerData, setGardenManagerData] = useState<IGardenManager>(gardenManager)
-  const [openDialog, setOpenDialog] = useState<boolean>(false)
-  const handleOpenDialog = () => {
-    setOpenDialog(true)
+  const params = useParams()
+  const gardenManagerId = params.id
+  const { data, error, getGardenManagerById } = useGetGardenManagerByIdApi()
+
+  const [openActiveDialog, setOpenActiveDialog] = useState<boolean>(false)
+  const [openDeactiveDialog, setOpenDeactiveDialog] = useState<boolean>(false)
+
+  const handleOpenActiveDialog = () => {
+    setOpenActiveDialog(true)
   }
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false)
+  const handleCloseActiveDialog = () => {
+    setOpenActiveDialog(false)
+  }
+
+  const handleOpenDeactiveDialog = () => {
+    setOpenDeactiveDialog(true)
+  }
+
+  const handleCloseDeactiveDialog = () => {
+    setOpenDeactiveDialog(false)
   }
 
   const handleUpdateButton = () => {
     alert('update')
   }
+
+  useEffect(() => {
+    if (gardenManagerId) {
+      getGardenManagerById(gardenManagerId)
+    }
+  }, [])
+
+  if (error) {
+    notifyError(error.message)
+  }
+
   return (
     <>
       <TitleWrapper>
@@ -64,13 +79,13 @@ const ViewGardenManagerDetail = () => {
             type='button'
             onClick={handleUpdateButton}
           />
-          {gardenManagerData.info.status === GardenManagerStatus.ACTIVE ? (
+          {data?.status === GardenManagerStatus.ACTIVE ? (
             <PrimaryButton
               variant='contained'
               name='Vô hiệu hóa'
               type='button'
               color={theme.palette.error.main}
-              onClick={handleOpenDialog}
+              onClick={handleOpenDeactiveDialog}
             />
           ) : (
             <PrimaryButton
@@ -78,7 +93,7 @@ const ViewGardenManagerDetail = () => {
               name='Kích hoạt'
               type='button'
               color={theme.palette.secondary.main}
-              onClick={handleOpenDialog}
+              onClick={handleOpenActiveDialog}
             />
           )}
         </div>
@@ -92,13 +107,13 @@ const ViewGardenManagerDetail = () => {
           <Line theme={theme} />
         </div>
         <Avatar>
-          <Image src={gardenManagerData.url} alt='Your Avatar' theme={theme} />
+          <Image src={data?.idCardPhoto} alt='Your Avatar' theme={theme} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <Typography variant='h6' fontSize={24} fontWeight={600}>
-              {gardenManagerData.name}
+              {data?.name}
             </Typography>
             <Typography variant='h6' fontSize={18} fontWeight={400} color={theme.palette.info.main}>
-              {gardenManagerData.role}
+              Quản lý vườn
             </Typography>
           </div>
         </Avatar>
@@ -111,14 +126,26 @@ const ViewGardenManagerDetail = () => {
           <Line theme={theme} />
         </div>
         <Box>
-          <Field label='Tên nhà vườn' content={gardenManagerData.name} theme={theme} />
-          <Field label='Email' content={gardenManagerData.info.email} theme={theme} />
-          <Field label='Nhà vườn' content={gardenManagerData.info.garden} theme={theme} />
-          <Field label='Trạng thái' content={gardenManagerData.info.status} theme={theme} />
+          <Field label='Tên nhà vườn' content={data?.name || ''} theme={theme} />
+          <Field label='Email' content={data?.email || ''} theme={theme} />
+          <Field
+            label='Nhà vườn'
+            content={map(data?.gardens || [], (garden) => garden.name).join(', ') || ''}
+            theme={theme}
+          />
+          <Field label='Trạng thái' content={data?.status || ''} theme={theme} />
         </Box>
       </ContentWrapper>
-      <DeactiveDialog open={openDialog} handleClose={handleCloseDialog} />
-      <ActiveDialog open={openDialog} handleClose={handleCloseDialog} />
+      <DeactiveDialog
+        open={openDeactiveDialog}
+        handleClose={handleCloseDeactiveDialog}
+        onSuccess={() => gardenManagerId && getGardenManagerById(gardenManagerId)}
+      />
+      <ActiveDialog
+        open={openActiveDialog}
+        handleClose={handleCloseActiveDialog}
+        onSuccess={() => gardenManagerId && getGardenManagerById(gardenManagerId)}
+      />
     </>
   )
 }
