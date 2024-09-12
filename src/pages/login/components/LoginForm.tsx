@@ -28,9 +28,9 @@ const validationSchema = z.object({
   role: z.nativeEnum(UserRole),
   email: z
     .string()
-    .email(APP_MESSAGE.WRONG_EMAIL_FORMAT)
     .min(1, APP_MESSAGE.REQUIRED_FIELD('Email'))
-    .max(50, APP_MESSAGE.FIELD_TOO_LONG('Email', 50)),
+    .max(50, APP_MESSAGE.FIELD_TOO_LONG('Email', 50))
+    .email(APP_MESSAGE.WRONG_EMAIL_FORMAT),
   password: z
     .string()
     .min(1, APP_MESSAGE.REQUIRED_FIELD('Mật khẩu'))

@@ -53,11 +53,14 @@ const theme = createTheme({
         variant: 'contained'
       },
       styleOverrides: {
+        root: {
+          padding: '8px 22px'
+        },
         sizeLarge: {
           height: '50px'
         },
         sizeMedium: {
-          height: '36px'
+          height: '40px'
         }
       }
     },
