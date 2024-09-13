@@ -6,17 +6,18 @@ import { ControlledFileFieldUpload } from '~/components/form/ControlledFileUploa
 import ControlledOutlinedInput from '~/components/form/ControlledOutlinedInput'
 import { APP_MESSAGE } from '~/global/app-message'
 import { StyledForm } from './AddGardenManagerForm.styled'
+import { FileFormat, FileSize } from '~/global/constants'
 
 type FormValues = {
   name: string
   email: string
-  idCardPhoto: FileList | undefined
+  idCardPhoto: File | null
 }
 
 const defaultFormValues: FormValues = {
   name: '',
   email: '',
-  idCardPhoto: new DataTransfer().files
+  idCardPhoto: null
 }
 
 const validationSchema = z.object({
@@ -29,8 +30,14 @@ const validationSchema = z.object({
     .min(1, APP_MESSAGE.REQUIRED_FIELD('Email'))
     .max(50, APP_MESSAGE.FIELD_TOO_LONG('Email', 50))
     .email(APP_MESSAGE.WRONG_EMAIL_FORMAT),
-  // TODO: Add custom file validation for idCardPhoto
-  idCardPhoto: z.string()
+  idCardPhoto: z
+    .instanceof(File)
+    .refine(
+      (file) => file.size < FileSize['5MB'] && [FileFormat.jpeg, FileFormat.jpg, FileFormat.png].includes(file.type),
+      {
+        message: APP_MESSAGE.INVALID_FILE_FORMAT_OR_SIZE('jpg, jpeg, png', '5MB')
+      }
+    )
 })
 
 const AddGardenManagerForm = () => {
@@ -43,7 +50,14 @@ const AddGardenManagerForm = () => {
     resolver: zodResolver(validationSchema)
   })
 
-  const onSubmit = handleSubmit(async (data) => console.log(data))
+  // const { data: uploadResData, error, callCloudinaryUploadApi } = useCloudinaryUploadApi()
+
+  const onSubmit = handleSubmit(async (formValue) => {
+    // await callCloudinaryUploadApi([formValue.idCardPhoto!, formValue.idCardPhoto!, formValue.idCardPhoto!])
+    // console.log(uploadResData)
+    // console.log(error)
+    console.log(formValue)
+  })
 
   return (
     <StyledForm onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column' }}>

@@ -7,5 +7,7 @@ export const APP_MESSAGE = {
   CONFIRM_ACTION: (action: string = '', object: string = '') => `Bạn có chắc chắn muốn ${action} ${object} không?`,
   ACTION_SUCCESS: (action: string = '') => `${action} thành công.`,
   ACTION_FAILED: (action: string = '') => `${action} không thành công. Vui lòng thử lại.`,
-  LOAD_DATA_FAILED: (data: string = '') => `Đã xảy ra lỗi khi tải ${data}. Vui lòng thử lại sau.`
+  LOAD_DATA_FAILED: (data: string = '') => `Đã xảy ra lỗi khi tải ${data}. Vui lòng thử lại sau.`,
+  INVALID_FILE_FORMAT_OR_SIZE: (format: string, size: string) =>
+    `Phương tiện phải có định dạng hỗ trợ (${format}) và kích thước không vượt quá ${size}`
 }

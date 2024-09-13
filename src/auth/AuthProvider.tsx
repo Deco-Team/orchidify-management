@@ -56,7 +56,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = () => {
     const refreshToken = localStorage.getItem('refreshToken')
-    if (refreshToken) callApi('/auth/management/logout', 'POST', {}, {}, { refreshToken })
+    if (refreshToken) callApi('/auth/instructor/logout', 'POST', {}, {}, { refreshToken })
     if (jwtPayload) setJwtPayload(null)
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')

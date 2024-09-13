@@ -2,20 +2,22 @@ import { ChangeEventHandler, useState } from 'react'
 import { Box, Button, FormHelperText, InputLabel, OutlinedInput, Typography } from '@mui/material'
 import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 import { Cloud } from '@mui/icons-material'
+import CloudinaryUploadWidget from '../cloudinary/CloudinaryUploadWidget'
 
 interface ControlledFileInputProps<TFieldValues extends FieldValues> {
   controller: UseControllerProps<TFieldValues>
   label: string
-  accept?: string
   multiple?: boolean
 }
 
 export const ControlledFileFieldUpload = <TFieldValues extends FieldValues>({
   controller,
   label,
-  accept,
   multiple
 }: ControlledFileInputProps<TFieldValues>) => {
+  const [publicId, setPublicId] = useState('')
+  console.log(publicId)
+
   const {
     field: { value, onChange, ...field },
     fieldState: { error }
@@ -29,15 +31,14 @@ export const ControlledFileFieldUpload = <TFieldValues extends FieldValues>({
 
   const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = (event) => {
     const files = event.target.files
-    if (files) {
-      const newFiles = new DataTransfer()
-      Array.from([...selectedFiles, ...files]).forEach((file) => newFiles.items.add(file))
-      onChange(newFiles.files)
-      setSelectedFiles((prev) => [...prev, ...files])
-    } else {
-      const newFiles = new DataTransfer()
-      selectedFiles.forEach((file) => newFiles.items.add(file))
-      onChange(newFiles)
+    if (files && files.length > 0) {
+      if (multiple) {
+        onChange([...selectedFiles, ...files])
+        setSelectedFiles((prev) => [...prev, ...files])
+      } else {
+        onChange(files[0])
+        setSelectedFiles([files[0]])
+      }
     }
   }
 
@@ -45,19 +46,19 @@ export const ControlledFileFieldUpload = <TFieldValues extends FieldValues>({
     <Box>
       <InputLabel sx={{ marginBottom: '0.7rem', color: '#000000' }}>{label}</InputLabel>
       <Box display='flex'>
-        <Button sx={{ marginRight: '8px' }} onClick={handleClick}>
+        {/* <Button sx={{ marginRight: '8px' }} onClick={handleClick}>
           Tải lên
-        </Button>
-        <input
+        </Button> */}
+        <CloudinaryUploadWidget setPublicId={setPublicId} />
+        {/* <input
           {...field}
           id={`${label}-file-input`}
           type='file'
-          accept={accept}
           multiple={multiple}
           value={value?.fileName}
           onChange={handleChange}
           style={{ display: 'none' }}
-        />
+        /> */}
         <OutlinedInput
           size='small'
           value={selectedFiles.map((file) => file.name).join(', ')}
@@ -77,7 +78,6 @@ export const ControlledFileFieldUpload = <TFieldValues extends FieldValues>({
 export const ControlledFileAreaUpload = <TFieldValues extends FieldValues>({
   controller,
   label,
-  accept,
   multiple
 }: ControlledFileInputProps<TFieldValues>) => {
   const {
@@ -93,15 +93,14 @@ export const ControlledFileAreaUpload = <TFieldValues extends FieldValues>({
 
   const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = (event) => {
     const files = event.target.files
-    if (files) {
-      const newFiles = new DataTransfer()
-      Array.from([...selectedFiles, ...files]).forEach((file) => newFiles.items.add(file))
-      onChange(newFiles.files)
-      setSelectedFiles((prev) => [...prev, ...files])
-    } else {
-      const newFiles = new DataTransfer()
-      selectedFiles.forEach((file) => newFiles.items.add(file))
-      onChange(newFiles)
+    if (files && files.length > 0) {
+      if (multiple) {
+        onChange([...selectedFiles, ...files])
+        setSelectedFiles((prev) => [...prev, ...files])
+      } else {
+        onChange(files[0])
+        setSelectedFiles([files[0]])
+      }
     }
   }
 
@@ -128,7 +127,6 @@ export const ControlledFileAreaUpload = <TFieldValues extends FieldValues>({
           id={`${label}-file-input`}
           type='file'
           multiple={multiple}
-          accept={accept}
           value={value?.fileName}
           onChange={handleChange}
           style={{ display: 'none' }}

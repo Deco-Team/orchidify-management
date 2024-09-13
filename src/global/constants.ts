@@ -11,3 +11,13 @@ export enum UserRole {
   STAFF = 'STAFF',
   GARDEN_MANAGER = 'GARDEN_MANAGER'
 }
+
+export const FileSize = {
+  '5MB': 1024 * 1024 * 5
+}
+
+export const FileFormat = {
+  jpg: 'image/jpg',
+  jpeg: 'image/jpeg',
+  png: 'image/png'
+}
