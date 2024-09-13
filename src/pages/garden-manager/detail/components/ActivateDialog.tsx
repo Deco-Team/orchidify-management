@@ -1,7 +1,8 @@
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import AlertDialog from '~/components/dialog/AlertDialog'
 import { APP_MESSAGE } from '~/global/app-message'
-import { useActiveGardenManagerApi } from '~/hooks/api/garden-manager/useActiveGardenManagerApi'
+import { useGardenManagerApi } from '~/hooks/api/useGardenManagerApi'
 import { notifyError, notifySuccess } from '~/utils/toastify'
 
 interface DialogProps {
@@ -11,12 +12,14 @@ interface DialogProps {
 }
 
 const ActivateDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
+  const [isProcessing, setIsProcessing] = useState(false)
   const params = useParams()
   const gardenManagerId = params.id
-  const { activeGardenManager, error } = useActiveGardenManagerApi()
+  const { activateGardenManager } = useGardenManagerApi()
 
-  const handleDeactive = async (gardenManagerId: string) => {
-    await activeGardenManager(gardenManagerId)
+  const handleActivate = async (gardenManagerId: string) => {
+    setIsProcessing(true)
+    const { error } = await activateGardenManager(gardenManagerId)
     if (error) {
       notifyError(error.message)
       return
@@ -24,15 +27,19 @@ const ActivateDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
     notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Kích hoạt'))
     onSuccess()
     handleClose()
+    setIsProcessing(false)
   }
   const handleCancel = () => {
+    setIsProcessing(true)
     handleClose()
+    setIsProcessing(false)
   }
   return (
     <AlertDialog
       open={open}
-      handleConfirm={() => gardenManagerId && handleDeactive(gardenManagerId)}
+      handleConfirm={() => gardenManagerId && handleActivate(gardenManagerId)}
       handleCancel={handleCancel}
+      isProcessing={isProcessing}
       title='Xác nhận kích hoạt'
       description={APP_MESSAGE.CONFIRM_ACTION('kích hoạt lại tài khoản này')}
       confirmButtonText='Kích hoạt'
