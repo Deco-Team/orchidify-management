@@ -1,7 +1,8 @@
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import AlertDialog from '~/components/dialog/AlertDialog'
 import { APP_MESSAGE } from '~/global/app-message'
-import { useDeactiveGardenManagerApi } from '~/hooks/api/garden-manager/useDeactiveGardenManagerApi'
+import { useGardenManagerApi } from '~/hooks/api/useGardenManagerApi'
 import { notifySuccess } from '~/utils/toastify'
 
 interface DialogProps {
@@ -11,24 +12,30 @@ interface DialogProps {
 }
 
 const DeactivateDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
+  const [isProcessing, setIsProcessing] = useState(false)
   const params = useParams()
   const gardenManagerId = params.id
-  const { deactiveGardenManager } = useDeactiveGardenManagerApi()
-  const handleDeactive = async (gardenManagerId: string) => {
-    await deactiveGardenManager(gardenManagerId)
+  const { deactivateGardenManager } = useGardenManagerApi()
+  const handleDeactivate = async (gardenManagerId: string) => {
+    setIsProcessing(true)
+    await deactivateGardenManager(gardenManagerId)
     notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Vô hiệu hóa'))
     onSuccess()
     handleClose()
+    setIsProcessing(false)
   }
 
   const handleCancel = () => {
+    setIsProcessing(true)
     handleClose()
+    setIsProcessing(false)
   }
   return (
     <AlertDialog
       open={open}
-      handleConfirm={() => gardenManagerId && handleDeactive(gardenManagerId)}
+      handleConfirm={() => gardenManagerId && handleDeactivate(gardenManagerId)}
       handleCancel={handleCancel}
+      isProcessing={isProcessing}
       title='Xác nhận vô hiệu hóa'
       description={APP_MESSAGE.CONFIRM_ACTION('vô hiệu hóa tài khoản này')}
       confirmButtonText='Vô hiệu hóa'

@@ -6,9 +6,12 @@ import DeactivateDialog from './components/DeactivateDialog'
 import { Avatar, ContentText, ContentWrapper, Image, Label, Line, TitleWrapper } from './ViewGardenManagerDetail.styled'
 import { notifyError } from '~/utils/toastify'
 import { map } from 'lodash'
-import { useGetGardenManagerByIdApi } from '~/hooks/api/garden-manager/useGetGardenManagerByIdApi'
+import { useGardenManagerApi } from '~/hooks/api/useGardenManagerApi'
 import UserStatusTag from '~/components/tag/UserStatusTag'
 import { UserStatus } from '~/global/app-status'
+import { GardenManager } from '~/data/gardenManager.dto'
+import { ErrorResponseDto } from '~/data/error.dto'
+import Loading from '~/components/loading/Loading'
 interface FieldProps {
   label: string
   content: ReactNode
@@ -27,45 +30,59 @@ const Field: React.FC<FieldProps> = ({ label, content, theme }) => (
 )
 
 const ViewGardenManagerDetail = () => {
+  const [data, setData] = useState<GardenManager | null>(null)
+  const [error, setError] = useState<ErrorResponseDto | null>(null)
   const theme = useTheme()
   const params = useParams()
   const gardenManagerId = params.id
-  const { data, error, getGardenManagerById } = useGetGardenManagerByIdApi()
+  const { getGardenManagerById } = useGardenManagerApi()
 
-  const [openActiveDialog, setOpenActiveDialog] = useState<boolean>(false)
-  const [openDeactiveDialog, setOpenDeactiveDialog] = useState<boolean>(false)
+  const [openActivateDialog, setOpenActivateDialog] = useState<boolean>(false)
+  const [openDeactivateDialog, setOpenDeactivateDialog] = useState<boolean>(false)
 
-  const handleOpenActiveDialog = () => {
-    setOpenActiveDialog(true)
+  const handleOpenActivateDialog = () => {
+    setOpenActivateDialog(true)
   }
 
-  const handleCloseActiveDialog = () => {
-    setOpenActiveDialog(false)
+  const handleCloseActivateDialog = () => {
+    setOpenActivateDialog(false)
   }
 
-  const handleOpenDeactiveDialog = () => {
-    setOpenDeactiveDialog(true)
+  const handleOpenDeactivateDialog = () => {
+    setOpenDeactivateDialog(true)
   }
 
-  const handleCloseDeactiveDialog = () => {
-    setOpenDeactiveDialog(false)
+  const handleCloseDeactivateDialog = () => {
+    setOpenDeactivateDialog(false)
   }
 
   const handleUpdateButton = () => {
     alert('update')
   }
 
+  const handleReloadData = async () => {
+    if (gardenManagerId) {
+      const { data: gardenManager, error: apiError } = await getGardenManagerById(gardenManagerId)
+      setData(gardenManager)
+      setError(apiError)
+    }
+  }
+
   useEffect(() => {
     if (gardenManagerId) {
-      getGardenManagerById(gardenManagerId)
+      ;(async () => {
+        const { data: gardenManager, error: apiError } = await getGardenManagerById(gardenManagerId)
+        setData(gardenManager)
+        setError(apiError)
+      })()
     }
-  }, [])
+  }, [gardenManagerId, getGardenManagerById])
 
   if (error) {
     notifyError(error.message)
   }
 
-  return (
+  return data ? (
     <>
       <TitleWrapper>
         <Typography variant='h5' fontSize={34} fontWeight={700}>
@@ -76,11 +93,11 @@ const ViewGardenManagerDetail = () => {
             Cập nhật
           </Button>
           {data?.status === UserStatus.ACTIVE ? (
-            <Button color='error' onClick={handleOpenDeactiveDialog}>
+            <Button color='error' onClick={handleOpenDeactivateDialog}>
               Vô hiệu hóa
             </Button>
           ) : (
-            <Button color='secondary' onClick={handleOpenActiveDialog}>
+            <Button color='secondary' onClick={handleOpenActivateDialog}>
               Kích hoạt
             </Button>
           )}
@@ -129,16 +146,14 @@ const ViewGardenManagerDetail = () => {
         </Box>
       </ContentWrapper>
       <DeactivateDialog
-        open={openDeactiveDialog}
-        handleClose={handleCloseDeactiveDialog}
-        onSuccess={() => gardenManagerId && getGardenManagerById(gardenManagerId)}
+        open={openDeactivateDialog}
+        handleClose={handleCloseDeactivateDialog}
+        onSuccess={handleReloadData}
       />
-      <ActivateDialog
-        open={openActiveDialog}
-        handleClose={handleCloseActiveDialog}
-        onSuccess={() => gardenManagerId && getGardenManagerById(gardenManagerId)}
-      />
+      <ActivateDialog open={openActivateDialog} handleClose={handleCloseActivateDialog} onSuccess={handleReloadData} />
     </>
+  ) : (
+    <Loading />
   )
 }
 
