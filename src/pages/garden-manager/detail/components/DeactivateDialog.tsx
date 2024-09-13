@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom'
 import AlertDialog from '~/components/dialog/AlertDialog'
 import { APP_MESSAGE } from '~/global/app-message'
-import { useActiveGardenManagerApi } from '~/hooks/api/garden-manager/useActiveGardenManagerApi'
-import { notifyError, notifySuccess } from '~/utils/toastify'
+import { useDeactiveGardenManagerApi } from '~/hooks/api/garden-manager/useDeactiveGardenManagerApi'
+import { notifySuccess } from '~/utils/toastify'
 
 interface DialogProps {
   open: boolean
@@ -10,21 +10,17 @@ interface DialogProps {
   onSuccess: () => void
 }
 
-const ActiveDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
+const DeactivateDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
   const params = useParams()
   const gardenManagerId = params.id
-  const { activeGardenManager, error } = useActiveGardenManagerApi()
-
+  const { deactiveGardenManager } = useDeactiveGardenManagerApi()
   const handleDeactive = async (gardenManagerId: string) => {
-    await activeGardenManager(gardenManagerId)
-    if (error) {
-      notifyError(error.message)
-      return
-    }
-    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Kích hoạt'))
+    await deactiveGardenManager(gardenManagerId)
+    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Vô hiệu hóa'))
     onSuccess()
     handleClose()
   }
+
   const handleCancel = () => {
     handleClose()
   }
@@ -33,14 +29,14 @@ const ActiveDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
       open={open}
       handleConfirm={() => gardenManagerId && handleDeactive(gardenManagerId)}
       handleCancel={handleCancel}
-      title='Xác nhận kích hoạt'
-      description={APP_MESSAGE.CONFIRM_ACTION('kích hoạt lại tài khoản này')}
-      confirmButtonText='Kích hoạt'
-      confirmButtonColor='secondary'
+      title='Xác nhận vô hiệu hóa'
+      description={APP_MESSAGE.CONFIRM_ACTION('vô hiệu hóa tài khoản này')}
+      confirmButtonText='Vô hiệu hóa'
+      confirmButtonColor='error'
       cancelButtonText='Hủy'
       sx={{ '& .MuiDialog-paper': { width: '500px' } }}
     />
   )
 }
 
-export default ActiveDialog
+export default DeactivateDialog

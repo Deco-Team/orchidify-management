@@ -11,8 +11,3 @@ export enum UserRole {
   STAFF = 'STAFF',
   GARDEN_MANAGER = 'GARDEN_MANAGER'
 }
-
-export enum GardenManagerStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE'
-}

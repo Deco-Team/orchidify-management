@@ -1,17 +1,17 @@
-import { Box, Grid, Theme, Typography, useTheme } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { Box, Button, Grid, Theme, Typography, useTheme } from '@mui/material'
+import { ReactNode, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import PrimaryButton from '~/components/button/PrimaryButton'
-import { GardenManagerStatus } from '~/global/constants'
-import ActiveDialog from '../dialogs/ActiveDialog'
-import DeactiveDialog from '../dialogs/DeactiveDialog'
+import ActivateDialog from './components/ActivateDialog'
+import DeactivateDialog from './components/DeactivateDialog'
 import { Avatar, ContentText, ContentWrapper, Image, Label, Line, TitleWrapper } from './ViewGardenManagerDetail.styled'
 import { notifyError } from '~/utils/toastify'
 import { map } from 'lodash'
 import { useGetGardenManagerByIdApi } from '~/hooks/api/garden-manager/useGetGardenManagerByIdApi'
+import UserStatusTag from '~/components/tag/UserStatusTag'
+import { UserStatus } from '~/global/app-status'
 interface FieldProps {
   label: string
-  content: string | Array<{ _id: string; name: string }>
+  content: ReactNode
   theme: Theme
 }
 
@@ -20,8 +20,8 @@ const Field: React.FC<FieldProps> = ({ label, content, theme }) => (
     <Grid item xs={2}>
       <Label theme={theme}>{label}</Label>
     </Grid>
-    <Grid item xs={4}>
-      <ContentText>{Array.isArray(content) ? JSON.stringify(content) : String(content)}</ContentText>
+    <Grid item xs={4} sx={{ display: 'flex', alignItems: 'center' }}>
+      {content}
     </Grid>
   </Grid>
 )
@@ -72,29 +72,17 @@ const ViewGardenManagerDetail = () => {
           Thông tin quản lý vườn
         </Typography>
         <div style={{ display: 'flex' }}>
-          <PrimaryButton
-            color={theme.palette.warning.main}
-            name='Cập nhật'
-            variant='contained'
-            type='button'
-            onClick={handleUpdateButton}
-          />
-          {data?.status === GardenManagerStatus.ACTIVE ? (
-            <PrimaryButton
-              variant='contained'
-              name='Vô hiệu hóa'
-              type='button'
-              color={theme.palette.error.main}
-              onClick={handleOpenDeactiveDialog}
-            />
+          <Button color='warning' onClick={handleUpdateButton} sx={{ marginRight: '24px' }}>
+            Cập nhật
+          </Button>
+          {data?.status === UserStatus.ACTIVE ? (
+            <Button color='error' onClick={handleOpenDeactiveDialog}>
+              Vô hiệu hóa
+            </Button>
           ) : (
-            <PrimaryButton
-              variant='contained'
-              name='Kích hoạt'
-              type='button'
-              color={theme.palette.secondary.main}
-              onClick={handleOpenActiveDialog}
-            />
+            <Button color='secondary' onClick={handleOpenActiveDialog}>
+              Kích hoạt
+            </Button>
           )}
         </div>
       </TitleWrapper>
@@ -109,10 +97,10 @@ const ViewGardenManagerDetail = () => {
         <Avatar>
           <Image src={data?.idCardPhoto} alt='Your Avatar' theme={theme} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <Typography variant='h6' fontSize={24} fontWeight={600}>
+            <Typography variant='h6' fontSize={20} fontWeight={500}>
               {data?.name}
             </Typography>
-            <Typography variant='h6' fontSize={18} fontWeight={400} color={theme.palette.info.main}>
+            <Typography variant='h6' fontSize={14} fontWeight={500} color={theme.label.secondary}>
               Quản lý vườn
             </Typography>
           </div>
@@ -126,22 +114,26 @@ const ViewGardenManagerDetail = () => {
           <Line theme={theme} />
         </div>
         <Box>
-          <Field label='Tên nhà vườn' content={data?.name || ''} theme={theme} />
-          <Field label='Email' content={data?.email || ''} theme={theme} />
+          <Field label='Tên nhà vườn' content={<ContentText>{data?.name || ''}</ContentText>} theme={theme} />
+          <Field label='Email' content={<ContentText>{data?.email || ''}</ContentText>} theme={theme} />
           <Field
             label='Nhà vườn'
-            content={map(data?.gardens || [], (garden) => garden.name).join(', ') || ''}
+            content={<ContentText>{map(data?.gardens || [], (garden) => garden.name).join(', ') || ''}</ContentText>}
             theme={theme}
           />
-          <Field label='Trạng thái' content={data?.status || ''} theme={theme} />
+          <Field
+            label='Trạng thái'
+            content={data ? <UserStatusTag type={UserStatus[data.status]} /> : null}
+            theme={theme}
+          />
         </Box>
       </ContentWrapper>
-      <DeactiveDialog
+      <DeactivateDialog
         open={openDeactiveDialog}
         handleClose={handleCloseDeactiveDialog}
         onSuccess={() => gardenManagerId && getGardenManagerById(gardenManagerId)}
       />
-      <ActiveDialog
+      <ActivateDialog
         open={openActiveDialog}
         handleClose={handleCloseActiveDialog}
         onSuccess={() => gardenManagerId && getGardenManagerById(gardenManagerId)}

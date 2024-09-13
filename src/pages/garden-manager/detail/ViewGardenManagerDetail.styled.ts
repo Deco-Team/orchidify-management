@@ -41,9 +41,9 @@ export const FlexRow = styled.div`
 `
 
 export const Label = styled.h6<{ theme: Theme }>`
-  color: ${({ theme }) => theme.palette.info.main};
+  color: ${({ theme }) => theme.label.secondary};
   font-size: 1rem;
-  font-weight: 400;
+  font-weight: 500;
   text-align: right;
   margin: 0.5rem;
 `

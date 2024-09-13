@@ -1,6 +1,20 @@
 import { createTheme, ThemeProvider } from '@mui/material'
 import { ReactNode } from 'react'
 
+declare module '@mui/material/styles' {
+  interface Theme {
+    label: {
+      secondary: string
+    }
+  }
+  // allow configuration using `createTheme`
+  interface ThemeOptions {
+    label?: {
+      secondary?: string
+    }
+  }
+}
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -16,7 +30,8 @@ const theme = createTheme({
       light: '#e0e0e0'
     },
     warning: {
-      main: '#f88C3D'
+      main: '#ff9242',
+      contrastText: '#ffffff'
     },
     error: {
       main: '#f66868',
@@ -29,6 +44,9 @@ const theme = createTheme({
       light: '#d3f4ef'
     }
   },
+  label: {
+    secondary: '#3C3C4399'
+  },
   components: {
     MuiButton: {
       defaultProps: {
@@ -40,6 +58,20 @@ const theme = createTheme({
         },
         sizeMedium: {
           height: '36px'
+        }
+      }
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          height: '24px',
+          padding: '2px 8px',
+          borderRadius: '4px',
+          '& .MuiChip-label': {
+            fontSize: '14px',
+            fontWeight: 500,
+            padding: 0
+          }
         }
       }
     }

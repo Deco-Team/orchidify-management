@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import ViewGardenManagerDetail from '~/pages/gardenManager/viewGardenManagerDetail/ViewGardenManagerDetail'
+import ViewGardenManagerDetail from '~/pages/garden-manager/detail/ViewGardenManagerDetail'
 
 const Home = lazy(() => import('~/pages/Home'))
 const Login = lazy(() => import('~/pages/login/Login'))
