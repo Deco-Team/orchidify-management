@@ -6,7 +6,7 @@ export type GardenManager = {
   email: string
   idCardPhoto: string
   status: UserStatus
-  createdAt: Date
-  updatedAt: Date
-  gardens: Array<{ _id: string; name: string }>
+  createdAt: string
+  updatedAt: string
+  gardens?: Array<{ _id: string; name: string }>
 }

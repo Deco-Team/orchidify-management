@@ -3,7 +3,7 @@ import { APP_MESSAGE } from '~/global/app-message'
 import { useCallback } from 'react'
 import { GardenManager } from '~/data/gardenManager.dto'
 import { useProtectedApi } from './useProtectedApi'
-import { IdResponseDto, SuccessResponseDto } from '~/data/common.dto'
+import { IdResponseDto, SuccessResponseDto, ListResponseDto } from '~/data/common.dto'
 
 const ROOT_ENDPOINT = '/garden-managers'
 
@@ -29,6 +29,34 @@ export const useGardenManagerApi = () => {
       return {
         data: null,
         error: { message: APP_MESSAGE.ACTION_FAILED('thêm quản lý vườn') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  const getAllGardenManager = useCallback(
+    async (page = 1, pageSize = 10) => {
+      const endpoint = `${ROOT_ENDPOINT}`
+      const result = await callAppProtectedApi<ListResponseDto<GardenManager>>(
+        endpoint,
+        'GET',
+        {},
+        {
+          page,
+          limit: pageSize
+        },
+        {}
+      )
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('danh sách quản lý vườn') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
@@ -91,5 +119,5 @@ export const useGardenManagerApi = () => {
     [callAppProtectedApi]
   )
 
-  return { addGardenManager, getGardenManagerById, activateGardenManager, deactivateGardenManager }
+  return { getAllGardenManager, addGardenManager, getGardenManagerById, activateGardenManager, deactivateGardenManager }
 }

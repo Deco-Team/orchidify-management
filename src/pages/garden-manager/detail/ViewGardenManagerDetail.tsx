@@ -75,7 +75,7 @@ const ViewGardenManagerDetail = () => {
 
   useEffect(() => {
     if (gardenManagerId) {
-      ;(async () => {
+      (async () => {
         const { data: gardenManager, error: apiError } = await getGardenManagerById(gardenManagerId)
         setData(gardenManager)
         setError(apiError)
