@@ -24,7 +24,7 @@ const ActivateDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
       notifyError(error.message)
       return
     }
-    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Kích hoạt'))
+    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Kích hoạt quản lý vườn'))
     onSuccess()
     handleClose()
     setIsProcessing(false)

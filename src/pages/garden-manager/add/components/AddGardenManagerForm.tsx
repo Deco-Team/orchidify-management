@@ -8,6 +8,9 @@ import { APP_MESSAGE } from '~/global/app-message'
 import { StyledForm } from './AddGardenManagerForm.styled'
 import { FileFormat, FileSize } from '~/global/constants'
 import { CloudinaryFileUploadedInfo } from '~/components/cloudinary/cloudinary-type'
+import { useGardenManagerApi } from '~/hooks/api/useGardenManagerApi'
+import { notifyError, notifySuccess } from '~/utils/toastify'
+import { useNavigate } from 'react-router-dom'
 
 type FormValues = {
   name: string
@@ -44,13 +47,17 @@ const AddGardenManagerForm = () => {
     resolver: zodResolver(validationSchema)
   })
 
-  // const { data: uploadResData, error, callCloudinaryUploadApi } = useCloudinaryUploadApi()
+  const { addGardenManager } = useGardenManagerApi()
+  const navigate = useNavigate()
 
   const onSubmit = handleSubmit(async (formValue) => {
-    // await callCloudinaryUploadApi([formValue.idCardPhoto!, formValue.idCardPhoto!, formValue.idCardPhoto!])
-    // console.log(uploadResData)
-    // console.log(error)
-    console.log(formValue)
+    const { error } = await addGardenManager({ ...formValue, idCardPhoto: formValue.idCardPhoto[0].url })
+    if (error) {
+      notifyError(error.message)
+      return
+    }
+    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Thêm quản lý vườn'))
+    navigate(`/garden-manager`, { replace: true })
   })
 
   return (
