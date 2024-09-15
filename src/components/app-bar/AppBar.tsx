@@ -5,17 +5,17 @@ import { Link } from 'react-router-dom'
 
 interface AppBarProps {
   open: boolean
-  drawerWidth: number
+  drawerwidth: number
   handleDrawer: () => void
 }
 
-const AppBar = ({ open, drawerWidth, handleDrawer }: AppBarProps) => {
+const AppBar = ({ open, drawerwidth, handleDrawer }: AppBarProps) => {
   return (
     <StyledAppBar
       position='fixed'
       elevation={0}
       open={open}
-      drawerWidth={drawerWidth}
+      drawerwidth={drawerwidth}
       sx={{ bgcolor: '#FFFFFF', borderBottom: '1px solid #0000001e' }}
     >
       <Toolbar>

@@ -19,7 +19,7 @@ const DeactivateDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
   const handleDeactivate = async (gardenManagerId: string) => {
     setIsProcessing(true)
     await deactivateGardenManager(gardenManagerId)
-    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Vô hiệu hóa'))
+    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Vô hiệu hóa quản lý vườn'))
     onSuccess()
     handleClose()
     setIsProcessing(false)

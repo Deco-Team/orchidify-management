@@ -3,12 +3,36 @@ import { APP_MESSAGE } from '~/global/app-message'
 import { useCallback } from 'react'
 import { GardenManager } from '~/data/gardenManager.dto'
 import { useProtectedApi } from './useProtectedApi'
-import { SuccessResponseDto } from '~/data/common.dto'
+import { IdResponseDto, SuccessResponseDto } from '~/data/common.dto'
 
 const ROOT_ENDPOINT = '/garden-managers'
 
+interface AddGardenManagerRequest {
+  email: string
+  name: string
+  idCardPhoto: string
+}
+
 export const useGardenManagerApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
+
+  const addGardenManager = useCallback(
+    async (gardenManager: AddGardenManagerRequest) => {
+      const result = await callAppProtectedApi<IdResponseDto>(ROOT_ENDPOINT, 'POST', {}, {}, gardenManager)
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('thêm quản lý vườn') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
 
   const getGardenManagerById = useCallback(
     async (gardenManagerId: string) => {
@@ -23,7 +47,7 @@ export const useGardenManagerApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('thông tin giảng viên') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('thông tin quản lý vườn') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
@@ -42,7 +66,7 @@ export const useGardenManagerApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('Vô hiệu hóa') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.ACTION_FAILED('Vô hiệu hóa') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
@@ -61,11 +85,11 @@ export const useGardenManagerApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('Kích hoạt') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.ACTION_FAILED('Kích hoạt') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
   )
 
-  return { getGardenManagerById, activateGardenManager, deactivateGardenManager }
+  return { addGardenManager, getGardenManagerById, activateGardenManager, deactivateGardenManager }
 }
