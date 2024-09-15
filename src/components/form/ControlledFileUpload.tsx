@@ -1,44 +1,38 @@
-import { ChangeEventHandler, useState } from 'react'
-import { Box, Button, FormHelperText, InputLabel, OutlinedInput, Typography } from '@mui/material'
+import { Box, FormHelperText, InputLabel, OutlinedInput, Typography, useTheme } from '@mui/material'
 import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 import { Cloud } from '@mui/icons-material'
 import CloudinaryUploadWidget from '../cloudinary/CloudinaryUploadWidget'
+import { CloudinaryFileUploadedInfo } from '../cloudinary/cloudinary-type'
 
 interface ControlledFileInputProps<TFieldValues extends FieldValues> {
   controller: UseControllerProps<TFieldValues>
   label: string
   multiple?: boolean
+  minFile: number
+  maxFile?: number
+  clientAllowedFormats?: string[]
+  maxFileSize?: { text: string; size: number }
 }
 
 export const ControlledFileFieldUpload = <TFieldValues extends FieldValues>({
   controller,
   label,
-  multiple
+  multiple,
+  minFile,
+  maxFile,
+  clientAllowedFormats,
+  maxFileSize
 }: ControlledFileInputProps<TFieldValues>) => {
-  const [publicId, setPublicId] = useState('')
-  console.log(publicId)
-
   const {
     field: { value, onChange, ...field },
     fieldState: { error }
   } = useController(controller)
 
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
-
-  const handleClick = () => {
-    document.getElementById(`${label}-file-input`)!.click()
-  }
-
-  const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = (event) => {
-    const files = event.target.files
-    if (files && files.length > 0) {
-      if (multiple) {
-        onChange([...selectedFiles, ...files])
-        setSelectedFiles((prev) => [...prev, ...files])
-      } else {
-        onChange(files[0])
-        setSelectedFiles([files[0]])
-      }
+  const handleUploadSuccess = (info: CloudinaryFileUploadedInfo) => {
+    if (multiple) {
+      onChange([...value, info])
+    } else {
+      onChange([info])
     }
   }
 
@@ -46,22 +40,19 @@ export const ControlledFileFieldUpload = <TFieldValues extends FieldValues>({
     <Box>
       <InputLabel sx={{ marginBottom: '0.7rem', color: '#000000' }}>{label}</InputLabel>
       <Box display='flex'>
-        {/* <Button sx={{ marginRight: '8px' }} onClick={handleClick}>
-          Tải lên
-        </Button> */}
-        <CloudinaryUploadWidget setPublicId={setPublicId} />
-        {/* <input
-          {...field}
-          id={`${label}-file-input`}
-          type='file'
+        <CloudinaryUploadWidget
+          buttonStyle={{ marginRight: '8px' }}
+          onSuccess={handleUploadSuccess}
+          minFile={minFile}
+          maxFile={maxFile}
+          clientAllowedFormats={clientAllowedFormats}
+          maxFileSize={maxFileSize}
           multiple={multiple}
-          value={value?.fileName}
-          onChange={handleChange}
-          style={{ display: 'none' }}
-        /> */}
+        />
         <OutlinedInput
+          {...field}
           size='small'
-          value={selectedFiles.map((file) => file.name).join(', ')}
+          value={value.map((file: CloudinaryFileUploadedInfo) => file.original_filename).join(', ')}
           disabled={!error}
           readOnly={!!error}
           error={!!error}
@@ -78,29 +69,23 @@ export const ControlledFileFieldUpload = <TFieldValues extends FieldValues>({
 export const ControlledFileAreaUpload = <TFieldValues extends FieldValues>({
   controller,
   label,
-  multiple
+  multiple,
+  minFile,
+  maxFile,
+  clientAllowedFormats,
+  maxFileSize
 }: ControlledFileInputProps<TFieldValues>) => {
+  const theme = useTheme()
   const {
-    field: { value, onChange, ...field },
+    field: { value, onChange },
     fieldState: { error }
   } = useController(controller)
 
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
-
-  const handleClick = () => {
-    document.getElementById(`${label}-file-input`)!.click()
-  }
-
-  const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = (event) => {
-    const files = event.target.files
-    if (files && files.length > 0) {
-      if (multiple) {
-        onChange([...selectedFiles, ...files])
-        setSelectedFiles((prev) => [...prev, ...files])
-      } else {
-        onChange(files[0])
-        setSelectedFiles([files[0]])
-      }
+  const handleUploadSuccess = (info: CloudinaryFileUploadedInfo) => {
+    if (multiple) {
+      onChange([...value, info])
+    } else {
+      onChange([info])
     }
   }
 
@@ -113,23 +98,20 @@ export const ControlledFileAreaUpload = <TFieldValues extends FieldValues>({
         alignItems='center'
         justifyContent='center'
         minHeight={200}
-        border='1px solid #0000001F'
+        border={`1px solid ${error ? theme.palette.error.main : ' #0000001F'}`}
       >
         <Cloud sx={{ width: 35, height: 35 }} color='primary' />
         <Typography variant='caption' margin='10px 0'>
-          Kéo thả ảnh vào đây hoặc bấm tải lên
+          Bấm tải lên
         </Typography>
-        <Button sx={{ width: 'fit-content' }} onClick={handleClick}>
-          Tải lên
-        </Button>
-        <input
-          {...field}
-          id={`${label}-file-input`}
-          type='file'
+        <CloudinaryUploadWidget
+          buttonStyle={{ width: 'fit-content' }}
+          onSuccess={handleUploadSuccess}
+          minFile={minFile}
+          maxFile={maxFile}
+          clientAllowedFormats={clientAllowedFormats}
+          maxFileSize={maxFileSize}
           multiple={multiple}
-          value={value?.fileName}
-          onChange={handleChange}
-          style={{ display: 'none' }}
         />
       </Box>
       {error ? <FormHelperText error>{error.message}</FormHelperText> : null}

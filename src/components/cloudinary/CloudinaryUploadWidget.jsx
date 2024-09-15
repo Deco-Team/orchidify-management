@@ -1,64 +1,75 @@
-import { createContext, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@mui/material'
+import { FileSize } from '~/global/constants'
+import { text } from './cloudinary-text'
+import { APP_MESSAGE } from '~/global/app-message'
 
-// Create a context to manage the script loading state
-const CloudinaryScriptContext = createContext()
-
-const CloudinaryUploadWidget = ({ setPublicId }) => {
-  const [loaded, setLoaded] = useState(false)
-
-  useEffect(() => {
-    // Check if the script is already loaded
-    if (!loaded) {
-      const uwScript = document.getElementById('uw')
-      if (!uwScript) {
-        // If not loaded, create and load the script
-        const script = document.createElement('script')
-        script.setAttribute('async', '')
-        script.setAttribute('id', 'uw')
-        script.src = 'https://upload-widget.cloudinary.com/global/all.js'
-        script.addEventListener('load', () => setLoaded(true))
-        document.body.appendChild(script)
-      } else {
-        // If already loaded, update the state
-        setLoaded(true)
-      }
-    }
-  }, [loaded])
-
-  const initializeCloudinaryWidget = () => {
-    if (loaded) {
-      const myWidget = window.cloudinary.createUploadWidget(
+const CloudinaryUploadWidget = ({ onSuccess, minFile, maxFile, clientAllowedFormats, maxFileSize, multiple, buttonStyle = {} }) => {
+  const [widget, setWidget] = useState(null)
+  const initializeCloudinaryWidget = useCallback(() => {
+    setWidget(
+      window.cloudinary.createUploadWidget(
         {
           cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME,
-          uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+          uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET,
+          sources: ['local'],
+          language: 'vi',
+          text: {
+            ...text,
+            vi: {
+              ...text.vi,
+              uploader: {
+                ...text.vi.uploader,
+                errors: {
+                  ...text.vi.uploader.errors,
+                  file_too_large: APP_MESSAGE.INVALID_FILE_FORMAT_OR_SIZE(
+                    clientAllowedFormats.join(', '),
+                    maxFileSize.text
+                  ),
+                  unavailable: 'Không có sẵn',
+                  max_number_of_files: APP_MESSAGE.INCORRECT_NUMBER_OF_FILES(minFile, maxFile),
+                  allowed_formats: APP_MESSAGE.INVALID_FILE_FORMAT_OR_SIZE(
+                    clientAllowedFormats.join(', '),
+                    maxFileSize.text
+                  ),
+                  max_file_size: APP_MESSAGE.INVALID_FILE_FORMAT_OR_SIZE(
+                    clientAllowedFormats.join(', '),
+                    maxFileSize.text
+                  ),
+                  min_file_size: APP_MESSAGE.INVALID_FILE_FORMAT_OR_SIZE(
+                    clientAllowedFormats.join(', '),
+                    maxFileSize.text
+                  )
+                }
+              }
+            }
+          },
+          clientAllowedFormats: clientAllowedFormats ? clientAllowedFormats : null,
+          maxFile: maxFile ? maxFile : null,
+          maxFileSize: maxFileSize ? maxFileSize.size : 'unlimited',
+          multiple: !!multiple
         },
         (error, result) => {
           if (!error && result && result.event === 'success') {
-            console.log('Done! Here is the image info: ', result.info)
-            setPublicId(result.info.public_id)
+            onSuccess(result.info)
           }
         }
       )
+    )
+  }, [])
 
-      document.getElementById('upload_widget').addEventListener(
-        'click',
-        function () {
-          myWidget.open()
-        },
-        false
-      )
+  useEffect(() => {
+    initializeCloudinaryWidget()
+    return () => {
+      if (widget) widget.destroy()
     }
-  }
+  }, [])
 
   return (
-    <CloudinaryScriptContext.Provider value={{ loaded }}>
-      <Button id='upload_widget' onClick={initializeCloudinaryWidget} sx={{ marginRight: '8px' }}>
-        Tải lên
-      </Button>
-    </CloudinaryScriptContext.Provider>
+    <Button id='upload_widget' sx={buttonStyle} onClick={() => widget.open()}>
+      Tải lên
+    </Button>
   )
 }
 
 export default CloudinaryUploadWidget
-export { CloudinaryScriptContext }

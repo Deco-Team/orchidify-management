@@ -7,17 +7,18 @@ import ControlledOutlinedInput from '~/components/form/ControlledOutlinedInput'
 import { APP_MESSAGE } from '~/global/app-message'
 import { StyledForm } from './AddGardenManagerForm.styled'
 import { FileFormat, FileSize } from '~/global/constants'
+import { CloudinaryFileUploadedInfo } from '~/components/cloudinary/cloudinary-type'
 
 type FormValues = {
   name: string
   email: string
-  idCardPhoto: File | null
+  idCardPhoto: CloudinaryFileUploadedInfo[]
 }
 
 const defaultFormValues: FormValues = {
   name: '',
   email: '',
-  idCardPhoto: null
+  idCardPhoto: []
 }
 
 const validationSchema = z.object({
@@ -30,14 +31,7 @@ const validationSchema = z.object({
     .min(1, APP_MESSAGE.REQUIRED_FIELD('Email'))
     .max(50, APP_MESSAGE.FIELD_TOO_LONG('Email', 50))
     .email(APP_MESSAGE.WRONG_EMAIL_FORMAT),
-  idCardPhoto: z
-    .instanceof(File)
-    .refine(
-      (file) => file.size < FileSize['5MB'] && [FileFormat.jpeg, FileFormat.jpg, FileFormat.png].includes(file.type),
-      {
-        message: APP_MESSAGE.INVALID_FILE_FORMAT_OR_SIZE('jpg, jpeg, png', '5MB')
-      }
-    )
+  idCardPhoto: z.array(z.object({}).passthrough()).nonempty(APP_MESSAGE.REQUIRED_FIELD('Ảnh thẻ'))
 })
 
 const AddGardenManagerForm = () => {
@@ -86,7 +80,13 @@ const AddGardenManagerForm = () => {
             />
           </Grid>
           <Grid item xs={12} lg={6}>
-            <ControlledFileFieldUpload controller={{ name: 'idCardPhoto', control: control }} label='Ảnh thẻ' />
+            <ControlledFileFieldUpload
+              controller={{ name: 'idCardPhoto', control: control }}
+              label='Ảnh thẻ'
+              clientAllowedFormats={[FileFormat.jpeg, FileFormat.jpg, FileFormat.png]}
+              minFile={1}
+              maxFileSize={FileSize['5MB']}
+            />
           </Grid>
         </Grid>
       </Paper>

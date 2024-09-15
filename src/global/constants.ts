@@ -13,11 +13,11 @@ export enum UserRole {
 }
 
 export const FileSize = {
-  '5MB': 1024 * 1024 * 5
+  '5MB': { text: '5MB', size: 1024 * 1024 * 5 }
 }
 
 export const FileFormat = {
-  jpg: 'image/jpg',
-  jpeg: 'image/jpeg',
-  png: 'image/png'
+  jpg: 'jpg',
+  jpeg: 'jpeg',
+  png: 'png'
 }
