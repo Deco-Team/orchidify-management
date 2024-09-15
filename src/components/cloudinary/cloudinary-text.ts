@@ -7,6 +7,9 @@ export const text = {
     menu: {
       files: 'Tệp của tôi '
     },
+    notifications: {
+      limit_reached: 'No more files can be selected.'
+    },
     queue: {
       title: 'Hàng đợi tải lên',
       title_uploading_with_counter: 'Đang tải lên {{num}} tệp',

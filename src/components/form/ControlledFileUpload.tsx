@@ -9,7 +9,7 @@ interface ControlledFileInputProps<TFieldValues extends FieldValues> {
   label: string
   multiple?: boolean
   minFile: number
-  maxFile?: number
+  maxFiles?: number
   clientAllowedFormats?: string[]
   maxFileSize?: { text: string; size: number }
 }
@@ -19,7 +19,7 @@ export const ControlledFileFieldUpload = <TFieldValues extends FieldValues>({
   label,
   multiple,
   minFile,
-  maxFile,
+  maxFiles = 20,
   clientAllowedFormats,
   maxFileSize
 }: ControlledFileInputProps<TFieldValues>) => {
@@ -44,7 +44,7 @@ export const ControlledFileFieldUpload = <TFieldValues extends FieldValues>({
           buttonStyle={{ marginRight: '8px' }}
           onSuccess={handleUploadSuccess}
           minFile={minFile}
-          maxFile={maxFile}
+          maxFiles={maxFiles}
           clientAllowedFormats={clientAllowedFormats}
           maxFileSize={maxFileSize}
           multiple={multiple}
@@ -71,7 +71,7 @@ export const ControlledFileAreaUpload = <TFieldValues extends FieldValues>({
   label,
   multiple,
   minFile,
-  maxFile,
+  maxFiles = 20,
   clientAllowedFormats,
   maxFileSize
 }: ControlledFileInputProps<TFieldValues>) => {
@@ -108,7 +108,7 @@ export const ControlledFileAreaUpload = <TFieldValues extends FieldValues>({
           buttonStyle={{ width: 'fit-content' }}
           onSuccess={handleUploadSuccess}
           minFile={minFile}
-          maxFile={maxFile}
+          maxFiles={maxFiles}
           clientAllowedFormats={clientAllowedFormats}
           maxFileSize={maxFileSize}
           multiple={multiple}

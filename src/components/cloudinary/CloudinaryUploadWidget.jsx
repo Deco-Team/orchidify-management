@@ -4,7 +4,7 @@ import { FileSize } from '~/global/constants'
 import { text } from './cloudinary-text'
 import { APP_MESSAGE } from '~/global/app-message'
 
-const CloudinaryUploadWidget = ({ onSuccess, minFile, maxFile, clientAllowedFormats, maxFileSize, multiple, buttonStyle = {} }) => {
+const CloudinaryUploadWidget = ({ onSuccess, minFile, maxFiles, clientAllowedFormats, maxFileSize, multiple, buttonStyle = {} }) => {
   const [widget, setWidget] = useState(null)
   const initializeCloudinaryWidget = useCallback(() => {
     setWidget(
@@ -14,10 +14,15 @@ const CloudinaryUploadWidget = ({ onSuccess, minFile, maxFile, clientAllowedForm
           uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET,
           sources: ['local'],
           language: 'vi',
+          singleUploadAutoClose: false,
           text: {
             ...text,
             vi: {
               ...text.vi,
+              notifications: {
+                ...text.vi.notifications,
+                limit_reached: APP_MESSAGE.INCORRECT_NUMBER_OF_FILES(minFile, maxFiles)
+              },
               uploader: {
                 ...text.vi.uploader,
                 errors: {
@@ -27,7 +32,7 @@ const CloudinaryUploadWidget = ({ onSuccess, minFile, maxFile, clientAllowedForm
                     maxFileSize.text
                   ),
                   unavailable: 'Không có sẵn',
-                  max_number_of_files: APP_MESSAGE.INCORRECT_NUMBER_OF_FILES(minFile, maxFile),
+                  max_number_of_files: APP_MESSAGE.INCORRECT_NUMBER_OF_FILES(minFile, maxFiles),
                   allowed_formats: APP_MESSAGE.INVALID_FILE_FORMAT_OR_SIZE(
                     clientAllowedFormats.join(', '),
                     maxFileSize.text
@@ -45,7 +50,7 @@ const CloudinaryUploadWidget = ({ onSuccess, minFile, maxFile, clientAllowedForm
             }
           },
           clientAllowedFormats: clientAllowedFormats ? clientAllowedFormats : null,
-          maxFile: maxFile ? maxFile : null,
+          maxFiles: maxFiles ? maxFiles : null,
           maxFileSize: maxFileSize ? maxFileSize.size : 'unlimited',
           multiple: !!multiple
         },
