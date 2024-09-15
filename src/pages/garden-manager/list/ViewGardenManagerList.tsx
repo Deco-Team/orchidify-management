@@ -49,7 +49,7 @@ const ViewGardenManagerList = () => {
     }),
     renderTopToolbarCustomActions: () => (
       <Typography variant='subtitle1' my={'auto'} sx={{ color: theme.palette.info.dark }}>
-        Danh sách nhà vườn
+        Danh sách quản lý vườn
       </Typography>
     ),
     muiTablePaperProps: {
@@ -81,7 +81,7 @@ const ViewGardenManagerList = () => {
     <>
       <TitleWrapper>
         <Typography variant='h5' fontSize={34} fontWeight={700}>
-          Nhà vườn
+          Quản lý vườn
         </Typography>
         <div style={{ display: 'flex' }}>
           <Button
