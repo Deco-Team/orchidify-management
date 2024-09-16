@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Box, FormHelperText, InputLabel, OutlinedInput, Typography, useTheme } from '@mui/material'
 import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 import { Cloud } from '@mui/icons-material'
@@ -24,14 +25,17 @@ export const ControlledFileFieldUpload = <TFieldValues extends FieldValues>({
   maxFileSize
 }: ControlledFileInputProps<TFieldValues>) => {
   const {
-    field: { value, onChange, ...field },
+    field: { onChange, ...field },
     fieldState: { error }
   } = useController(controller)
+  const [selectedFiles, setSelectedFiles] = useState<CloudinaryFileUploadedInfo[]>([])
 
   const handleUploadSuccess = (info: CloudinaryFileUploadedInfo) => {
     if (multiple) {
-      onChange([...value, info])
+      setSelectedFiles((prev) => [...prev, info])
+      onChange([...selectedFiles, info])
     } else {
+      setSelectedFiles([info])
       onChange([info])
     }
   }
@@ -52,7 +56,7 @@ export const ControlledFileFieldUpload = <TFieldValues extends FieldValues>({
         <OutlinedInput
           {...field}
           size='small'
-          value={value.map((file: CloudinaryFileUploadedInfo) => file.original_filename).join(', ')}
+          value={selectedFiles.map((file: CloudinaryFileUploadedInfo) => file.original_filename).join(', ')}
           disabled={!error}
           readOnly={!!error}
           error={!!error}
@@ -77,14 +81,17 @@ export const ControlledFileAreaUpload = <TFieldValues extends FieldValues>({
 }: ControlledFileInputProps<TFieldValues>) => {
   const theme = useTheme()
   const {
-    field: { value, onChange },
+    field: { onChange },
     fieldState: { error }
   } = useController(controller)
+  const [selectedFiles, setSelectedFiles] = useState<CloudinaryFileUploadedInfo[]>([])
 
   const handleUploadSuccess = (info: CloudinaryFileUploadedInfo) => {
     if (multiple) {
-      onChange([...value, info])
+      setSelectedFiles((prev) => [...prev, info])
+      onChange([...selectedFiles, info])
     } else {
+      setSelectedFiles([info])
       onChange([info])
     }
   }
