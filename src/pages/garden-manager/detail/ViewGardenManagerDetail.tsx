@@ -1,6 +1,6 @@
 import { Box, Button, Grid, Theme, Typography, useTheme } from '@mui/material'
 import { lazy, ReactNode, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Avatar, ContentText, ContentWrapper, Image, Label, Line, TitleWrapper } from './ViewGardenManagerDetail.styled'
 import { notifyError } from '~/utils/toastify'
 import { map } from 'lodash'
@@ -37,6 +37,7 @@ const ViewGardenManagerDetail = () => {
   const [error, setError] = useState<ErrorResponseDto | null>(null)
   const theme = useTheme()
   const params = useParams()
+  const navigate = useNavigate()
   const gardenManagerId = params.id
   const { getGardenManagerById } = useGardenManagerApi()
 
@@ -62,7 +63,7 @@ const ViewGardenManagerDetail = () => {
   }
 
   const handleUpdateButton = () => {
-    alert('update')
+    if (gardenManagerId) navigate(protectedRoute.updateGardenManager.path.replace(':id', gardenManagerId))
   }
 
   const handleReloadData = async () => {
