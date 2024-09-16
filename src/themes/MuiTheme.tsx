@@ -27,7 +27,8 @@ const theme = createTheme({
     },
     info: {
       main: '#aeaeb2',
-      light: '#e0e0e0'
+      light: '#e0e0e0',
+      dark: '#666666'
     },
     warning: {
       main: '#ff9242',

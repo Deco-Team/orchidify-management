@@ -2,7 +2,7 @@ import { lazy } from 'react'
 
 const Home = lazy(() => import('~/pages/Home'))
 const Login = lazy(() => import('~/pages/login/Login'))
-const GardenManagerList = lazy(() => import('~/pages/garden-manager/GardenManagerList'))
+const ViewGardenManagerList = lazy(() => import('~/pages/garden-manager/list/ViewGardenManagerList'))
 const ViewGardenManagerDetail = lazy(() => import('~/pages/garden-manager/detail/ViewGardenManagerDetail'))
 const AddGardenManager = lazy(() => import('~/pages/garden-manager/add/AddGardenManager'))
 
@@ -22,17 +22,17 @@ export const protectedRoute = {
   },
   gardenManagerList: {
     name: 'Quản lý vườn',
-    path: '/garden-manager',
-    Component: GardenManagerList
+    path: '/garden-managers',
+    Component: ViewGardenManagerList
   },
   gardenManagerDetail: {
-    name: 'Thông tin Quản lý vườn',
-    path: '/garden-manager/:id',
+    name: 'Thông tin quản lý vườn',
+    path: '/garden-managers/:id',
     Component: ViewGardenManagerDetail
   },
   addGardenManager: {
     name: 'Thêm Quản lý vườn',
-    path: '/garden-manager/add',
+    path: '/garden-managers/add',
     Component: AddGardenManager
   }
 }

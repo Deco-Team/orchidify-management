@@ -75,7 +75,8 @@ const ViewGardenManagerDetail = () => {
 
   useEffect(() => {
     if (gardenManagerId) {
-      ;(async () => {
+      // eslint-disable-next-line prettier/prettier
+      (async () => {
         const { data: gardenManager, error: apiError } = await getGardenManagerById(gardenManagerId)
         setData(gardenManager)
         setError(apiError)

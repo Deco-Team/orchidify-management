@@ -1,11 +1,12 @@
 import { Chip, SxProps, Theme } from '@mui/material'
+import { ReactNode } from 'react'
 import { UserStatus } from '~/global/app-status'
 
 interface UserStatusTagProps {
   type: UserStatus
 }
 
-const UserStatusTag = ({ type }: UserStatusTagProps) => {
+const UserStatusTag = ({ type }: UserStatusTagProps): ReactNode => {
   let label = ''
   let styles: SxProps<Theme> | undefined = undefined
 
