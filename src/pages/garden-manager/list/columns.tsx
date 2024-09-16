@@ -21,7 +21,8 @@ export const GardenManagerColumns: MRT_ColumnDef<GardenManager>[] = [
     Cell: ({ cell }) => {
       const date = new Date(cell.getValue() as unknown as string)
       return date.toLocaleDateString('vi-VN')
-    }
+    },
+    enableColumnFilter: false
   },
   {
     accessorKey: 'status',
@@ -30,6 +31,11 @@ export const GardenManagerColumns: MRT_ColumnDef<GardenManager>[] = [
     Cell: ({ cell }) => {
       const type = cell.getValue() as UserStatus
       return <UserStatusTag type={type} />
-    }
+    },
+    filterVariant: 'multi-select',
+    filterSelectOptions: [
+      { label: 'Hoạt động', value: UserStatus.ACTIVE },
+      { label: 'Vô hiệu hóa', value: UserStatus.INACTIVE }
+    ]
   }
 ]

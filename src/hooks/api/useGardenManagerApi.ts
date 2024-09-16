@@ -35,15 +35,27 @@ export const useGardenManagerApi = () => {
   )
 
   const getAllGardenManager = useCallback(
-    async (page = 1, pageSize = 10) => {
+    async (
+      page = 1,
+      pageSize = 10,
+      sorting: { field: string; desc: boolean }[] = [],
+      filters: { field: string; value: unknown }[] = []
+    ) => {
       const endpoint = `${ROOT_ENDPOINT}`
+      const sortingFormat = sorting.map((sort) => `${sort.field}.${sort.desc ? 'desc' : 'asc'}`).join('_')
+      let filtersFormat = {}
+      filters.forEach((filter) => {
+        filtersFormat = Object.assign({ [filter.field]: filter.value }, filtersFormat)
+      })
       const result = await callAppProtectedApi<ListResponseDto<GardenManager>>(
         endpoint,
         'GET',
         {},
         {
           page,
-          limit: pageSize
+          limit: pageSize,
+          sort: sortingFormat,
+          ...filtersFormat
         },
         {}
       )
@@ -94,7 +106,7 @@ export const useGardenManagerApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Vô hiệu hóa') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.ACTION_FAILED('Vô hiệu hóa quản lý vườn') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
@@ -113,7 +125,7 @@ export const useGardenManagerApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Kích hoạt') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.ACTION_FAILED('Kích hoạt quản lý vườn') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]

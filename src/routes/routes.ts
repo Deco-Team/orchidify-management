@@ -21,16 +21,18 @@ export const protectedRoute = {
     Component: Home
   },
   gardenManagerList: {
+    name: 'Quản lý vườn',
     path: '/garden-managers',
     Component: ViewGardenManagerList
   },
   gardenManagerDetail: {
+    name: 'Thông tin quản lý vườn',
     path: '/garden-managers/:id',
     Component: ViewGardenManagerDetail
   },
   addGardenManager: {
     name: 'Thêm Quản lý vườn',
-    path: '/garden-manager/add',
+    path: '/garden-managers/add',
     Component: AddGardenManager
   }
 }

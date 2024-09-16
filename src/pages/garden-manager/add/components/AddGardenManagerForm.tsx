@@ -11,6 +11,7 @@ import { CloudinaryFileUploadedInfo } from '~/components/cloudinary/cloudinary-t
 import { useGardenManagerApi } from '~/hooks/api/useGardenManagerApi'
 import { notifyError, notifySuccess } from '~/utils/toastify'
 import { useNavigate } from 'react-router-dom'
+import { protectedRoute } from '~/routes/routes'
 
 type FormValues = {
   name: string
@@ -57,7 +58,7 @@ const AddGardenManagerForm = () => {
       return
     }
     notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Thêm quản lý vườn'))
-    navigate(`/garden-manager`, { replace: true })
+    navigate(protectedRoute.gardenManagerList.path, { replace: true })
   })
 
   return (
