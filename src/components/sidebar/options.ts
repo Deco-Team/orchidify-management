@@ -23,7 +23,7 @@ export const OptionsStaff = [
   { id: 4, text: 'Đơn tuyển', link: protectedRoute.dashboard.path, Icon: ContactPage },
   { id: 5, text: 'Giảng viên', link: protectedRoute.dashboard.path, Icon: CoPresent },
   { id: 6, text: 'Học viên', link: protectedRoute.dashboard.path, Icon: School },
-  { id: 7, text: 'Nhà vườn', link: protectedRoute.dashboard.path, Icon: LocalFlorist },
+  { id: 7, text: 'Nhà vườn', link: protectedRoute.gardenList.path, Icon: LocalFlorist },
   { id: 8, text: 'Quản lý vườn', link: protectedRoute.gardenManagerList.path, Icon: ManageAccounts },
   { id: 9, text: 'Yêu cầu rút tiền', link: protectedRoute.dashboard.path, Icon: RequestQuote }
 ]
