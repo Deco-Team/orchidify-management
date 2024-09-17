@@ -38,7 +38,7 @@ export const useGardenManagerApi = () => {
     [callAppProtectedApi]
   )
 
-  const getAllGardenManager = useCallback(
+  const getAllGardenManagers = useCallback(
     async (
       page = 1,
       pageSize = 10,
@@ -155,7 +155,7 @@ export const useGardenManagerApi = () => {
   )
 
   return {
-    getAllGardenManager,
+    getAllGardenManagers,
     addGardenManager,
     getGardenManagerById,
     updateGardenManager,

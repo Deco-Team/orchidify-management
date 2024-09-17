@@ -81,7 +81,7 @@ const ViewGardenList = () => {
           <Button
             color='secondary'
             onClick={() => {
-              navigate(protectedRoute.addGardenManager.path)
+              navigate(protectedRoute.addGarden.path)
             }}
             sx={{ marginRight: '24px' }}
             endIcon={<AddIcon />}

@@ -20,7 +20,7 @@ const Layout = ({ children }: LayoutProps) => {
     <Box sx={{ display: 'flex' }}>
       <AppBar open={open} drawerwidth={DRAWER_WIDTH} handleDrawer={handleDrawer} />
       <Sidebar open={open} drawerwidth={DRAWER_WIDTH} />
-      <Box component='main' sx={{ flexGrow: 1, p: 3, mt: 8 }}>
+      <Box component='main' sx={{ minWidth: `calc(100% - ${DRAWER_WIDTH}px)`, p: 3, mt: 8 }}>
         {children}
       </Box>
     </Box>
