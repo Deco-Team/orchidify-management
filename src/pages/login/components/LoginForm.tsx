@@ -13,19 +13,24 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { APP_MESSAGE } from '~/global/app-message'
 
 type FormValues = {
-  role: UserRole
+  role: string
   email: string
   password: string
 }
 
 const defaultFormValues: FormValues = {
-  role: UserRole.STAFF,
+  role: '',
   email: '',
   password: ''
 }
 
 const validationSchema = z.object({
-  role: z.nativeEnum(UserRole),
+  role: z
+    .string()
+    .min(1, APP_MESSAGE.REQUIRED_FIELD('Chức vụ'))
+    .refine((value) => UserRole[value as keyof typeof UserRole], {
+      message: APP_MESSAGE.INVALID_VALUE(['Staff', 'Garden Manager'])
+    }),
   email: z
     .string()
     .min(1, APP_MESSAGE.REQUIRED_FIELD('Email'))
@@ -59,7 +64,7 @@ const LoginForm = () => {
   const { login } = useAuth()
 
   const onSubmit = handleSubmit(async (data) => {
-    const error = await login(data.role, data.email, data.password)
+    const error = await login(UserRole[data.role as keyof typeof UserRole], data.email, data.password)
 
     if (error) {
       notifyError(error.message)

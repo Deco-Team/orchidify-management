@@ -1,7 +1,6 @@
 import { Badge, Box, IconButton, Toolbar } from '@mui/material'
 import { StyledAppBar } from './AppBar.styled'
-import { Menu, Notifications, AccountCircle } from '@mui/icons-material'
-import { Link } from 'react-router-dom'
+import { Menu, Notifications } from '@mui/icons-material'
 
 interface AppBarProps {
   open: boolean
@@ -37,9 +36,6 @@ const AppBar = ({ open, drawerwidth, handleDrawer }: AppBarProps) => {
             <Badge badgeContent={17} color='error'>
               <Notifications sx={{ color: '#2EC4B6' }} />
             </Badge>
-          </IconButton>
-          <IconButton size='large' edge='end' color='inherit' component={Link} to='/profile'>
-            <AccountCircle sx={{ color: '#2EC4B6' }} />
           </IconButton>
         </Box>
       </Toolbar>

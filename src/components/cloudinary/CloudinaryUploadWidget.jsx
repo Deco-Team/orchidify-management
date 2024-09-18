@@ -4,7 +4,15 @@ import { FileSize } from '~/global/constants'
 import { text } from './cloudinary-text'
 import { APP_MESSAGE } from '~/global/app-message'
 
-const CloudinaryUploadWidget = ({ onSuccess, minFile, maxFiles, clientAllowedFormats, maxFileSize, multiple, buttonStyle = {} }) => {
+const CloudinaryUploadWidget = ({
+  onSuccess,
+  minFile,
+  maxFiles,
+  clientAllowedFormats,
+  maxFileSize,
+  multiple,
+  buttonStyle = {}
+}) => {
   const [widget, setWidget] = useState(null)
   const initializeCloudinaryWidget = useCallback(() => {
     setWidget(
@@ -71,7 +79,14 @@ const CloudinaryUploadWidget = ({ onSuccess, minFile, maxFiles, clientAllowedFor
   }, [])
 
   return (
-    <Button id='upload_widget' sx={buttonStyle} onClick={() => widget.open()}>
+    <Button
+      id='upload_widget'
+      sx={buttonStyle}
+      onClick={() => {
+        widget.update({ maxFiles: maxFiles })
+        widget.open()
+      }}
+    >
       Tải lên
     </Button>
   )

@@ -10,5 +10,6 @@ export const APP_MESSAGE = {
   LOAD_DATA_FAILED: (data: string = '') => `Đã xảy ra lỗi khi tải ${data}. Vui lòng thử lại sau.`,
   INVALID_FILE_FORMAT_OR_SIZE: (format: string, size: string) =>
     `Phương tiện phải có định dạng hỗ trợ (${format}) và kích thước không vượt quá ${size}`,
-  INCORRECT_NUMBER_OF_FILES: (min: number, max: number) => `Số lượng file phải nằm trong khoảng từ ${min} đến ${max}.`
+  INCORRECT_NUMBER_OF_FILES: (min: number, max: number) => `Số lượng file phải nằm trong khoảng từ ${min} đến ${max}.`,
+  INVALID_VALUE: (valueList: string[]) => `Chỉ chấp nhận các giá trị ${valueList.join(', ')}`
 }

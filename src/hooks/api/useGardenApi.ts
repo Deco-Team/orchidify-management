@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { ListResponseDto } from '~/data/common.dto'
+import { IdResponseDto, ListResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { GardenManager } from '~/data/gardenManager.dto'
 import { APP_MESSAGE } from '~/global/app-message'
@@ -7,6 +7,14 @@ import { useProtectedApi } from './useProtectedApi'
 import { Garden } from '~/data/garden.dto'
 
 const ROOT_ENDPOINT = '/gardens'
+
+interface AddGardenRequest {
+  name: string
+  address: string
+  gardenManagerId: string
+  description: string
+  images: string[]
+}
 
 export const useGardenApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
@@ -70,5 +78,23 @@ export const useGardenApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getAllGardens, getGardenById }
+  const addGarden = useCallback(
+    async (garden: AddGardenRequest) => {
+      const result = await callAppProtectedApi<IdResponseDto>(ROOT_ENDPOINT, 'POST', {}, {}, garden)
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('thêm nhà vườn') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return { getAllGardens, getGardenById, addGarden }
 }

@@ -15,7 +15,7 @@ import Table from '~/components/table/Table'
 
 const ViewGardenManagerList = () => {
   const navigate = useNavigate()
-  const { getAllGardenManager } = useGardenManagerApi()
+  const { getAllGardenManagers } = useGardenManagerApi()
   const [data, setData] = useState<ListResponseDto<GardenManager>>({
     docs: [],
     totalDocs: 0,
@@ -40,7 +40,7 @@ const ViewGardenManagerList = () => {
   useEffect(() => {
     // eslint-disable-next-line prettier/prettier
     (async () => {
-      const { data: gardenManager, error: apiError } = await getAllGardenManager(
+      const { data: gardenManager, error: apiError } = await getAllGardenManagers(
         pagination.pageIndex + 1,
         pagination.pageSize,
         sorting.map((sort) => ({ field: sort.id, desc: sort.desc })),
@@ -65,7 +65,7 @@ const ViewGardenManagerList = () => {
       }
       setError(apiError)
     })()
-  }, [getAllGardenManager, pagination.pageIndex, pagination.pageSize, sorting, columnFilters])
+  }, [getAllGardenManagers, pagination.pageIndex, pagination.pageSize, sorting, columnFilters])
 
   if (error) {
     notifyError(error.message)
