@@ -29,6 +29,7 @@ const Carousel = ({ children }: SliderProps) => {
     infinite: false,
     speed: 500,
     slidesToShow: Math.min(5, childrenArray.length),
+    swipeToSlide: true,
     slidesToScroll: 1,
     arrows: false
   }
