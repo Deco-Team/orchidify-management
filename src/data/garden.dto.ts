@@ -12,4 +12,5 @@ export type Garden = {
     name: string
     id: string
   }>
+  images?: Array<string>
 }
