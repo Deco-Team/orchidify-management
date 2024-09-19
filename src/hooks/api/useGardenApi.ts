@@ -1,10 +1,9 @@
 import { useCallback } from 'react'
 import { IdResponseDto, ListResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { GardenManager } from '~/data/gardenManager.dto'
+import { Garden } from '~/data/garden.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useProtectedApi } from './useProtectedApi'
-import { Garden } from '~/data/garden.dto'
 
 const ROOT_ENDPOINT = '/gardens'
 
@@ -60,9 +59,9 @@ export const useGardenApi = () => {
   )
 
   const getGardenById = useCallback(
-    async (gardenManagerId: string) => {
-      const endpoint = `${ROOT_ENDPOINT}/${gardenManagerId}`
-      const result = await callAppProtectedApi<GardenManager>(endpoint, 'GET', {}, {}, {})
+    async (gardenId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/${gardenId}`
+      const result = await callAppProtectedApi<Garden>(endpoint, 'GET', {}, {}, {})
 
       if (result) {
         const { data, error } = result

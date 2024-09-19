@@ -8,6 +8,7 @@ const AddGardenManager = lazy(() => import('~/pages/garden-manager/add/AddGarden
 const UpdateGardenManager = lazy(() => import('~/pages/garden-manager/update/UpdateGardenManager'))
 const ViewGardenList = lazy(() => import('~/pages/garden/list/ViewGardenList'))
 const AddGarden = lazy(() => import('~/pages/garden/add/AddGarden'))
+const ViewGardenDetail = lazy(() => import('~/pages/garden/detail/ViewGardenDetail'))
 
 export const publicRoute = {
   login: {
@@ -52,5 +53,10 @@ export const protectedRoute = {
     name: 'Thêm nhà vườn',
     path: '/gardens/add',
     Component: AddGarden
+  },
+  gardenDetail: {
+    name: 'Thông tin nhà vườn',
+    path: '/gardens/:id',
+    Component: ViewGardenDetail
   }
 }

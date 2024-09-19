@@ -1,36 +1,20 @@
-import { Box, Button, Grid, Theme, Typography, useTheme } from '@mui/material'
-import { lazy, ReactNode, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { Avatar, ContentText, ContentWrapper, Image, Label, Line, TitleWrapper } from './ViewGardenManagerDetail.styled'
-import { notifyError } from '~/utils/toastify'
+import { Box, Button, Typography, useTheme } from '@mui/material'
 import { map } from 'lodash'
-import { useGardenManagerApi } from '~/hooks/api/useGardenManagerApi'
-import UserStatusTag from '~/components/tag/UserStatusTag'
-import { UserStatus } from '~/global/app-status'
-import { GardenManager } from '~/data/gardenManager.dto'
-import { ErrorResponseDto } from '~/data/error.dto'
-import Loading from '~/components/loading/Loading'
-import { protectedRoute } from '~/routes/routes'
+import { lazy, useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import Breadcrumbs from '~/components/breadscrumbs/Breadscrumbs'
+import Loading from '~/components/loading/Loading'
+import UserStatusTag from '~/components/tag/UserStatusTag'
+import Field from '~/components/text-field/Field'
+import { ErrorResponseDto } from '~/data/error.dto'
+import { GardenManager } from '~/data/gardenManager.dto'
+import { UserStatus } from '~/global/app-status'
+import { useGardenManagerApi } from '~/hooks/api/useGardenManagerApi'
+import { protectedRoute } from '~/routes/routes'
+import { notifyError } from '~/utils/toastify'
+import { Avatar, ContentText, ContentWrapper, Image, Line, TitleWrapper } from './ViewGardenManagerDetail.styled'
 const ActivateDialog = lazy(() => import('./components/ActivateDialog'))
 const DeactivateDialog = lazy(() => import('./components/DeactivateDialog'))
-
-interface FieldProps {
-  label: string
-  content: ReactNode
-  theme: Theme
-}
-
-const Field: React.FC<FieldProps> = ({ label, content, theme }) => (
-  <Grid container spacing={3}>
-    <Grid item xs={2}>
-      <Label theme={theme}>{label}</Label>
-    </Grid>
-    <Grid item xs={4} sx={{ display: 'flex', alignItems: 'center' }}>
-      {content}
-    </Grid>
-  </Grid>
-)
 
 const ViewGardenManagerDetail = () => {
   const [data, setData] = useState<GardenManager | null>(null)
