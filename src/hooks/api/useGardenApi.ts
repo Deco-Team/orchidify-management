@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { IdResponseDto, ListResponseDto } from '~/data/common.dto'
+import { IdResponseDto, ListResponseDto, SuccessResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { Garden } from '~/data/garden.dto'
 import { APP_MESSAGE } from '~/global/app-message'
@@ -95,5 +95,43 @@ export const useGardenApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getAllGardens, getGardenById, addGarden }
+  const activateGarden = useCallback(
+    async (gardenId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/${gardenId}/active`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PATCH', {}, {}, {})
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('Vô hiệu hóa nhà vườn') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  const deactivateGarden = useCallback(
+    async (gardenId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/${gardenId}/deactivate`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PATCH', {}, {}, {})
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('Kích hoạt nhà vườn') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return { getAllGardens, getGardenById, addGarden, activateGarden, deactivateGarden }
 }
