@@ -1,7 +1,7 @@
 import { ArrowForward } from '@mui/icons-material'
 import { Box, Button, Grid, Link as MuiLink, Typography, useTheme } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Breadcrumbs from '~/components/breadscrumbs/Breadscrumbs'
 import Loading from '~/components/loading/Loading'
 import Carousel from '~/components/slider/Carousel'
@@ -24,6 +24,7 @@ const ViewGardenDetail = () => {
   const params = useParams()
   const gardenId = params.id
   const { getGardenById } = useGardenApi()
+  const navigate = useNavigate()
 
   const [openActivateDialog, setOpenActivateDialog] = useState<boolean>(false)
   const [openDeactivateDialog, setOpenDeactivateDialog] = useState<boolean>(false)
@@ -47,7 +48,7 @@ const ViewGardenDetail = () => {
   }
 
   const handleUpdateButton = () => {
-    alert('updated')
+    navigate(protectedRoute.updateGardenInfo.path.replace(':id', gardenId!))
   }
 
   const handleReloadData = async () => {
@@ -64,8 +65,6 @@ const ViewGardenDetail = () => {
       (async () => {
         const { data: garden, error: apiError } = await getGardenById(gardenId)
         setData(garden)
-        console.log(garden?.images)
-
         setError(apiError)
       })()
     }
@@ -174,7 +173,7 @@ const ViewGardenDetail = () => {
                 boxSizing: 'border-box'
               }}
             >
-              <div style={{ width: '230px', padding: '0 2px' }}>
+              <div style={{ width: '200px', height: '200px', padding: '0 2px' }}>
                 <Image src={value} alt={`Garden Image ${index + 1}`} />
               </div>
             </div>

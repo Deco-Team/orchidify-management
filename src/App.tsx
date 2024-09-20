@@ -11,8 +11,6 @@ import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
 
 function App() {
   return (
@@ -33,12 +31,13 @@ function App() {
                 }
               />
             ))}
-            {Object.entries(protectedRoute).map(([, { path, Component }]) => (
+            {Object.entries(protectedRoute).map(([, { roles, path, Component }]) => (
               <Route
                 key={path}
                 path={path}
                 element={
                   <ProtectedRoute
+                    roles={roles}
                     element={
                       <Suspense fallback={<Loading />}>
                         <Component />

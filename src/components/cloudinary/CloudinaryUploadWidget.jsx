@@ -81,6 +81,7 @@ const CloudinaryUploadWidget = ({
   return (
     <Button
       id='upload_widget'
+      disabled={maxFiles <= 0}
       sx={buttonStyle}
       onClick={() => {
         widget.update({ maxFiles: maxFiles })

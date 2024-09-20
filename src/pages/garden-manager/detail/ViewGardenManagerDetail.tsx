@@ -71,6 +71,7 @@ const ViewGardenManagerDetail = () => {
 
   if (error) {
     notifyError(error.message)
+    navigate(protectedRoute.gardenManagerList.path, { replace: true })
   }
 
   return data ? (
