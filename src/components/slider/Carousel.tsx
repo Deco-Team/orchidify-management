@@ -2,6 +2,8 @@ import { ReactNode } from 'react'
 import Slider from 'react-slick'
 import { Children } from 'react'
 import styled from '@emotion/styled'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 
 interface SliderProps {
   children: ReactNode

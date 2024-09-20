@@ -7,11 +7,11 @@ import { APP_MESSAGE } from '~/global/app-message'
 import { StyledForm } from './AddGardenForm.styled'
 import { CloudinaryFileUploadedInfo } from '~/components/cloudinary/cloudinary-type'
 import { useNavigate } from 'react-router-dom'
-import GardenManagerSelect from './GardenManagerSelect'
 import { useGardenApi } from '~/hooks/api/useGardenApi'
 import { notifyError, notifySuccess } from '~/utils/toastify'
 import { protectedRoute } from '~/routes/routes'
 import GardenImageUpload from './GardenImageUpload'
+import { Garden } from '~/data/garden.dto'
 
 type FormValues = {
   name: string
@@ -21,24 +21,7 @@ type FormValues = {
   images: CloudinaryFileUploadedInfo[]
 }
 
-const defaultFormValues: FormValues = {
-  name: '',
-  address: '',
-  gardenManagerId: '',
-  description: '',
-  images: []
-}
-
 const validationSchema = z.object({
-  name: z
-    .string()
-    .min(1, APP_MESSAGE.REQUIRED_FIELD('Tên quản lý vườn'))
-    .max(50, APP_MESSAGE.FIELD_TOO_LONG('Tên quản lý vườn', 50)),
-  address: z
-    .string()
-    .min(1, APP_MESSAGE.REQUIRED_FIELD('Địa chỉ'))
-    .max(100, APP_MESSAGE.FIELD_TOO_LONG('Địa chỉ', 100)),
-  gardenManagerId: z.string().min(1, APP_MESSAGE.REQUIRED_FIELD('Quản lý vườn')),
   description: z
     .string()
     .min(1, APP_MESSAGE.REQUIRED_FIELD('Mô tả'))
@@ -46,26 +29,38 @@ const validationSchema = z.object({
   images: z.array(z.object({}).passthrough()).nonempty(APP_MESSAGE.REQUIRED_FIELD('Hình ảnh nhà vườn'))
 })
 
-const AddGardenForm = () => {
-  const { addGarden } = useGardenApi()
+interface UpdateGardenInfoFormProps {
+  garden: Garden
+}
+
+const UpdateGardenInfoForm = ({ garden }: UpdateGardenInfoFormProps) => {
+  const { updateGardenInfo } = useGardenApi()
   const navigate = useNavigate()
   const {
     handleSubmit,
     control,
     formState: { isSubmitting }
   } = useForm<FormValues>({
-    defaultValues: defaultFormValues,
+    defaultValues: {
+      name: garden.name,
+      address: garden.address,
+      description: garden.description,
+      images: garden.images ? garden.images.map((image) => ({ url: image })) : []
+    },
     resolver: zodResolver(validationSchema)
   })
 
   const onSubmit = handleSubmit(async (formValue) => {
-    const { error } = await addGarden({ ...formValue, images: formValue.images.map((image) => image.url) })
+    const { error } = await updateGardenInfo(garden._id, {
+      ...formValue,
+      images: formValue.images.map((image) => image.url)
+    })
     if (error) {
       notifyError(error.message)
       return
     }
-    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Thêm nhà vườn'))
-    navigate(protectedRoute.gardenList.path, { replace: true })
+    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Cập nhật thông tin nhà vườn'))
+    navigate(protectedRoute.gardenDetail.path.replace(':id', garden._id), { replace: true })
   })
 
   return (
@@ -81,6 +76,7 @@ const AddGardenForm = () => {
           <Grid item xs={12} lg={6}>
             <ControlledOutlinedInput
               controller={{ name: 'name', control: control }}
+              disabled
               label='Tên nhà vườn'
               fullWidth
               size='small'
@@ -89,13 +85,11 @@ const AddGardenForm = () => {
           <Grid item xs={12} lg={6}>
             <ControlledOutlinedInput
               controller={{ name: 'address', control: control }}
+              disabled
               label='Địa chỉ'
               fullWidth
               size='small'
             />
-          </Grid>
-          <Grid item xs={12} lg={6}>
-            <GardenManagerSelect controller={{ name: 'gardenManagerId', control: control }} />
           </Grid>
           <Grid item xs={12}>
             <ControlledOutlinedInput
@@ -113,10 +107,10 @@ const AddGardenForm = () => {
         </Grid>
       </Paper>
       <Button disabled={isSubmitting} type='submit'>
-        Thêm
+        Lưu
       </Button>
     </StyledForm>
   )
 }
 
-export default AddGardenForm
+export default UpdateGardenInfoForm

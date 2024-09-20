@@ -1,18 +1,7 @@
-import { useEffect, useState } from 'react'
-import {
-  Box,
-  FormHelperText,
-  IconButton,
-  ImageList,
-  ImageListItem,
-  ImageListItemBar,
-  InputLabel,
-  OutlinedInput,
-  Typography,
-  useTheme
-} from '@mui/material'
+import { FC, useEffect, useState } from 'react'
+import { Box, FormHelperText, InputLabel, OutlinedInput, Typography, useTheme } from '@mui/material'
 import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
-import { Cloud, Delete } from '@mui/icons-material'
+import { Cloud } from '@mui/icons-material'
 import CloudinaryUploadWidget from '../cloudinary/CloudinaryUploadWidget'
 import { CloudinaryFileUploadedInfo } from '../cloudinary/cloudinary-type'
 
@@ -25,6 +14,7 @@ interface ControlledFileInputProps<TFieldValues extends FieldValues> {
   clientAllowedFormats?: string[]
   maxFileSize?: { text: string; size: number }
   onUploadSuccess?: (files: CloudinaryFileUploadedInfo[]) => void
+  FileDisplayComponent?: FC<{ files: CloudinaryFileUploadedInfo[]; onRemoveFile: (index: number) => void }>
 }
 
 export const ControlledFileFieldUpload = <TFieldValues extends FieldValues>({
@@ -95,14 +85,17 @@ export const ControlledFileAreaUpload = <TFieldValues extends FieldValues>({
   maxFiles = 20,
   clientAllowedFormats,
   maxFileSize,
-  onUploadSuccess
+  onUploadSuccess,
+  FileDisplayComponent
 }: ControlledFileInputProps<TFieldValues>) => {
   const theme = useTheme()
   const {
-    field: { onChange },
+    field: { value, onChange },
     fieldState: { error }
   } = useController(controller)
-  const [selectedFiles, setSelectedFiles] = useState<CloudinaryFileUploadedInfo[]>([])
+  const [selectedFiles, setSelectedFiles] = useState<CloudinaryFileUploadedInfo[]>(
+    value as CloudinaryFileUploadedInfo[]
+  )
 
   useEffect(() => {
     onChange(selectedFiles)
@@ -125,6 +118,7 @@ export const ControlledFileAreaUpload = <TFieldValues extends FieldValues>({
   return (
     <Box>
       <InputLabel sx={{ marginBottom: '0.7rem', color: '#000000' }}>{label}</InputLabel>
+      {FileDisplayComponent ? <FileDisplayComponent files={selectedFiles} onRemoveFile={handleRemoveFile} /> : null}
       <Box
         display='flex'
         flexDirection='column'
@@ -133,47 +127,21 @@ export const ControlledFileAreaUpload = <TFieldValues extends FieldValues>({
         minHeight={200}
         border={`1px solid ${error ? theme.palette.error.main : '#0000001F'}`}
       >
-        {selectedFiles.length ? (
-          <Box maxWidth='100%' overflow='scroll' paddingX={2}>
-            <ImageList sx={{ width: 'fit-content', display: 'flex' }}>
-              {selectedFiles.map((image, index) => (
-                <ImageListItem key={image.public_id} sx={{ width: '200px', height: '200px !important' }}>
-                  <img src={image.url} alt={image.display_name} style={{ height: '100%' }} />
-                  <ImageListItemBar
-                    sx={{
-                      background:
-                        'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' + 'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)'
-                    }}
-                    position='top'
-                    actionIcon={
-                      <IconButton sx={{ color: theme.palette.error.main }} onClick={() => handleRemoveFile(index)}>
-                        <Delete />
-                      </IconButton>
-                    }
-                    actionPosition='right'
-                  />
-                </ImageListItem>
-              ))}
-            </ImageList>
-          </Box>
-        ) : null}
-        {maxFiles - selectedFiles.length ? (
-          <Box display='flex' flexDirection='column' alignItems='center' paddingBottom={2}>
-            <Cloud sx={{ width: 35, height: 35 }} color='primary' />
-            <Typography variant='caption' margin='10px 0'>
-              Bấm tải lên
-            </Typography>
-            <CloudinaryUploadWidget
-              buttonStyle={{ width: 'fit-content' }}
-              onSuccess={handleUploadSuccess}
-              minFile={minFile}
-              maxFiles={maxFiles - selectedFiles.length}
-              clientAllowedFormats={clientAllowedFormats}
-              maxFileSize={maxFileSize}
-              multiple={multiple}
-            />
-          </Box>
-        ) : null}
+        <Box display='flex' flexDirection='column' alignItems='center' paddingBottom={2}>
+          <Cloud sx={{ width: 35, height: 35 }} color='primary' />
+          <Typography variant='caption' margin='10px 0'>
+            Bấm tải lên
+          </Typography>
+          <CloudinaryUploadWidget
+            buttonStyle={{ width: 'fit-content' }}
+            onSuccess={handleUploadSuccess}
+            minFile={minFile}
+            maxFiles={maxFiles - selectedFiles.length}
+            clientAllowedFormats={clientAllowedFormats}
+            maxFileSize={maxFileSize}
+            multiple={multiple}
+          />
+        </Box>
       </Box>
       {error ? <FormHelperText error>{error.message}</FormHelperText> : null}
     </Box>

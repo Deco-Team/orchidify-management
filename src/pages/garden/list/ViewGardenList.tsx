@@ -12,8 +12,11 @@ import { protectedRoute } from '~/routes/routes'
 import { notifyError } from '~/utils/toastify'
 import { GardenColumns } from './columns'
 import { useGardenApi } from '~/hooks/api/useGardenApi'
+import useAuth from '~/auth/useAuth'
+import { UserRole } from '~/global/constants'
 
 const ViewGardenList = () => {
+  const { userTokenPayload } = useAuth()
   const navigate = useNavigate()
   const { getAllGardens } = useGardenApi()
   const [data, setData] = useState<ListResponseDto<Garden>>({
@@ -78,16 +81,18 @@ const ViewGardenList = () => {
           Nhà vườn
         </Typography>
         <div style={{ display: 'flex' }}>
-          <Button
-            color='secondary'
-            onClick={() => {
-              navigate(protectedRoute.addGarden.path)
-            }}
-            sx={{ marginRight: '24px' }}
-            endIcon={<AddIcon />}
-          >
-            Thêm
-          </Button>
+          {userTokenPayload && userTokenPayload.role === UserRole.STAFF ? (
+            <Button
+              color='secondary'
+              onClick={() => {
+                navigate(protectedRoute.addGarden.path)
+              }}
+              sx={{ marginRight: '24px' }}
+              endIcon={<AddIcon />}
+            >
+              Thêm
+            </Button>
+          ) : null}
         </div>
       </TitleWrapper>
       <Table

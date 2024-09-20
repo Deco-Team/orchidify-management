@@ -15,6 +15,13 @@ interface AddGardenRequest {
   images: string[]
 }
 
+interface UpdateGardenInfoRequest {
+  name: string
+  address: string
+  description: string
+  images: string[]
+}
+
 export const useGardenApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
 
@@ -95,6 +102,25 @@ export const useGardenApi = () => {
     [callAppProtectedApi]
   )
 
+  const updateGardenInfo = useCallback(
+    async (gardenId: string, garden: UpdateGardenInfoRequest) => {
+      const endpoint = `${ROOT_ENDPOINT}/${gardenId}`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PUT', {}, {}, garden)
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('cập nhật thông tin nhà vườn') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
   const activateGarden = useCallback(
     async (gardenId: string) => {
       const endpoint = `${ROOT_ENDPOINT}/${gardenId}/active`
@@ -108,7 +134,7 @@ export const useGardenApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Vô hiệu hóa nhà vườn') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.ACTION_FAILED('Kích hoạt nhà vườn') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
@@ -127,11 +153,11 @@ export const useGardenApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Kích hoạt nhà vườn') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.ACTION_FAILED('Vô hiệu hóa nhà vườn') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
   )
 
-  return { getAllGardens, getGardenById, addGarden, activateGarden, deactivateGarden }
+  return { getAllGardens, getGardenById, addGarden, updateGardenInfo, activateGarden, deactivateGarden }
 }

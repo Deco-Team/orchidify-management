@@ -47,29 +47,28 @@ export default function UpdateGardenManager() {
 
   if (error) {
     notifyError(error.message)
+    navigate(protectedRoute.gardenManagerList.path, { replace: true })
   }
 
   return data ? (
-    <>
-      <Box sx={{ marginBottom: '40px' }}>
-        <Typography variant='h1' sx={{ fontSize: '2rem', paddingBottom: '8px', fontWeight: 700 }}>
-          Cập nhật quản lý vườn
-        </Typography>
-        <Breadcrumbs items={items} />
-        <UpdateGardenManagerForm
-          gardenManager={data}
-          onSubmit={async (formValues) => {
-            const { error } = await updateGardenManager(data._id, { ...formValues })
-            if (error) {
-              notifyError(error.message)
-              return
-            }
-            notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Cập nhật quản lý vườn'))
-            navigate(protectedRoute.gardenManagerDetail.path.replace(':id', gardenManagerId), { replace: true })
-          }}
-        />
-      </Box>
-    </>
+    <Box sx={{ marginBottom: '20px' }}>
+      <Typography variant='h1' sx={{ fontSize: '2rem', paddingBottom: '8px', fontWeight: 700 }}>
+        Cập nhật quản lý vườn
+      </Typography>
+      <Breadcrumbs items={items} />
+      <UpdateGardenManagerForm
+        gardenManager={data}
+        onSubmit={async (formValues) => {
+          const { error } = await updateGardenManager(data._id, { ...formValues })
+          if (error) {
+            notifyError(error.message)
+            return
+          }
+          notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Cập nhật quản lý vườn'))
+          navigate(protectedRoute.gardenManagerDetail.path.replace(':id', gardenManagerId), { replace: true })
+        }}
+      />
+    </Box>
   ) : (
     <Loading />
   )

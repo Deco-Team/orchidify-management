@@ -1,4 +1,5 @@
 import { lazy } from 'react'
+import { UserRole } from '~/global/constants'
 
 const Home = lazy(() => import('~/pages/Home'))
 const Login = lazy(() => import('~/pages/login/Login'))
@@ -9,6 +10,7 @@ const UpdateGardenManager = lazy(() => import('~/pages/garden-manager/update/Upd
 const ViewGardenList = lazy(() => import('~/pages/garden/list/ViewGardenList'))
 const AddGarden = lazy(() => import('~/pages/garden/add/AddGarden'))
 const ViewGardenDetail = lazy(() => import('~/pages/garden/detail/ViewGardenDetail'))
+const UpdateGardenInfo = lazy(() => import('~/pages/garden/update-info/UpdateGardenInfo'))
 
 export const publicRoute = {
   login: {
@@ -22,41 +24,55 @@ export const protectedRoute = {
   dashboard: {
     name: 'Trang chủ',
     path: '/dashboard',
-    Component: Home
+    Component: Home,
+    roles: [UserRole.ADMIN, UserRole.STAFF, UserRole.GARDEN_MANAGER]
   },
   gardenManagerList: {
     name: 'Quản lý vườn',
     path: '/garden-managers',
-    Component: ViewGardenManagerList
+    Component: ViewGardenManagerList,
+    roles: [UserRole.STAFF]
   },
   gardenManagerDetail: {
     name: 'Thông tin quản lý vườn',
     path: '/garden-managers/:id',
-    Component: ViewGardenManagerDetail
+    Component: ViewGardenManagerDetail,
+    roles: [UserRole.STAFF]
   },
   addGardenManager: {
     name: 'Thêm Quản lý vườn',
     path: '/garden-managers/add',
-    Component: AddGardenManager
+    Component: AddGardenManager,
+    roles: [UserRole.STAFF]
   },
   updateGardenManager: {
     name: 'Cập nhật Quản lý vườn',
     path: '/garden-managers/:id/update',
-    Component: UpdateGardenManager
+    Component: UpdateGardenManager,
+    roles: [UserRole.STAFF]
   },
   gardenList: {
     name: 'Nhà vườn',
     path: '/gardens',
-    Component: ViewGardenList
+    Component: ViewGardenList,
+    roles: [UserRole.STAFF, UserRole.GARDEN_MANAGER]
   },
   addGarden: {
     name: 'Thêm nhà vườn',
     path: '/gardens/add',
-    Component: AddGarden
+    Component: AddGarden,
+    roles: [UserRole.STAFF]
   },
   gardenDetail: {
     name: 'Thông tin nhà vườn',
     path: '/gardens/:id',
-    Component: ViewGardenDetail
+    Component: ViewGardenDetail,
+    roles: [UserRole.STAFF, UserRole.GARDEN_MANAGER]
+  },
+  updateGardenInfo: {
+    name: 'Cập nhật nhà vườn',
+    path: '/gardens/:id/update',
+    Component: UpdateGardenInfo,
+    roles: [UserRole.STAFF, UserRole.GARDEN_MANAGER]
   }
 }
