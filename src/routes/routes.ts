@@ -11,6 +11,7 @@ const ViewGardenList = lazy(() => import('~/pages/garden/list/ViewGardenList'))
 const AddGarden = lazy(() => import('~/pages/garden/add/AddGarden'))
 const ViewGardenDetail = lazy(() => import('~/pages/garden/detail/ViewGardenDetail'))
 const UpdateGardenInfo = lazy(() => import('~/pages/garden/update-info/UpdateGardenInfo'))
+const UpdateGardenMangerOfGarden = lazy(() => import('~/pages/garden/update-garden-manager/UpdateGardenManager'))
 
 export const publicRoute = {
   login: {
@@ -74,5 +75,11 @@ export const protectedRoute = {
     path: '/gardens/:id/update',
     Component: UpdateGardenInfo,
     roles: [UserRole.STAFF, UserRole.GARDEN_MANAGER]
+  },
+  updateGardenManagerOfGarden: {
+    name: 'Thay đổi quản lý vườn',
+    path: '/gardens/:id/update-garden-manager',
+    Component: UpdateGardenMangerOfGarden,
+    roles: [UserRole.STAFF]
   }
 }
