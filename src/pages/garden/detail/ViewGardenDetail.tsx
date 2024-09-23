@@ -16,8 +16,12 @@ import { protectedRoute } from '~/routes/routes'
 import { notifyError } from '~/utils/toastify'
 import ActivateDialog from './components/ActivateDialog'
 import DeactivateDialog from './components/DeactivateDialog'
+import { APP_MESSAGE } from '~/global/app-message'
+import useAuth from '~/auth/useAuth'
+import { UserRole } from '~/global/constants'
 
 const ViewGardenDetail = () => {
+  const { userTokenPayload } = useAuth()
   const [data, setData] = useState<Garden | null>(null)
   const [error, setError] = useState<ErrorResponseDto | null>(null)
   const theme = useTheme()
@@ -70,6 +74,12 @@ const ViewGardenDetail = () => {
     }
   }, [gardenId, getGardenById])
 
+  if (!gardenId) {
+    notifyError(APP_MESSAGE.LOAD_DATA_FAILED('thông tin vườn'))
+    navigate(protectedRoute.gardenList.path, { replace: true })
+    return
+  }
+
   if (error) {
     notifyError(error.message)
   }
@@ -87,14 +97,18 @@ const ViewGardenDetail = () => {
           <Button color='warning' onClick={handleUpdateButton} sx={{ marginRight: '24px' }}>
             Cập nhật
           </Button>
-          {data?.status === UserStatus.ACTIVE ? (
-            <Button color='error' onClick={handleOpenDeactivateDialog}>
-              Vô hiệu hóa
-            </Button>
-          ) : (
-            <Button color='secondary' onClick={handleOpenActivateDialog}>
-              Kích hoạt
-            </Button>
+          {userTokenPayload && userTokenPayload.role === UserRole.STAFF && (
+            <>
+              {data?.status === UserStatus.ACTIVE ? (
+                <Button color='error' onClick={handleOpenDeactivateDialog}>
+                  Vô hiệu hóa
+                </Button>
+              ) : (
+                <Button color='secondary' onClick={handleOpenActivateDialog}>
+                  Kích hoạt
+                </Button>
+              )}
+            </>
           )}
         </div>
       </TitleWrapper>
@@ -136,20 +150,22 @@ const ViewGardenDetail = () => {
                 Người quản lý:
               </Typography>
               {data.gardenManager.map((item) => item.name).join(', ')}
-              <Box sx={{ display: 'flex' }}>
-                <MuiLink
-                  component={Link}
-                  to={protectedRoute.gardenList.path}
-                  underline='always'
-                  marginLeft={'50px'}
-                  color={'inherit'}
-                  fontWeight={500}
-                  sx={{}}
-                >
-                  Thay đổi quản lý vườn
-                </MuiLink>
-                <ArrowForward />
-              </Box>
+              {userTokenPayload && userTokenPayload.role === UserRole.STAFF ? (
+                <Box sx={{ display: 'flex' }}>
+                  <MuiLink
+                    component={Link}
+                    to={protectedRoute.updateGardenManagerOfGarden.path.replace(':id', gardenId)}
+                    underline='always'
+                    marginLeft={'50px'}
+                    color={'inherit'}
+                    fontWeight={500}
+                    sx={{}}
+                  >
+                    Thay đổi quản lý vườn
+                  </MuiLink>
+                  <ArrowForward />
+                </Box>
+              ) : null}
             </Box>
           </Grid>
           <Grid item xs={12}>

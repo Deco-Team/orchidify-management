@@ -22,6 +22,10 @@ interface UpdateGardenInfoRequest {
   images: string[]
 }
 
+interface UpdateGardenManager {
+  gardenManagerId: string
+}
+
 export const useGardenApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
 
@@ -159,5 +163,32 @@ export const useGardenApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getAllGardens, getGardenById, addGarden, updateGardenInfo, activateGarden, deactivateGarden }
+  const updateGardenManager = useCallback(
+    async (gardenId: string, garden: UpdateGardenManager) => {
+      const endpoint = `${ROOT_ENDPOINT}/${gardenId}`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PUT', {}, {}, garden)
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('cập nhật quản lý vườn') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return {
+    getAllGardens,
+    getGardenById,
+    addGarden,
+    updateGardenInfo,
+    activateGarden,
+    deactivateGarden,
+    updateGardenManager
+  }
 }
