@@ -1,11 +1,17 @@
 import { useCallback } from 'react'
-import { ListResponseDto, SuccessResponseDto } from '~/data/common.dto'
+import { IdResponseDto, ListResponseDto, SuccessResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { Staff } from '~/data/staff.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useProtectedApi } from './useProtectedApi'
 
 const ROOT_ENDPOINT = '/staffs'
+
+interface AddStaffRequest {
+  email: string
+  name: string
+  idCardPhoto: string
+}
 
 const useStaffApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
@@ -69,6 +75,24 @@ const useStaffApi = () => {
     [callAppProtectedApi]
   )
 
+  const addStaff = useCallback(
+    async (staff: AddStaffRequest) => {
+      const result = await callAppProtectedApi<IdResponseDto>(ROOT_ENDPOINT, 'POST', {}, {}, staff)
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('thêm nhân viên') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
   const activateStaff = useCallback(
     async (staffId: string) => {
       const endpoint = `${ROOT_ENDPOINT}/${staffId}/active`
@@ -107,7 +131,7 @@ const useStaffApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getAllStaffs, getStaffById, activateStaff, deactivateStaff }
+  return { getAllStaffs, getStaffById, addStaff, activateStaff, deactivateStaff }
 }
 
 export default useStaffApi
