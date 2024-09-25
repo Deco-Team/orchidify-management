@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { ListResponseDto } from '~/data/common.dto'
+import { ListResponseDto, SuccessResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { Staff } from '~/data/staff.dto'
 import { APP_MESSAGE } from '~/global/app-message'
@@ -50,9 +50,64 @@ const useStaffApi = () => {
     [callAppProtectedApi]
   )
 
-  return {
-    getAllStaffs
-  }
+  const getStaffById = useCallback(
+    async (staffId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/${staffId}`
+      const result = await callAppProtectedApi<Staff>(endpoint, 'GET', {}, {}, {})
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('thông tin nhân viên') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  const activateStaff = useCallback(
+    async (staffId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/${staffId}/active`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PATCH', {}, {}, {})
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('Kích hoạt nhân viên') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  const deactivateStaff = useCallback(
+    async (staffId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/${staffId}/deactivate`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PATCH', {}, {}, {})
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('Vô hiệu hóa nhân viên') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return { getAllStaffs, getStaffById, activateStaff, deactivateStaff }
 }
 
 export default useStaffApi

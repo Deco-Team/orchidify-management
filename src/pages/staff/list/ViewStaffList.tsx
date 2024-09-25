@@ -75,7 +75,7 @@ const ViewStaffList = () => {
     <>
       <TitleWrapper>
         <Typography variant='h5' fontSize={34} fontWeight={700}>
-          Quản lý vườn
+          Nhân viên
         </Typography>
         <div style={{ display: 'flex' }}>
           <Button
@@ -91,7 +91,7 @@ const ViewStaffList = () => {
         </div>
       </TitleWrapper>
       <Table
-        title='Danh sách quản lý vườn'
+        title='Danh sách nhân viên'
         tableOptions={{
           columns: StaffColumns,
           data: data.docs || [],
