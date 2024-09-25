@@ -1,7 +1,7 @@
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { OptionsGardenManager, OptionsStaff } from './options'
+import { OptionsAdmin, OptionsGardenManager, OptionsStaff } from './options'
 import { UserRole } from '~/global/constants'
 import useAuth from '~/auth/useAuth'
 
@@ -15,8 +15,8 @@ const OptionList = ({ open }: OptionListProps) => {
 
   const options = (() => {
     switch (role) {
-      //   case UserRole.ADMIN:
-      //     return OptionsAdmin
+      case UserRole.ADMIN:
+        return OptionsAdmin
       case UserRole.STAFF:
         return OptionsStaff
       case UserRole.GARDEN_MANAGER:
