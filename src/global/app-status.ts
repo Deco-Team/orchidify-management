@@ -17,3 +17,8 @@ export enum UserStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE'
 }
+
+export enum GardenTimesheetStatus {
+  AVAILABLE = 'AVAILABLE',
+  BOOKED = 'BOOKED'
+}
