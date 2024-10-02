@@ -56,3 +56,8 @@ export enum SlotNumber {
   THREE = 3,
   FOUR = 4
 }
+
+export enum CalendarType {
+  MONTH = 'MONTH',
+  WEEK = 'WEEK'
+}
