@@ -13,7 +13,7 @@ interface AddStaffRequest {
   idCardPhoto: string
 }
 
-const useStaffApi = () => {
+export const useStaffApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
 
   const getAllStaffs = useCallback(
@@ -133,5 +133,3 @@ const useStaffApi = () => {
 
   return { getAllStaffs, getStaffById, addStaff, activateStaff, deactivateStaff }
 }
-
-export default useStaffApi

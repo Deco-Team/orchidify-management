@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import AlertDialog from '~/components/dialog/AlertDialog'
 import { APP_MESSAGE } from '~/global/app-message'
-import useStaffApi from '~/hooks/api/useStaffApi'
+import { useStaffApi } from '~/hooks/api/useStaffApi'
 import { notifyError, notifySuccess } from '~/utils/toastify'
 
 interface DialogProps {

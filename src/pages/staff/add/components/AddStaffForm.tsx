@@ -58,7 +58,7 @@ const AddStaffForm = () => {
       return
     }
     notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Thêm nhân viên'))
-    navigate(protectedRoute.gardenManagerList.path, { replace: true })
+    navigate(protectedRoute.staffList.path, { replace: true })
   })
 
   return (
