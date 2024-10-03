@@ -100,7 +100,7 @@ const ViewLearnerList = () => {
           onSortingChange: setSorting,
           onColumnFiltersChange: setColumnFilters,
           muiTableBodyRowProps: ({ row }) => ({
-            onClick: () => navigate(`/learners/management/${row.original._id}`),
+            onClick: () => navigate(`/learners/${row.original._id}`),
             sx: {
               cursor: 'pointer'
             }
