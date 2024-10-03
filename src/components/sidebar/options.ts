@@ -13,7 +13,7 @@ import { protectedRoute } from '~/routes/routes'
 
 export const OptionsAdmin = [
   { id: 1, text: 'Trang chủ', link: protectedRoute.dashboard.path, Icon: Home },
-  { id: 2, text: 'Khóa học', link: 'courses', Icon: MenuBook }
+  { id: 2, text: 'Nhân viên', link: protectedRoute.staffList.path, Icon: ManageAccounts }
 ]
 
 export const OptionsStaff = [
