@@ -119,7 +119,7 @@ const ViewStaffDetail = () => {
               {data?.name}
             </Typography>
             <Typography variant='h6' fontSize={14} fontWeight={500} color={theme.label.secondary}>
-              Quản lý vườn
+              Nhân viên
             </Typography>
           </div>
         </Avatar>
