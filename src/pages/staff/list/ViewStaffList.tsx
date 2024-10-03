@@ -11,7 +11,7 @@ import { MRT_PaginationState, MRT_SortingState, MRT_ColumnFiltersState } from 'm
 import { useEffect, useState } from 'react'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { notifyError } from '~/utils/toastify'
-import useStaffApi from '~/hooks/api/useStaffApi'
+import { useStaffApi } from '~/hooks/api/useStaffApi'
 
 const ViewStaffList = () => {
   const navigate = useNavigate()
@@ -39,7 +39,7 @@ const ViewStaffList = () => {
 
   useEffect(() => {
     // eslint-disable-next-line prettier/prettier
-    (async () => {
+    ;(async () => {
       const { data: staff, error: apiError } = await getAllStaffs(
         pagination.pageIndex + 1,
         pagination.pageSize,
@@ -81,7 +81,7 @@ const ViewStaffList = () => {
           <Button
             color='secondary'
             onClick={() => {
-              navigate(protectedRoute.addGardenManager.path)
+              navigate(protectedRoute.addStaff.path)
             }}
             sx={{ marginRight: '24px' }}
             endIcon={<AddIcon />}

@@ -14,6 +14,7 @@ const UpdateGardenInfo = lazy(() => import('~/pages/garden/update-info/UpdateGar
 const UpdateGardenMangerOfGarden = lazy(() => import('~/pages/garden/update-garden-manager/UpdateGardenManager'))
 const ViewStaffList = lazy(() => import('~/pages/staff/list/ViewStaffList'))
 const ViewStaffDetail = lazy(() => import('~/pages/staff/detail/ViewStaffDetail'))
+const AddStaff = lazy(() => import('~/pages/staff/add/AddStaff'))
 
 export const publicRoute = {
   login: {
@@ -94,6 +95,12 @@ export const protectedRoute = {
     name: 'Thông tin nhân viên',
     path: '/staffs/:id',
     Component: ViewStaffDetail,
+    roles: [UserRole.ADMIN]
+  },
+  addStaff: {
+    name: 'Thêm nhân viên',
+    path: '/staffs/add',
+    Component: AddStaff,
     roles: [UserRole.ADMIN]
   }
 }

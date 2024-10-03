@@ -37,7 +37,7 @@ function App() {
                 path={path}
                 element={
                   <ProtectedRoute
-                    roles={roles}
+                    roles={roles ?? []}
                     element={
                       <Suspense fallback={<Loading />}>
                         <Component />

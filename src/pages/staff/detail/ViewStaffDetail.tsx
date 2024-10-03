@@ -8,7 +8,7 @@ import Field from '~/components/text-field/Field'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { Staff } from '~/data/staff.dto'
 import { UserStatus } from '~/global/app-status'
-import useStaffApi from '~/hooks/api/useStaffApi'
+import { useStaffApi } from '~/hooks/api/useStaffApi'
 import {
   Avatar,
   ContentText,
@@ -67,7 +67,7 @@ const ViewStaffDetail = () => {
   useEffect(() => {
     if (staffId) {
       // eslint-disable-next-line prettier/prettier
-      (async () => {
+      ;(async () => {
         const { data: staff, error: apiError } = await getStaffById(staffId)
         setData(staff)
         setError(apiError)
