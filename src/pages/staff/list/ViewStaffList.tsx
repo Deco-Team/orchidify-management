@@ -31,7 +31,7 @@ const ViewStaffList = () => {
   })
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
-    pageSize: 5
+    pageSize: 10
   })
   const [sorting, setSorting] = useState<MRT_SortingState>([])
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([])
@@ -39,7 +39,7 @@ const ViewStaffList = () => {
 
   useEffect(() => {
     // eslint-disable-next-line prettier/prettier
-    ;(async () => {
+    (async () => {
       const { data: staff, error: apiError } = await getAllStaffs(
         pagination.pageIndex + 1,
         pagination.pageSize,
