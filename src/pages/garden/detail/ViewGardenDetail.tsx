@@ -147,6 +147,14 @@ const ViewGardenDetail = () => {
           <Grid item xs={12}>
             <Box sx={{ display: 'flex' }}>
               <Typography fontWeight={500} width={'180px'}>
+                Số lớp học tối đa:
+              </Typography>
+              {data.maxClass}
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <Box sx={{ display: 'flex' }}>
+              <Typography fontWeight={500} width={'180px'}>
                 Người quản lý:
               </Typography>
               {data.gardenManager.map((item) => item.name).join(', ')}

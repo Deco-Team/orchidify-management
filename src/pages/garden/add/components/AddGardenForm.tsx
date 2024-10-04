@@ -19,6 +19,7 @@ type FormValues = {
   gardenManagerId: string
   description: string
   images: CloudinaryFileUploadedInfo[]
+  maxClass: number
 }
 
 const defaultFormValues: FormValues = {
@@ -26,7 +27,8 @@ const defaultFormValues: FormValues = {
   address: '',
   gardenManagerId: '',
   description: '',
-  images: []
+  images: [],
+  maxClass: 0
 }
 
 const validationSchema = z.object({
@@ -43,7 +45,12 @@ const validationSchema = z.object({
     .string()
     .min(1, APP_MESSAGE.REQUIRED_FIELD('Mô tả'))
     .max(500, APP_MESSAGE.FIELD_TOO_LONG('Mô tả', 500)),
-  images: z.array(z.object({}).passthrough()).nonempty(APP_MESSAGE.REQUIRED_FIELD('Hình ảnh nhà vườn'))
+  images: z.array(z.object({}).passthrough()).nonempty(APP_MESSAGE.REQUIRED_FIELD('Hình ảnh nhà vườn')),
+  maxClass: z.coerce
+    .number({ message: APP_MESSAGE.INVALID_VALUE(['số nguyên']) })
+    .int({ message: APP_MESSAGE.INVALID_VALUE(['số nguyên']) })
+    .min(1, APP_MESSAGE.VALUE_OUT_OF_RANGE(1, 4))
+    .max(4, APP_MESSAGE.VALUE_OUT_OF_RANGE(1, 4))
 })
 
 const AddGardenForm = () => {
@@ -90,6 +97,15 @@ const AddGardenForm = () => {
             <ControlledOutlinedInput
               controller={{ name: 'address', control: control }}
               label='Địa chỉ'
+              fullWidth
+              size='small'
+            />
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <ControlledOutlinedInput
+              controller={{ name: 'maxClass', control: control }}
+              label='Số lớp học tối đa'
+              inputMode='numeric'
               fullWidth
               size='small'
             />

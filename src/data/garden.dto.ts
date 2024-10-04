@@ -4,6 +4,7 @@ export type Garden = {
   description: string
   address: string
   status: string
+  maxClass: number
   gardenManagerId: string
   createdAt: string
   updatedAt: string

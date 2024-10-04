@@ -11,5 +11,7 @@ export const APP_MESSAGE = {
   INVALID_FILE_FORMAT_OR_SIZE: (format: string, size: string) =>
     `Phương tiện phải có định dạng hỗ trợ (${format}) và kích thước không vượt quá ${size}`,
   INCORRECT_NUMBER_OF_FILES: (min: number, max: number) => `Số lượng file phải nằm trong khoảng từ ${min} đến ${max}.`,
-  INVALID_VALUE: (valueList: string[]) => `Chỉ chấp nhận các giá trị ${valueList.join(', ')}`
+  INVALID_VALUE: (valueList: string[]) =>
+    `Chỉ chấp nhận${valueList.length > 1 ? ' các' : ''} giá trị ${valueList.join(', ')}`,
+  VALUE_OUT_OF_RANGE: (min: number, max: number) => `Giá trị phải nằm trong khoảng từ ${min} đến ${max}.`
 }

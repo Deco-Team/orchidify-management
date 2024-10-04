@@ -10,14 +10,20 @@ export const GardenColumns: MRT_ColumnDef<Garden>[] = [
     size: 150
   },
   {
-    accessorKey: 'description',
-    header: 'Mô tả',
-    size: 250
-  },
-  {
     accessorKey: 'address',
     header: 'Địa chỉ',
     size: 200
+  },
+  {
+    accessorKey: 'maxClass',
+    header: 'Số lớp học tối đa',
+    size: 200,
+    muiTableHeadCellProps: {
+      align: 'right'
+    },
+    muiTableBodyCellProps: {
+      align: 'right'
+    }
   },
   {
     accessorFn: (row) => row.gardenManager?.[0]?.name || '',
