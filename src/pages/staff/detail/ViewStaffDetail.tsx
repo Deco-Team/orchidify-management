@@ -53,7 +53,7 @@ const ViewStaffDetail = () => {
   }
 
   const handleUpdateButton = () => {
-    if (staffId) navigate(protectedRoute.updateGardenManager.path.replace(':id', staffId))
+    if (staffId) navigate(protectedRoute.updateStaff.path.replace(':id', staffId))
   }
 
   const handleReloadData = async () => {
@@ -67,7 +67,7 @@ const ViewStaffDetail = () => {
   useEffect(() => {
     if (staffId) {
       // eslint-disable-next-line prettier/prettier
-      ;(async () => {
+      (async () => {
         const { data: staff, error: apiError } = await getStaffById(staffId)
         setData(staff)
         setError(apiError)
