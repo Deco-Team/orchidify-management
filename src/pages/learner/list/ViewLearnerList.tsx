@@ -1,5 +1,4 @@
-import AddIcon from '@mui/icons-material/Add'
-import { Button, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { MRT_ColumnFiltersState, MRT_PaginationState, MRT_SortingState } from 'material-react-table'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -31,7 +30,7 @@ const ViewLearnerList = () => {
   })
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
-    pageSize: 5
+    pageSize: 10
   })
   const [sorting, setSorting] = useState<MRT_SortingState>([])
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([])
@@ -77,18 +76,6 @@ const ViewLearnerList = () => {
         <Typography variant='h5' fontSize={34} fontWeight={700}>
           Học viên
         </Typography>
-        <div style={{ display: 'flex' }}>
-          <Button
-            color='secondary'
-            onClick={() => {
-              navigate(protectedRoute.addGardenManager.path)
-            }}
-            sx={{ marginRight: '24px' }}
-            endIcon={<AddIcon />}
-          >
-            Thêm
-          </Button>
-        </div>
       </TitleWrapper>
       <Table
         title='Danh sách học viên'
@@ -100,7 +87,7 @@ const ViewLearnerList = () => {
           onSortingChange: setSorting,
           onColumnFiltersChange: setColumnFilters,
           muiTableBodyRowProps: ({ row }) => ({
-            onClick: () => navigate(`/learners/management/${row.original._id}`),
+            onClick: () => navigate(protectedRoute.learnerDetail.path.replace(':id', row.original._id)),
             sx: {
               cursor: 'pointer'
             }

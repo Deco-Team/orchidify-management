@@ -9,4 +9,5 @@ export type Learner = {
   status: UserStatus
   createdAt: string
   updatedAt: string
+  avatar: string
 }
