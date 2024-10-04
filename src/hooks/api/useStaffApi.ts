@@ -13,6 +13,10 @@ interface AddStaffRequest {
   idCardPhoto: string
 }
 
+interface UpdateStaffRequest {
+  name: string
+}
+
 export const useStaffApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
 
@@ -93,6 +97,25 @@ export const useStaffApi = () => {
     [callAppProtectedApi]
   )
 
+  const updateStaff = useCallback(
+    async (staffId: string, staff: UpdateStaffRequest) => {
+      const endpoint = `${ROOT_ENDPOINT}/${staffId}`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PUT', {}, {}, staff)
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('cập nhật nhân viên') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
   const activateStaff = useCallback(
     async (staffId: string) => {
       const endpoint = `${ROOT_ENDPOINT}/${staffId}/active`
@@ -131,5 +154,5 @@ export const useStaffApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getAllStaffs, getStaffById, addStaff, activateStaff, deactivateStaff }
+  return { getAllStaffs, getStaffById, addStaff, updateStaff, activateStaff, deactivateStaff }
 }
