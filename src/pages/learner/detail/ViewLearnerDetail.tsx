@@ -134,7 +134,11 @@ const ViewLearnerDetail = () => {
         </div>
         <Box>
           <Field label='Tên học viên' content={<ContentText>{data?.name || ''}</ContentText>} theme={theme} />
-          <Field label='Ngày sinh' content={<ContentText>{data?.dateOfBirth || ''}</ContentText>} theme={theme} />
+          <Field
+            label='Ngày sinh'
+            content={<ContentText>{new Date(data.dateOfBirth).toLocaleDateString('vi-VN')}</ContentText>}
+            theme={theme}
+          />
           <Field label='Email' content={<ContentText>{data?.email || ''}</ContentText>} theme={theme} />
           <Field label='Số điện thoại' content={<ContentText>{data?.phone || ''}</ContentText>} theme={theme} />
           <Field
