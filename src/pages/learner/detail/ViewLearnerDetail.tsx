@@ -106,15 +106,13 @@ const ViewLearnerDetail = () => {
         </div>
       </TitleWrapper>
       <ContentWrapper theme={theme}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Typography variant='h5' fontSize={24} fontWeight={700}>
-            Thông tin hệ thống
-          </Typography>
-
-          <Line theme={theme} />
-        </div>
         <Avatar>
-          <Image src={data?.avatar || avatar} alt='Your Avatar' theme={theme} />
+          <Image
+            src={data.avatar}
+            alt='Your Avatar'
+            theme={theme}
+            onError={(event) => (event.currentTarget.src = avatar)}
+          />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <Typography variant='h6' fontSize={20} fontWeight={500}>
               {data?.name}

@@ -1,22 +1,22 @@
 import AddIcon from '@mui/icons-material/Add'
 import { Button, Typography } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
-import Table from '~/components/table/Table'
-import { TitleWrapper } from '~/pages/garden-manager/detail/ViewGardenManagerDetail.styled'
-import { protectedRoute } from '~/routes/routes'
-import { StaffColumns } from './columns'
-import { Staff } from '~/data/staff.dto'
-import { ListResponseDto } from '~/data/common.dto'
-import { MRT_PaginationState, MRT_SortingState, MRT_ColumnFiltersState } from 'material-react-table'
+import { MRT_ColumnFiltersState, MRT_PaginationState, MRT_SortingState } from 'material-react-table'
 import { useEffect, useState } from 'react'
+import { ListResponseDto } from '~/data/common.dto'
+import { TitleWrapper } from '../detail/ViewInstructorDetail.styled'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { notifyError } from '~/utils/toastify'
-import { useStaffApi } from '~/hooks/api/useStaffApi'
+import { useNavigate } from 'react-router-dom'
+import { protectedRoute } from '~/routes/routes'
+import Table from '~/components/table/Table'
+import { useInstructorApi } from '~/hooks/api/useInstructorApi'
+import { Instructor } from '~/data/instructor.dto'
+import { InstructorColumns } from './columns'
 
-const ViewStaffList = () => {
+const ViewInstructorList = () => {
   const navigate = useNavigate()
-  const { getAllStaffs } = useStaffApi()
-  const [data, setData] = useState<ListResponseDto<Staff>>({
+  const { getAllInstructors } = useInstructorApi()
+  const [data, setData] = useState<ListResponseDto<Instructor>>({
     docs: [],
     totalDocs: 0,
     offset: 0,
@@ -40,14 +40,14 @@ const ViewStaffList = () => {
   useEffect(() => {
     // eslint-disable-next-line prettier/prettier
     (async () => {
-      const { data: staff, error: apiError } = await getAllStaffs(
+      const { data: instructor, error: apiError } = await getAllInstructors(
         pagination.pageIndex + 1,
         pagination.pageSize,
         sorting.map((sort) => ({ field: sort.id, desc: sort.desc })),
         columnFilters.map((filter) => ({ field: filter.id, value: filter.value }))
       )
-      if (staff) {
-        setData(staff)
+      if (instructor) {
+        setData(instructor)
       } else {
         setData({
           docs: [],
@@ -65,7 +65,7 @@ const ViewStaffList = () => {
       }
       setError(apiError)
     })()
-  }, [getAllStaffs, pagination.pageIndex, pagination.pageSize, sorting, columnFilters])
+  }, [getAllInstructors, pagination.pageIndex, pagination.pageSize, sorting, columnFilters])
 
   if (error) {
     notifyError(error.message)
@@ -75,13 +75,13 @@ const ViewStaffList = () => {
     <>
       <TitleWrapper>
         <Typography variant='h5' fontSize={34} fontWeight={700}>
-          Nhân viên
+          Giảng viên
         </Typography>
         <div style={{ display: 'flex' }}>
           <Button
             color='secondary'
             onClick={() => {
-              navigate(protectedRoute.addStaff.path)
+              navigate(protectedRoute.addGardenManager.path)
             }}
             sx={{ marginRight: '24px' }}
             endIcon={<AddIcon />}
@@ -91,16 +91,16 @@ const ViewStaffList = () => {
         </div>
       </TitleWrapper>
       <Table
-        title='Danh sách nhân viên'
+        title='Danh sách giảng viên'
         tableOptions={{
-          columns: StaffColumns,
+          columns: InstructorColumns,
           data: data.docs || [],
           rowCount: data.totalDocs,
           onPaginationChange: setPagination,
           onSortingChange: setSorting,
           onColumnFiltersChange: setColumnFilters,
           muiTableBodyRowProps: ({ row }) => ({
-            onClick: () => navigate(protectedRoute.staffDetail.path.replace(':id', row.original._id)),
+            onClick: () => navigate(protectedRoute.instructorDetail.path.replace(':id', row.original._id)),
             sx: {
               cursor: 'pointer'
             }
@@ -119,4 +119,4 @@ const ViewStaffList = () => {
   )
 }
 
-export default ViewStaffList
+export default ViewInstructorList

@@ -1,13 +1,13 @@
 import { MRT_ColumnDef } from 'material-react-table'
 import UserStatusTag from '~/components/tag/UserStatusTag'
-import { Learner } from '~/data/learner.dto'
+import { Instructor } from '~/data/instructor.dto'
 import { UserStatus } from '~/global/app-status'
 
-export const LearnerColumns: MRT_ColumnDef<Learner>[] = [
+export const InstructorColumns: MRT_ColumnDef<Instructor>[] = [
   {
     accessorKey: 'name',
-    header: 'Tên học viên',
-    size: 200
+    header: 'Tên giảng viên',
+    size: 250
   },
   {
     accessorKey: 'email',
