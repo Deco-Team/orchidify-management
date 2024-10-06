@@ -9,7 +9,8 @@ export type Instructor = {
   idCardPhoto: string
   avatar: string
   bio: string
-  certificates: Array<{ name: string; url: string }>
+  certificates: Array<{ name: string; url: string; publicId: string }>
+  balance: number
   status: UserStatus
   createdAt: string
   updatedAt: string

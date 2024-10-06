@@ -36,6 +36,7 @@ export const Image = styled.img<{ theme: Theme }>`
   overflow: hidden;
   margin: 20px;
 `
+
 export const FlexRow = styled.div`
   display: flex;
 `

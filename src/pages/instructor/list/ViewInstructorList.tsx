@@ -100,7 +100,7 @@ const ViewInstructorList = () => {
           onSortingChange: setSorting,
           onColumnFiltersChange: setColumnFilters,
           muiTableBodyRowProps: ({ row }) => ({
-            onClick: () => navigate(protectedRoute.gardenManagerDetail.path.replace(':id', row.original._id)),
+            onClick: () => navigate(protectedRoute.instructorDetail.path.replace(':id', row.original._id)),
             sx: {
               cursor: 'pointer'
             }
