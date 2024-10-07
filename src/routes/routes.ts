@@ -20,6 +20,8 @@ const ViewLearnerList = lazy(() => import('~/pages/learner/list/ViewLearnerList'
 const ViewLearnerDetail = lazy(() => import('~/pages/learner/detail/ViewLearnerDetail'))
 const ViewInstructorList = lazy(() => import('~/pages/instructor/list/ViewInstructorList'))
 const ViewInstructorDetail = lazy(() => import('~/pages/instructor/detail/ViewInstructorDetail'))
+// const ViewClassRequestList = lazy(() => import('~/pages/class-request/list/ViewClassRequestList'))
+const ViewClassRequestDetail = lazy(() => import('~/pages/class-request/detail/ViewClassRequestDetail'))
 
 export const publicRoute = {
   login: {
@@ -136,6 +138,18 @@ export const protectedRoute = {
     name: 'Thông tin giảng viên',
     path: '/instructors/:id',
     Component: ViewInstructorDetail,
+    roles: [UserRole.STAFF]
+  },
+  classRequestList: {
+    name: 'Yêu cầu lớp học',
+    path: '/class-requests',
+    Component: ViewClassRequestDetail,
+    roles: [UserRole.STAFF]
+  },
+  classRequestDetail: {
+    name: 'Chi tiết yêu cầu',
+    path: '/class-requests/:id',
+    Component: ViewClassRequestDetail,
     roles: [UserRole.STAFF]
   }
 }

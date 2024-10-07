@@ -31,13 +31,14 @@ function App() {
                 }
               />
             ))}
-            {Object.entries(protectedRoute).map(([, { roles, path, Component }]) => (
+            {Object.entries(protectedRoute).map(([, { name, roles, path, Component }]) => (
               <Route
                 key={path}
                 path={path}
                 element={
                   <ProtectedRoute
                     roles={roles ?? []}
+                    name={name}
                     element={
                       <Suspense fallback={<Loading />}>
                         <Component />
