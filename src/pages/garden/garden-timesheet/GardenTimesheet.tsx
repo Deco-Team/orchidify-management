@@ -24,7 +24,7 @@ const GardenTimesheet = () => {
   const [data, setData] = useState<Garden | null>(null)
   const [error, setError] = useState<ErrorResponseDto | null>(null)
 
-  const [eventData, setEventData] = useState<Slot[] | null>(null)
+  const [eventData, setEventData] = useState<Slot[]>([])
 
   const mapViewTypeToApi = (viewType: string) => {
     switch (viewType) {
@@ -48,16 +48,18 @@ const GardenTimesheet = () => {
     }
   }, [gardenId, getGardenById])
 
-  const handleDatesChange = async (viewType: string, startDate: Date) => {
+  const handleDatesChange = async (viewType: string, startDate: string) => {
     if (gardenId) {
-      const formattedStartDate = startDate.toISOString().split('T')[0]
       const apiViewType = mapViewTypeToApi(viewType)
-      const { data: gardenTimesheet, error: apiError } = await getGardenTimesheet(
-        gardenId,
-        formattedStartDate,
-        apiViewType
-      )
-      setEventData(gardenTimesheet?.slots ?? [])
+      const { data: gardenTimesheet, error: apiError } = await getGardenTimesheet(gardenId, startDate, apiViewType)
+      if (gardenTimesheet) {
+        const transformedEventData = gardenTimesheet.map((slot) => ({
+          ...slot,
+          title: slot.classId
+        }))
+
+        setEventData(transformedEventData)
+      }
       setError(apiError)
     }
   }
@@ -112,7 +114,7 @@ const GardenTimesheet = () => {
           </Grid>
         </Grid>
       </Paper>
-      <GardenCalendar events={eventData ?? []} onDatesChange={handleDatesChange} />
+      <GardenCalendar events={eventData} onDatesChange={handleDatesChange} />
     </Box>
   ) : (
     <Loading />

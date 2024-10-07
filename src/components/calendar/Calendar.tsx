@@ -1,24 +1,23 @@
+import { DatesSetArg } from '@fullcalendar/core/index.js'
 import viLocale from '@fullcalendar/core/locales/vi'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import '~/components/calendar/Calendar.css'
-import FullCalendar from '@fullcalendar/react'
-import { DatesSetArg } from '@fullcalendar/core/index.js'
 
 interface GardenCalendarProps {
   events: Array<object>
-  onDatesChange: (viewType: string, startDate: Date, endDate: Date) => void
+  onDatesChange: (viewType: string, startDate: string, endDate: string) => void
 }
 
 const Calendar: React.FC<GardenCalendarProps> = ({ events = [], onDatesChange }) => {
   const handleDatesSet = (arg: DatesSetArg) => {
     const viewType = arg.view.type
-    const startDate = arg.start
-    const endDate = arg.end
+    const startDate = arg.startStr
+    const endDate = arg.endStr
     onDatesChange(viewType, startDate, endDate)
   }
-
   return (
     <FullCalendar
       plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -44,6 +43,8 @@ const Calendar: React.FC<GardenCalendarProps> = ({ events = [], onDatesChange })
       eventDisplay='block'
       expandRows={false}
       datesSet={handleDatesSet}
+      showNonCurrentDates={false}
+      fixedWeekCount={false}
     />
   )
 }

@@ -3,12 +3,12 @@ import { GardenTimesheetStatus } from '~/global/app-status'
 
 interface EventProps {
   events: Array<{
-    _id: string
-    startTime: string
-    endTime: string
+    start: string
+    end: string
     status: GardenTimesheetStatus
+    classId?: string
   }>
-  onDatesChange: (viewType: string, startDate: Date) => Promise<void>
+  onDatesChange: (viewType: string, startDate: string) => Promise<void>
 }
 
 const GardenCalendar = ({ events, onDatesChange }: EventProps) => {
