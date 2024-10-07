@@ -85,6 +85,7 @@ const AssignmentList = ({ assignments }: AssignmentListProps) => {
                 </div>
               ))}
             </Carousel>
+            {index !== assignments.length - 1 ? <Divider sx={{ margin: '1.25rem 0' }} /> : null}
           </Box>
         </Box>
       ))}

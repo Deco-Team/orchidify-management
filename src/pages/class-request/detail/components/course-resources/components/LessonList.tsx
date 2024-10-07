@@ -77,6 +77,7 @@ const LessonList = ({ lessons }: LessonListProps) => {
                 </div>
               ))}
             </Carousel>
+            {index !== lessons.length - 1 ? <Divider sx={{ margin: '1.25rem 0' }} /> : null}
           </Box>
         </Box>
       ))}
