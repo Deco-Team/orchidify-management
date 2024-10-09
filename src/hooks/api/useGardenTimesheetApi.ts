@@ -21,7 +21,7 @@ const useGardenTimesheetApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('lịch') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('thông tin lịch nhà vườn') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]

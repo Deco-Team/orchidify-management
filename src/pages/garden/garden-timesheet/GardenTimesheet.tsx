@@ -65,7 +65,7 @@ const GardenTimesheet = () => {
   }
 
   if (!gardenId) {
-    notifyError(APP_MESSAGE.LOAD_DATA_FAILED('thông tin quản lý vườn'))
+    notifyError(APP_MESSAGE.LOAD_DATA_FAILED('thông tin lịch nhà vườn'))
     navigate(protectedRoute.gardenList.path, { replace: true })
     return
   }
