@@ -15,3 +15,8 @@ export type Garden = {
   }>
   images?: Array<string>
 }
+
+export type AvailableGardenDto = {
+  _id: string
+  name: string
+}
