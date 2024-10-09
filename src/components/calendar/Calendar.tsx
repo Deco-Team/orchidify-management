@@ -32,19 +32,25 @@ const Calendar: React.FC<GardenCalendarProps> = ({ events = [], onDatesChange })
       weekends={true}
       events={events}
       locale={viLocale}
-      height={896}
+      height={1000}
       dayMaxEvents={true}
-      aspectRatio={2}
+      // aspectRatio={2}
       titleFormat={{
         year: 'numeric',
-        month: 'long'
+        month: '2-digit'
       }}
-      displayEventTime={false}
-      eventDisplay='block'
-      expandRows={false}
+      eventTimeFormat={{
+        hour: '2-digit',
+        minute: '2-digit'
+      }}
+      displayEventTime={true}
+      displayEventEnd={true}
+      allDaySlot={false}
+      nowIndicator
+      slotMinTime={'7:00:00'}
+      slotMaxTime={'17:00:00'}
+      expandRows={true}
       datesSet={handleDatesSet}
-      showNonCurrentDates={false}
-      fixedWeekCount={false}
     />
   )
 }
