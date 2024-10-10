@@ -105,7 +105,7 @@ const ViewGardenList = () => {
           onSortingChange: setSorting,
           onColumnFiltersChange: setColumnFilters,
           muiTableBodyRowProps: ({ row }) => ({
-            onClick: () => navigate(`/gardens/${row.original._id}`),
+            onClick: () => navigate(protectedRoute.gardenDetail.path.replace(':id', row.original._id)),
             sx: {
               cursor: 'pointer'
             }

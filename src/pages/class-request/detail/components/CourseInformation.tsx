@@ -56,7 +56,10 @@ const CourseInformation = ({ classRequest }: CourseInformationProps) => {
         <Box display='flex' flexDirection='column' gap={1} flexGrow='1'>
           <Field label='Mã khóa học' content={course.code} />
           <Field label='Tên khóa học' content={course.title} />
-          <Field label='Giảng viên' content={classRequest.createdBy.name} />
+          <Field
+            label='Giảng viên'
+            content={typeof classRequest.createdBy === 'string' ? '' : classRequest.createdBy.name}
+          />
           <Field label='Giá' content={formatCurrency(course.price)} />
           <Field label='Cấp độ' content={formatCourseLevel(course.level)} />
           <Field label='Thể loại' content={course.type.join(', ')} />
