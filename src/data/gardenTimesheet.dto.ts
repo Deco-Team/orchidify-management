@@ -5,4 +5,5 @@ export interface Slot {
   end: string
   status: GardenTimesheetStatus
   classId?: string
+  slotNumber?: number
 }

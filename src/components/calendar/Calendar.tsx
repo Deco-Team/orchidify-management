@@ -43,7 +43,8 @@ const Calendar: React.FC<GardenCalendarProps> = ({ events = [], onDatesChange })
         hour: '2-digit',
         minute: '2-digit'
       }}
-      displayEventTime={true}
+      showNonCurrentDates={false}
+      fixedWeekCount={false}
       displayEventEnd={true}
       allDaySlot={false}
       nowIndicator
