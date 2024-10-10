@@ -24,7 +24,7 @@ export default function ViewClassRequestDetail() {
   const [availableGardens, setAvailableGardens] = useState<Array<AvailableGardenDto>>([])
   const params = useParams()
   const navigate = useNavigate()
-  const classRequestId = params.id || '67016a3d3124837a010aead4'
+  const classRequestId = params.id || '6706b281dc7f8e5149c286f7'
   const { getClassRequestById } = useClassRequestApi()
   const { getAvailableGardens } = useGardenApi()
 
@@ -76,7 +76,7 @@ export default function ViewClassRequestDetail() {
   return classRequest ? (
     <>
       <Header
-        classRequestStatus={RequestStatus.PENDING}
+        classRequestStatus={classRequest.status}
         onApproveButtonClick={handleApproveButtonClick}
         onRejectButtonClick={() => setOpenRejectDialog(true)}
       />
