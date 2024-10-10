@@ -4,6 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
+import { useMemo } from 'react'
 import '~/components/calendar/Calendar.css'
 
 interface GardenCalendarProps {
@@ -12,12 +13,24 @@ interface GardenCalendarProps {
 }
 
 const Calendar: React.FC<GardenCalendarProps> = ({ events = [], onDatesChange }) => {
+  const validRange = useMemo(() => {
+    const today = new Date()
+    const startDate = `${today.getFullYear() - 2}-${today.getMonth() + 1}-${today.getDate()}`
+    const endDate = `${today.getFullYear() + 1}-${today.getMonth() + 1}-${today.getDate()}`
+
+    return {
+      start: startDate,
+      end: endDate
+    }
+  }, [])
+
   const handleDatesSet = (arg: DatesSetArg) => {
     const viewType = arg.view.type
     const startDate = arg.startStr
     const endDate = arg.endStr
     onDatesChange(viewType, startDate, endDate)
   }
+
   return (
     <FullCalendar
       plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -27,6 +40,7 @@ const Calendar: React.FC<GardenCalendarProps> = ({ events = [], onDatesChange })
         right: 'dayGridMonth,timeGridWeek'
       }}
       initialView={'dayGridMonth'}
+      validRange={validRange}
       editable={false}
       selectable={false}
       weekends={true}
