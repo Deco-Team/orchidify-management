@@ -20,7 +20,7 @@ const ViewLearnerList = lazy(() => import('~/pages/learner/list/ViewLearnerList'
 const ViewLearnerDetail = lazy(() => import('~/pages/learner/detail/ViewLearnerDetail'))
 const ViewInstructorList = lazy(() => import('~/pages/instructor/list/ViewInstructorList'))
 const ViewInstructorDetail = lazy(() => import('~/pages/instructor/detail/ViewInstructorDetail'))
-// const ViewClassRequestList = lazy(() => import('~/pages/class-request/list/ViewClassRequestList'))
+const ViewClassRequestList = lazy(() => import('~/pages/class-request/list/ViewClassRequestList'))
 const ViewClassRequestDetail = lazy(() => import('~/pages/class-request/detail/ViewClassRequestDetail'))
 
 export const publicRoute = {
@@ -143,7 +143,7 @@ export const protectedRoute = {
   classRequestList: {
     name: 'Yêu cầu lớp học',
     path: '/class-requests',
-    Component: ViewClassRequestDetail,
+    Component: ViewClassRequestList,
     roles: [UserRole.STAFF]
   },
   classRequestDetail: {

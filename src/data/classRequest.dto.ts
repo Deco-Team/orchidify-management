@@ -1,11 +1,11 @@
 import { CourseStatus, RequestStatus } from '~/global/app-status'
 import { BaseMediaDto } from './common.dto'
 import { AssignmentDto, LessonDto } from './course.dto'
-import { CourseLevel, SlotNumber, Weekday } from '~/global/constants'
+import { CourseLevel, RequestType, SlotNumber, Weekday } from '~/global/constants'
 
 export type ClassRequestDto = {
   _id: string
-  type: string
+  type: RequestType
   description: string
   status: RequestStatus
   metadata: {
@@ -33,13 +33,15 @@ export type ClassRequestDto = {
     gardenId?: string
     rate?: number
   }
-  createdBy: {
-    _id: string
-    name: string
-    phone: string
-    idCardPhoto: string
-    avatar: string
-  }
+  createdBy:
+    | {
+        _id: string
+        name: string
+        phone: string
+        idCardPhoto: string
+        avatar: string
+      }
+    | string
   createdAt: string
   updatedAt: string
   courseId?: string

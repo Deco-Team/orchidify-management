@@ -1,4 +1,3 @@
-import { RequestStatus } from '~/global/app-status'
 import Header from './components/Header'
 import InstructorRequestDetailInformation from '~/components/request/InstructorRequestDetailInformation'
 import ClassInformation from './components/ClassInformation'
@@ -40,7 +39,7 @@ export default function ViewClassRequestDetail() {
   return data ? (
     <>
       <Header
-        classRequestStatus={RequestStatus.PENDING}
+        classRequestStatus={data.status}
         onApproveButtonClick={() => {}}
         onRejectButtonClick={() => {}}
       />

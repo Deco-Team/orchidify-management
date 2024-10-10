@@ -42,7 +42,7 @@ const RequestStatusTag = ({ type }: RequestStatusTagProps) => {
       }
       break
     }
-    case RequestStatus.CANCELED: {
+    case RequestStatus.CANCELLED: {
       label = 'Đã hủy'
       styles = {
         backgroundColor: 'transparent',
@@ -52,7 +52,7 @@ const RequestStatusTag = ({ type }: RequestStatusTagProps) => {
     }
   }
 
-  return <Chip label={label} variant={label === RequestStatus.CANCELED ? 'outlined' : 'filled'} sx={styles} />
+  return <Chip label={label} variant={label === RequestStatus.CANCELLED ? 'outlined' : 'filled'} sx={styles} />
 }
 
 export default RequestStatusTag
