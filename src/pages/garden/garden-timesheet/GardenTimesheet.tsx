@@ -54,7 +54,10 @@ const GardenTimesheet = () => {
       const { data: gardenTimesheet, error: apiError } = await getGardenTimesheet(gardenId, startDate, apiViewType)
       if (gardenTimesheet) {
         let transformedEventData: (Slot & {
-          title: string
+          title?: string
+          allDay?: boolean
+          display?: string
+          backgroundColor?: string
         })[] = []
 
         if (apiViewType === CalendarType.MONTH) {
@@ -63,22 +66,22 @@ const GardenTimesheet = () => {
             { [key: string]: { start: string; end: string; status: GardenTimesheetStatus; classQuantity: number } }
           >()
           gardenTimesheet.forEach((slot) => {
-            if (slot.slotNumber) {
+            if (slot.status !== GardenTimesheetStatus.INACTIVE) {
               const date = new Date(slot.start).getDate().toString()
               const dateData = gardenTimesheetMap.get(date)
               if (dateData) {
                 gardenTimesheetMap.set(date, {
                   ...dateData,
-                  [slot.slotNumber]: {
+                  [slot.slotNumber!]: {
                     start: slot.start,
                     end: slot.end,
                     status: slot.status,
-                    classQuantity: dateData[slot.slotNumber] ? dateData[slot.slotNumber].classQuantity + 1 : 1
+                    classQuantity: dateData[slot.slotNumber!] ? dateData[slot.slotNumber!].classQuantity + 1 : 1
                   }
                 })
               } else {
                 gardenTimesheetMap.set(date, {
-                  [slot.slotNumber]: {
+                  [slot.slotNumber!]: {
                     start: slot.start,
                     end: slot.end,
                     status: slot.status,
@@ -86,6 +89,13 @@ const GardenTimesheet = () => {
                   }
                 })
               }
+            } else {
+              transformedEventData.push({
+                ...slot,
+                allDay: true,
+                display: 'background',
+                backgroundColor: '#d0d0d0'
+              })
             }
           })
 
@@ -99,12 +109,20 @@ const GardenTimesheet = () => {
             )
           })
         } else {
-          transformedEventData = gardenTimesheet.map((slot) => ({
-            ...slot,
-            title: slot.classId!,
-            display: 'block',
-            backgroundColor: '#0ea5e919'
-          }))
+          transformedEventData = gardenTimesheet.map((slot) =>
+            slot.status !== GardenTimesheetStatus.INACTIVE
+              ? {
+                  ...slot,
+                  title: slot.classId!,
+                  display: 'block',
+                  backgroundColor: '#0ea5e919'
+                }
+              : {
+                  ...slot,
+                  display: 'background',
+                  backgroundColor: '#d0d0d0'
+                }
+          )
         }
 
         setEventData(transformedEventData)
