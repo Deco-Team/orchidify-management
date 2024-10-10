@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Breadcrumbs from '~/components/breadscrumbs/Breadscrumbs'
 import Loading from '~/components/loading/Loading'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { Slot } from '~/data/garden-timesheet.dto'
+import { Slot } from '~/data/gardenTimesheet.dto'
 import { Garden } from '~/data/garden.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { CalendarType } from '~/global/constants'
@@ -13,6 +13,7 @@ import useGardenTimesheetApi from '~/hooks/api/useGardenTimesheetApi'
 import { protectedRoute } from '~/routes/routes'
 import { notifyError } from '~/utils/toastify'
 import GardenCalendar from './components/GardenCalendar'
+import { GardenTimesheetStatus } from '~/global/app-status'
 
 const GardenTimesheet = () => {
   const navigate = useNavigate()
@@ -53,10 +54,56 @@ const GardenTimesheet = () => {
       const apiViewType = mapViewTypeToApi(viewType)
       const { data: gardenTimesheet, error: apiError } = await getGardenTimesheet(gardenId, startDate, apiViewType)
       if (gardenTimesheet) {
-        const transformedEventData = gardenTimesheet.map((slot) => ({
-          ...slot,
-          title: slot.classId
-        }))
+        let transformedEventData: (Slot & {
+          title: string
+        })[] = []
+
+        if (apiViewType === CalendarType.MONTH) {
+          const gardenTimesheetMap = new Map<
+            string,
+            { [key: string]: { start: string; end: string; status: GardenTimesheetStatus; classQuantity: number } }
+          >()
+          gardenTimesheet.forEach((slot) => {
+            if (slot.slotNumber) {
+              const date = new Date(slot.start).getDate().toString()
+              const dateData = gardenTimesheetMap.get(date)
+              if (dateData) {
+                gardenTimesheetMap.set(date, {
+                  ...dateData,
+                  [slot.slotNumber]: {
+                    start: slot.start,
+                    end: slot.end,
+                    status: slot.status,
+                    classQuantity: dateData[slot.slotNumber] ? dateData[slot.slotNumber].classQuantity + 1 : 1
+                  }
+                })
+              } else {
+                gardenTimesheetMap.set(date, {
+                  [slot.slotNumber]: {
+                    start: slot.start,
+                    end: slot.end,
+                    status: slot.status,
+                    classQuantity: 1
+                  }
+                })
+              }
+            }
+          })
+
+          gardenTimesheetMap.forEach((value) => {
+            transformedEventData.push(
+              ...Object.keys(value).map((slotNumber) => ({
+                ...value[slotNumber],
+                title: `Tiết ${slotNumber} (${value[slotNumber].classQuantity})`
+              }))
+            )
+          })
+        } else {
+          transformedEventData = gardenTimesheet.map((slot) => ({
+            ...slot,
+            title: slot.classId!
+          }))
+        }
 
         setEventData(transformedEventData)
       }

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { Slot } from '~/data/garden-timesheet.dto'
+import { Slot } from '~/data/gardenTimesheet.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useProtectedApi } from './useProtectedApi'
 
