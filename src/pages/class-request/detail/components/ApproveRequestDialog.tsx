@@ -5,7 +5,8 @@ import FormDialog from '~/components/dialog/FormDialog'
 import ControlledSelect from '~/components/form/ControlledSelect'
 import { AvailableGardenDto } from '~/data/garden.dto'
 import { APP_MESSAGE } from '~/global/app-message'
-import { notifySuccess } from '~/utils/toastify'
+import { useClassRequestApi } from '~/hooks/api/useClassRequestApi'
+import { notifyError, notifySuccess } from '~/utils/toastify'
 
 type FormValues = {
   gardenId: string
@@ -27,7 +28,13 @@ interface ApproveRequestDialogProps {
   onSuccess: () => void
 }
 
-const ApproveRequestDialog = ({ gardenOptions, open, handleClose, onSuccess }: ApproveRequestDialogProps) => {
+const ApproveRequestDialog = ({
+  requestId,
+  gardenOptions,
+  open,
+  handleClose,
+  onSuccess
+}: ApproveRequestDialogProps) => {
   const {
     handleSubmit,
     control,
@@ -36,9 +43,14 @@ const ApproveRequestDialog = ({ gardenOptions, open, handleClose, onSuccess }: A
     defaultValues: defaultFormValues,
     resolver: zodResolver(validationSchema)
   })
+  const { approveClassRequest } = useClassRequestApi()
 
   const handleApprove = async (data: FormValues) => {
-    console.log(data)
+    const { error } = await approveClassRequest(requestId, data)
+    if (error) {
+      notifyError(error.message)
+      return
+    }
     notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Chấp nhận yêu cầu'))
     onSuccess()
     handleClose()

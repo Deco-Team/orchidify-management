@@ -4,7 +4,8 @@ import { z } from 'zod'
 import FormDialog from '~/components/dialog/FormDialog'
 import ControlledOutlinedInput from '~/components/form/ControlledOutlinedInput'
 import { APP_MESSAGE } from '~/global/app-message'
-import { notifySuccess } from '~/utils/toastify'
+import { useClassRequestApi } from '~/hooks/api/useClassRequestApi'
+import { notifyError, notifySuccess } from '~/utils/toastify'
 
 type FormValues = {
   rejectReason: string
@@ -28,7 +29,7 @@ interface RejectRequestDialogProps {
   onSuccess: () => void
 }
 
-const RejectRequestDialog = ({ open, handleClose, onSuccess }: RejectRequestDialogProps) => {
+const RejectRequestDialog = ({ requestId, open, handleClose, onSuccess }: RejectRequestDialogProps) => {
   const {
     handleSubmit,
     control,
@@ -37,9 +38,14 @@ const RejectRequestDialog = ({ open, handleClose, onSuccess }: RejectRequestDial
     defaultValues: defaultFormValues,
     resolver: zodResolver(validationSchema)
   })
+  const { rejectClassRequest } = useClassRequestApi()
 
   const handleReject = async (data: FormValues) => {
-    console.log(data)
+    const { error } = await rejectClassRequest(requestId, data)
+    if (error) {
+      notifyError(error.message)
+      return
+    }
     notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Từ chối yêu cầu'))
     onSuccess()
     handleClose()
