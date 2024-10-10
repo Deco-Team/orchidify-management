@@ -40,8 +40,7 @@ const GardenTimesheet = () => {
 
   useEffect(() => {
     if (gardenId) {
-      // eslint-disable-next-line prettier/prettier
-      (async () => {
+      ;(async () => {
         const { data: garden, error: apiError } = await getGardenById(gardenId)
         setData(garden)
         setError(apiError)
@@ -94,14 +93,17 @@ const GardenTimesheet = () => {
             transformedEventData.push(
               ...Object.keys(value).map((slotNumber) => ({
                 ...value[slotNumber],
-                title: `Tiết ${slotNumber} (${value[slotNumber].classQuantity})`
+                title: `Tiết ${slotNumber} (${value[slotNumber].classQuantity})`,
+                display: 'block'
               }))
             )
           })
         } else {
           transformedEventData = gardenTimesheet.map((slot) => ({
             ...slot,
-            title: slot.classId!
+            title: slot.classId!,
+            display: 'block',
+            backgroundColor: '#0ea5e919'
           }))
         }
 
