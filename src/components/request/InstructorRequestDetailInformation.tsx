@@ -45,7 +45,10 @@ const InstructorRequestDetailInformationProps = ({ classRequest }: InstructorReq
       </Box>
       <Box marginBottom='1.25rem'>
         <Field label='Loại yêu cầu' requestType={classRequest.type} />
-        <Field label='Tên giảng viên' content={classRequest.createdBy.name} />
+        <Field
+          label='Tên giảng viên'
+          content={typeof classRequest.createdBy === 'string' ? '' : classRequest.createdBy.name}
+        />
         <Field label='Thời gian tạo' content={new Date(classRequest.createdAt).toLocaleString('vi-VN')} />
         <Field label='Cập nhật cuối' content={new Date(classRequest.createdAt).toLocaleString('vi-VN')} />
         <Field label='Trạng thái' statusTag={classRequest.status} />

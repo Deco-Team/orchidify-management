@@ -10,7 +10,7 @@ export enum RequestStatus {
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
   EXPIRED = 'EXPIRED',
-  CANCELED = 'CANCELED'
+  CANCELLED = 'CANCELLED'
 }
 
 export enum UserStatus {
