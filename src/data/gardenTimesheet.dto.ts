@@ -6,4 +6,6 @@ export interface Slot {
   status: GardenTimesheetStatus
   classId?: string
   slotNumber?: number
+  display?: string
+  backgroundColor?: string
 }
