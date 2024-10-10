@@ -61,10 +61,7 @@ const GardenTimesheet = () => {
         })[] = []
 
         if (apiViewType === CalendarType.MONTH) {
-          const gardenTimesheetMap = new Map<
-            string,
-            { [key: string]: { start: string; end: string; status: GardenTimesheetStatus; classQuantity: number } }
-          >()
+          const gardenTimesheetMap = new Map<string, { [key: string]: Slot & { classQuantity: number } }>()
           gardenTimesheet.forEach((slot) => {
             if (slot.status !== GardenTimesheetStatus.INACTIVE) {
               const date = new Date(slot.start).getDate().toString()
@@ -82,9 +79,7 @@ const GardenTimesheet = () => {
               } else {
                 gardenTimesheetMap.set(date, {
                   [slot.slotNumber!]: {
-                    start: slot.start,
-                    end: slot.end,
-                    status: slot.status,
+                    ...slot,
                     classQuantity: 1
                   }
                 })
@@ -113,7 +108,7 @@ const GardenTimesheet = () => {
             slot.status !== GardenTimesheetStatus.INACTIVE
               ? {
                   ...slot,
-                  title: slot.classId!,
+                  title: slot.metadata ? `${slot.metadata.code} - ${slot.metadata.title}` : 'Lớp học',
                   display: 'block',
                   backgroundColor: '#0ea5e919'
                 }

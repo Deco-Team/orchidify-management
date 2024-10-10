@@ -1,11 +1,14 @@
 import { GardenTimesheetStatus } from '~/global/app-status'
 
 export interface Slot {
+  _id: string
   start: string
   end: string
   status: GardenTimesheetStatus
   classId?: string
   slotNumber?: number
-  display?: string
-  backgroundColor?: string
+  metadata?: {
+    code: string
+    title: string
+  }
 }
