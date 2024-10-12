@@ -82,7 +82,7 @@ export const useInstructorApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Vô hiệu hóa giảng viên') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.ACTION_FAILED('Kích hoạt giảng viên') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
@@ -101,7 +101,7 @@ export const useInstructorApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Kích hoạt giảng viên') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.ACTION_FAILED('Vô hiệu hóa giảng viên') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]

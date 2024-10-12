@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import AlertDialog from '~/components/dialog/AlertDialog'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useLearnerApi } from '~/hooks/api/useLearnerApi'
-import { notifySuccess } from '~/utils/toastify'
+import { notifyError, notifySuccess } from '~/utils/toastify'
 
 interface DialogProps {
   open: boolean
@@ -18,9 +18,13 @@ const DeactivateDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
   const { deactivateLearner } = useLearnerApi()
   const handleDeactivate = async (learnerId: string) => {
     setIsProcessing(true)
-    await deactivateLearner(learnerId)
-    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Vô hiệu hóa học viên'))
-    onSuccess()
+    const { error } = await deactivateLearner(learnerId)
+    if (error) {
+      notifyError(error.message)
+    } else {
+      notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Vô hiệu hóa học viên'))
+      onSuccess()
+    }
     handleClose()
     setIsProcessing(false)
   }

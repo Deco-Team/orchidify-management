@@ -22,10 +22,10 @@ const ActivateDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
     const { error } = await activateStaff(staffId)
     if (error) {
       notifyError(error.message)
-      return
+    } else {
+      notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Kích hoạt nhân viên'))
+      onSuccess()
     }
-    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Kích hoạt nhân viên'))
-    onSuccess()
     handleClose()
     setIsProcessing(false)
   }

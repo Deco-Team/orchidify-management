@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import AlertDialog from '~/components/dialog/AlertDialog'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useGardenManagerApi } from '~/hooks/api/useGardenManagerApi'
-import { notifySuccess } from '~/utils/toastify'
+import { notifyError, notifySuccess } from '~/utils/toastify'
 
 interface DialogProps {
   open: boolean
@@ -18,9 +18,13 @@ const DeactivateDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
   const { deactivateGardenManager } = useGardenManagerApi()
   const handleDeactivate = async (gardenManagerId: string) => {
     setIsProcessing(true)
-    await deactivateGardenManager(gardenManagerId)
-    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Vô hiệu hóa quản lý vườn'))
-    onSuccess()
+    const { error } = await deactivateGardenManager(gardenManagerId)
+    if (error) {
+      notifyError(error.message)
+    } else {
+      notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Vô hiệu hóa quản lý vườn'))
+      onSuccess()
+    }
     handleClose()
     setIsProcessing(false)
   }

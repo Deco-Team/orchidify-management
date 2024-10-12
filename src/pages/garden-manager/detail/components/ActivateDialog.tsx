@@ -22,10 +22,10 @@ const ActivateDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
     const { error } = await activateGardenManager(gardenManagerId)
     if (error) {
       notifyError(error.message)
-      return
+    } else {
+      notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Kích hoạt quản lý vườn'))
+      onSuccess()
     }
-    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Kích hoạt quản lý vườn'))
-    onSuccess()
     handleClose()
     setIsProcessing(false)
   }

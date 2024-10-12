@@ -89,7 +89,7 @@ const ViewGardenDetail = () => {
       <TitleWrapper>
         <div>
           <Typography variant='h5' fontSize={34} fontWeight={700}>
-            Thông tin quản lý vườn
+            Thông tin nhà vườn
           </Typography>
           <Breadcrumbs items={breadcrumbsItems} />
         </div>

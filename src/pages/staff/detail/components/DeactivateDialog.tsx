@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import AlertDialog from '~/components/dialog/AlertDialog'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useStaffApi } from '~/hooks/api/useStaffApi'
-import { notifySuccess } from '~/utils/toastify'
+import { notifyError, notifySuccess } from '~/utils/toastify'
 
 interface DialogProps {
   open: boolean
@@ -18,9 +18,13 @@ const DeactivateDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
   const { deactivateStaff } = useStaffApi()
   const handleDeactivate = async (staffId: string) => {
     setIsProcessing(true)
-    await deactivateStaff(staffId)
-    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Vô hiệu hóa nhân viên'))
-    onSuccess()
+    const { error } = await deactivateStaff(staffId)
+    if (error) {
+      notifyError(error.message)
+    } else {
+      notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Vô hiệu hóa nhân viên'))
+      onSuccess()
+    }
     handleClose()
     setIsProcessing(false)
   }
