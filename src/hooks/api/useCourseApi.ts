@@ -6,7 +6,7 @@ import { ErrorResponseDto } from '~/data/error.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useProtectedApi } from './useProtectedApi'
 
-const ROOT_ENDPOINT = '/courses/instructor'
+const ROOT_ENDPOINT = '/courses/management'
 
 interface CreateCourse {
   title: string
