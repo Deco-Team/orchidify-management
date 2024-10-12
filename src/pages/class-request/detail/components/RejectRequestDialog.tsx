@@ -44,10 +44,10 @@ const RejectRequestDialog = ({ requestId, open, handleClose, onSuccess }: Reject
     const { error } = await rejectClassRequest(requestId, data)
     if (error) {
       notifyError(error.message)
-      return
+    } else {
+      notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Từ chối yêu cầu'))
+      onSuccess()
     }
-    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Từ chối yêu cầu'))
-    onSuccess()
     handleClose()
   }
 
