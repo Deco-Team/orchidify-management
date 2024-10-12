@@ -49,10 +49,10 @@ const ApproveRequestDialog = ({
     const { error } = await approveClassRequest(requestId, data)
     if (error) {
       notifyError(error.message)
-      return
+    } else {
+      notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Chấp nhận yêu cầu'))
+      onSuccess()
     }
-    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Chấp nhận yêu cầu'))
-    onSuccess()
     handleClose()
   }
 
