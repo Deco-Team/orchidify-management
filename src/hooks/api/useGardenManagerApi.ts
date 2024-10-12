@@ -129,7 +129,7 @@ export const useGardenManagerApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Vô hiệu hóa quản lý vườn') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.ACTION_FAILED('Kích hoạt quản lý vườn') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
@@ -148,7 +148,7 @@ export const useGardenManagerApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Kích hoạt quản lý vườn') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.ACTION_FAILED('Vô hiệu hóa quản lý vườn') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]

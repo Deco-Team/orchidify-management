@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import AlertDialog from '~/components/dialog/AlertDialog'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useInstructorApi } from '~/hooks/api/useInstructorApi'
-import { notifySuccess } from '~/utils/toastify'
+import { notifyError, notifySuccess } from '~/utils/toastify'
 
 interface DialogProps {
   open: boolean
@@ -18,10 +18,13 @@ const DeactivateDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
   const { deactivateInstructor } = useInstructorApi()
   const handleDeactivate = async (instructorId: string) => {
     setIsProcessing(true)
-    await deactivateInstructor(instructorId)
-    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Vô hiệu hóa giảng viên'))
-    onSuccess()
-    handleClose()
+    const { error } = await deactivateInstructor(instructorId)
+    if (error) {
+      notifyError(error.message)
+    } else {
+      notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Vô hiệu hóa giảng viên'))
+      onSuccess()
+    }
     setIsProcessing(false)
   }
 

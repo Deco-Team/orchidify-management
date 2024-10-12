@@ -82,7 +82,7 @@ export const useLearnerApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Vô hiệu hóa học viên') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.ACTION_FAILED('Kích hoạt học viên') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
@@ -101,7 +101,7 @@ export const useLearnerApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Kích hoạt học viên') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.ACTION_FAILED('Vô hiệu hóa học viên') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
