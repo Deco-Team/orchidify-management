@@ -23,6 +23,9 @@ const ViewInstructorDetail = lazy(() => import('~/pages/instructor/detail/ViewIn
 const ViewClassRequestList = lazy(() => import('~/pages/class-request/list/ViewClassRequestList'))
 const ViewClassRequestDetail = lazy(() => import('~/pages/class-request/detail/ViewClassRequestDetail'))
 const ViewCourseList = lazy(() => import('~/pages/course/list/ViewCourseList'))
+const CourseLessonDetail = lazy(() => import('~/pages/course/detail/lesson-detail/LessonDetail'))
+const CourseAssignmentDetail = lazy(() => import('~/pages/course/detail/assignment-detail/AssignmentDetail'))
+const CourseDetail = lazy(() => import('~/pages/course/detail/CourseDetail'))
 
 export const publicRoute = {
   login: {
@@ -157,6 +160,24 @@ export const protectedRoute = {
     name: 'Lớp học',
     path: '/courses',
     Component: ViewCourseList,
+    roles: [UserRole.STAFF]
+  },
+  courseDetail: {
+    name: 'Chi tiết khóa học',
+    path: '/courses/:id',
+    Component: CourseDetail,
+    roles: [UserRole.STAFF]
+  },
+  courseLessonDetail: {
+    name: 'Chi tiết bài học',
+    path: '/courses/:courseId/lesson/:lessonId',
+    Component: CourseLessonDetail,
+    roles: [UserRole.STAFF]
+  },
+  courseAssignmentDetail: {
+    name: 'Chi tiết bài tập',
+    path: '/courses/:courseId/assignment/:assignmentId',
+    Component: CourseAssignmentDetail,
     roles: [UserRole.STAFF]
   }
 }
