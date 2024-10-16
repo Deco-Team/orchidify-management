@@ -11,7 +11,7 @@ import { Garden } from '~/data/garden.dto'
 import { UserStatus } from '~/global/app-status'
 import { useGardenApi } from '~/hooks/api/useGardenApi'
 import { ContentWrapper, Line, TitleWrapper } from '~/pages/garden-manager/detail/ViewGardenManagerDetail.styled'
-import { Image } from '~/pages/garden/detail/ViewGardenDetail.styled'
+import { ButtonWrapper, Image } from '~/pages/garden/detail/ViewGardenDetail.styled'
 import { protectedRoute } from '~/routes/routes'
 import { notifyError } from '~/utils/toastify'
 import ActivateDialog from './components/ActivateDialog'
@@ -204,6 +204,9 @@ const ViewGardenDetail = () => {
           ))}
         </Carousel>
       </ContentWrapper>
+      <ButtonWrapper>
+        <Button onClick={() => navigate(protectedRoute.viewGardenTimesheet.path.replace(':id', gardenId))}>Lịch</Button>
+      </ButtonWrapper>
       <DeactivateDialog
         open={openDeactivateDialog}
         handleClose={handleCloseDeactivateDialog}

@@ -22,6 +22,7 @@ const ViewInstructorList = lazy(() => import('~/pages/instructor/list/ViewInstru
 const ViewInstructorDetail = lazy(() => import('~/pages/instructor/detail/ViewInstructorDetail'))
 const ViewClassRequestList = lazy(() => import('~/pages/class-request/list/ViewClassRequestList'))
 const ViewClassRequestDetail = lazy(() => import('~/pages/class-request/detail/ViewClassRequestDetail'))
+const ViewGardenTimesheet = lazy(() => import('~/pages/garden/garden-timesheet/GardenTimesheet'))
 
 export const publicRoute = {
   login: {
@@ -151,5 +152,11 @@ export const protectedRoute = {
     path: '/class-requests/:id',
     Component: ViewClassRequestDetail,
     roles: [UserRole.STAFF]
+  },
+  viewGardenTimesheet: {
+    name: 'Lịch',
+    path: '/gardens/:id/timesheet',
+    Component: ViewGardenTimesheet,
+    roles: [UserRole.STAFF, UserRole.GARDEN_MANAGER]
   }
 }

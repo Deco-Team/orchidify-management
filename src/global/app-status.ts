@@ -17,3 +17,11 @@ export enum UserStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE'
 }
+
+export enum GardenTimesheetStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  AVAILABLE = 'AVAILABLE',
+  LOCKED = 'LOCKED',
+  NOT_AVAILABLE = 'NOT_AVAILABLE'
+}
