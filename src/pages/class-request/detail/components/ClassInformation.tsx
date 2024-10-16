@@ -1,6 +1,6 @@
 import { Paper, Box, Typography, Divider, Grid } from '@mui/material'
 import ClassStatusTag from '~/components/tag/ClassStatusTag'
-import { ClassRequestDto } from '~/data/classRequest.dto'
+import { ClassRequestDetailResponseDto } from '~/data/classRequest.dto'
 import { ClassStatus, SlotNumber, Weekday } from '~/global/constants'
 
 interface FieldProps {
@@ -55,7 +55,7 @@ const Field: React.FC<FieldProps> = ({ label, content, weekDays = [], slotNumber
 }
 
 interface ClassInformationProps {
-  classRequest: ClassRequestDto
+  classRequest: ClassRequestDetailResponseDto
 }
 
 const ClassInformation = ({ classRequest }: ClassInformationProps) => {

@@ -76,7 +76,8 @@ const ApproveRequestDialog = ({
           controller={{ name: 'gardenId', control: control }}
           label='Nhà vườn'
           labelId='garden-select-label'
-          placeholder='Chọn nhà vườn'
+          placeholder={gardenOptions.length > 0 ? 'Chọn nhà vườn' : 'Không có nhà vườn nào'}
+          disabled={gardenOptions.length === 0}
           items={gardenOptions.map((option) => ({ value: option._id, name: option.name }))}
           fullWidth
           size='small'

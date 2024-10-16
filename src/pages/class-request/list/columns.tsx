@@ -1,10 +1,10 @@
 import { MRT_ColumnDef } from 'material-react-table'
 import RequestStatusTag from '~/components/tag/RequestStatusTag'
-import { ClassRequestDto } from '~/data/classRequest.dto'
+import { ClassRequestListItemResponseDto } from '~/data/classRequest.dto'
 import { RequestStatus } from '~/global/app-status'
 import { formatRequestType } from '~/utils/format'
 
-export const ClassRequestColumns: MRT_ColumnDef<ClassRequestDto>[] = [
+export const ClassRequestColumns: MRT_ColumnDef<ClassRequestListItemResponseDto>[] = [
   {
     accessorKey: 'type',
     header: 'Loại yêu cầu',
