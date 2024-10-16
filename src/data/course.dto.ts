@@ -36,3 +36,34 @@ export interface AssignmentDto {
   description: string
   attachments: BaseMediaDto[]
 }
+
+export type CourseListItemResponseDto = {
+  _id: string
+  code: string
+  title: string
+  price: number
+  level: CourseLevel
+  type: string[]
+  status: CourseStatus
+  learnerLimit: number
+  rate: number
+}
+
+export type CourseDetailResponseDto = {
+  _id: string
+  code: string
+  title: string
+  description: string
+  price: number
+  level: CourseLevel
+  type: string[]
+  thumbnail: string
+  media: BaseMediaDto[]
+  status: CourseStatus
+  learnerLimit: number
+  instructorId: string
+  lessons: LessonDto[]
+  assignments: AssignmentDto[]
+  rate: number
+  gardenRequiredToolkits: string
+}
