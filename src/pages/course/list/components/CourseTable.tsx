@@ -9,13 +9,8 @@ import { useCourseApi } from '~/hooks/api/useCourseApi'
 import { protectedRoute } from '~/routes/routes'
 import { notifyError } from '~/utils/toastify'
 import { courseColumns } from './columns'
-import { CourseStatus } from '~/global/app-status'
 
-interface CourseTableProps {
-  statusFilter: CourseStatus
-}
-
-const CourseTable = ({ statusFilter }: CourseTableProps) => {
+const CourseTable = () => {
   const { getCourseList } = useCourseApi()
   const [data, setData] = useState<ListResponseDto<CourseListItemResponseDto>>({
     docs: [],
@@ -46,10 +41,7 @@ const CourseTable = ({ statusFilter }: CourseTableProps) => {
         pagination.pageIndex + 1,
         pagination.pageSize,
         sorting.map((sort) => ({ field: sort.id, desc: sort.desc })),
-        [
-          ...columnFilters.map((filter) => ({ field: filter.id, value: filter.value })),
-          { field: 'status', value: statusFilter }
-        ]
+        columnFilters.map((filter) => ({ field: filter.id, value: filter.value }))
       )
       if (courses) {
         setData(courses)
@@ -70,7 +62,6 @@ const CourseTable = ({ statusFilter }: CourseTableProps) => {
       }
       setError(apiError)
     })()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getCourseList, pagination.pageIndex, pagination.pageSize, sorting, columnFilters])
 
   if (error) {
@@ -79,7 +70,7 @@ const CourseTable = ({ statusFilter }: CourseTableProps) => {
 
   return (
     <Table
-      title='Danh sách khóa học/combo khóa học'
+      title='Danh sách khóa học'
       tableOptions={{
         columns: courseColumns,
         data: data.docs || [],

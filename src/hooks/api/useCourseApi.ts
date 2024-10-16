@@ -1,58 +1,11 @@
 import { useCallback } from 'react'
-import { CloudinaryFileUploadedInfo } from '~/components/cloudinary/cloudinary-type'
-import { BaseMediaDto, IdResponseDto, ListResponseDto, SuccessResponseDto } from '~/data/common.dto'
+import { ListResponseDto } from '~/data/common.dto'
 import { AssignmentDto, CourseDetailResponseDto, CourseListItemResponseDto, LessonDto } from '~/data/course.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useProtectedApi } from './useProtectedApi'
 
 const ROOT_ENDPOINT = '/courses/management'
-
-interface CreateCourse {
-  title: string
-  description: string
-  price: number
-  level: string
-  type: string[]
-  thumbnail: string
-  media: CloudinaryFileUploadedInfo[]
-  learnerLimit: number
-  lessons: {
-    title: string
-    description: string
-    media: CloudinaryFileUploadedInfo[]
-  }[]
-  assignments: {
-    title: string
-    description: string
-    attachments: CloudinaryFileUploadedInfo[]
-  }[]
-  gardenRequiredToolkits: string
-}
-
-interface UpdateCourse {
-  title: string
-  description: string
-  price: number
-  level: string
-  type: string[]
-  thumbnail: string
-  media: BaseMediaDto[]
-  learnerLimit: number
-  lessons: {
-    _id?: string
-    title: string
-    description: string
-    media: BaseMediaDto[]
-  }[]
-  assignments: {
-    _id?: string
-    title: string
-    description: string
-    attachments: BaseMediaDto[]
-  }[]
-  gardenRequiredToolkits: string
-}
 
 export const useCourseApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
@@ -116,63 +69,6 @@ export const useCourseApi = () => {
     [callAppProtectedApi]
   )
 
-  const createCourse = useCallback(
-    async (course: CreateCourse) => {
-      const endpoint = `${ROOT_ENDPOINT}`
-      const result = await callAppProtectedApi<IdResponseDto>(endpoint, 'POST', {}, {}, course)
-
-      if (result) {
-        const { data, error } = result
-        if (data) return { data: data, error: null }
-        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
-      }
-
-      return {
-        data: null,
-        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('chi tiết khóa học') } as ErrorResponseDto
-      }
-    },
-    [callAppProtectedApi]
-  )
-
-  const updateCourse = useCallback(
-    async (courseId: string, courseData: UpdateCourse) => {
-      const endpoint = `${ROOT_ENDPOINT}/${courseId}`
-      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PUT', {}, {}, courseData)
-
-      if (result) {
-        const { data, error } = result
-        if (data) return { data: data, error: null }
-        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
-      }
-
-      return {
-        data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Cập nhật mẫu khóa học') } as ErrorResponseDto
-      }
-    },
-    [callAppProtectedApi]
-  )
-
-  const deleteCourse = useCallback(
-    async (courseId: string) => {
-      const endpoint = `${ROOT_ENDPOINT}/${courseId}`
-      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'DELETE')
-
-      if (result) {
-        const { data, error } = result
-        if (data) return { data: data, error: null }
-        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
-      }
-
-      return {
-        data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Xóa khóa học') } as ErrorResponseDto
-      }
-    },
-    [callAppProtectedApi]
-  )
-
   const getLessonById = useCallback(
     async (coursesId: string, lessonId: string) => {
       const endpoint = `${ROOT_ENDPOINT}/${coursesId}/lessons/${lessonId}`
@@ -214,9 +110,6 @@ export const useCourseApi = () => {
   return {
     getCourseList,
     getCourseById,
-    createCourse,
-    updateCourse,
-    deleteCourse,
     getLessonById,
     getAssignmentById
   }

@@ -12,7 +12,7 @@ export const courseColumns: MRT_ColumnDef<CourseListItemResponseDto>[] = [
   },
   {
     accessorKey: 'title',
-    header: 'Khóa học',
+    header: 'Tên khóa học',
     size: 200
   },
   {

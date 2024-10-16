@@ -161,7 +161,7 @@ export const protectedRoute = {
     roles: [UserRole.STAFF, UserRole.GARDEN_MANAGER]
   },
   courseList: {
-    name: 'Lớp học',
+    name: 'Khóa học',
     path: '/courses',
     Component: ViewCourseList,
     roles: [UserRole.STAFF]
