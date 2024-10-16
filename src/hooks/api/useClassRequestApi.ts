@@ -3,9 +3,17 @@ import { ClassRequestDto } from '~/data/classRequest.dto'
 import { useProtectedApi } from './useProtectedApi'
 import { APP_MESSAGE } from '~/global/app-message'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { ListResponseDto } from '~/data/common.dto'
+import { ListResponseDto, SuccessResponseDto } from '~/data/common.dto'
 
 const ROOT_ENDPOINT = '/class-requests/management'
+
+interface ApproveClassRequest {
+  gardenId: string
+}
+
+interface RejectClassRequest {
+  rejectReason: string
+}
 
 export const useClassRequestApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
@@ -69,5 +77,43 @@ export const useClassRequestApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getAllClassRequests, getClassRequestById }
+  const approveClassRequest = useCallback(
+    async (classRequestId: string, data: ApproveClassRequest) => {
+      const endpoint = `${ROOT_ENDPOINT}/${classRequestId}/approve`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PATCH', {}, {}, data)
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('Chấp nhận yêu cầu') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  const rejectClassRequest = useCallback(
+    async (classRequestId: string, data: RejectClassRequest) => {
+      const endpoint = `${ROOT_ENDPOINT}/${classRequestId}/reject`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PATCH', {}, {}, data)
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('Từ chối yêu cầu') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return { getAllClassRequests, getClassRequestById, approveClassRequest, rejectClassRequest }
 }
