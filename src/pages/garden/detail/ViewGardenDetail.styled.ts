@@ -10,3 +10,9 @@ export const Image = styled.img`
 export const Item = styled.div`
   width: 25rem;
 `
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`

@@ -2,7 +2,42 @@ import { CourseStatus } from '~/global/app-status'
 import { BaseMediaDto } from './common.dto'
 import { CourseLevel } from '~/global/constants'
 
-export type CourseDto = {
+export interface SessionDto {
+  _id: string
+  sessionNumber: number
+  title: string
+  description: string
+  media: BaseMediaDto[]
+  assignments: AssignmentDto[]
+}
+
+export interface AssignmentDto {
+  _id: string
+  title: string
+  description: string
+  attachments: BaseMediaDto[]
+}
+
+export type CourseListItemResponseDto = {
+  _id: string
+  code: string
+  title: string
+  price: number
+  level: CourseLevel
+  type: string[]
+  duration: number
+  thumbnail: string
+  status: CourseStatus
+  learnerLimit: number
+  rate: number
+  discount: number
+  instructorId: string
+  isPublished: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export type CourseDetailResponseDto = {
   _id: string
   code: string
   title: string
@@ -10,29 +45,17 @@ export type CourseDto = {
   price: number
   level: CourseLevel
   type: string[]
+  duration: number
   thumbnail: string
   media: BaseMediaDto[]
   status: CourseStatus
+  sessions: SessionDto[]
   learnerLimit: number
-  instructorId: string
-  lessons: LessonDto[]
-  assignments: AssignmentDto[]
   rate: number
+  discount: number
   gardenRequiredToolkits: string
-}
-
-export interface LessonDto {
-  _id: string
-  index: number
-  title: string
-  description: string
-  media: BaseMediaDto[]
-}
-
-export interface AssignmentDto {
-  _id: string
-  index: number
-  title: string
-  description: string
-  attachments: BaseMediaDto[]
+  instructorId: string
+  isPublished: boolean
+  createdAt: string
+  updatedAt: string
 }

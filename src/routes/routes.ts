@@ -23,6 +23,8 @@ const ViewInstructorDetail = lazy(() => import('~/pages/instructor/detail/ViewIn
 const ViewClassRequestList = lazy(() => import('~/pages/class-request/list/ViewClassRequestList'))
 const ViewClassRequestDetail = lazy(() => import('~/pages/class-request/detail/ViewClassRequestDetail'))
 const ViewRecruitmentList = lazy(() => import('~/pages/recruitment/list/ViewRecruitmentList'))
+const ViewGardenTimesheet = lazy(() => import('~/pages/garden/garden-timesheet/GardenTimesheet'))
+const ViewCourseList = lazy(() => import('~/pages/course/list/ViewCourseList'))
 
 export const publicRoute = {
   login: {
@@ -157,6 +159,18 @@ export const protectedRoute = {
     name: 'Đơn tuyển',
     path: '/recruitments',
     Component: ViewRecruitmentList,
+    roles: [UserRole.STAFF]
+  },
+  viewGardenTimesheet: {
+    name: 'Lịch',
+    path: '/gardens/:id/timesheet',
+    Component: ViewGardenTimesheet,
+    roles: [UserRole.STAFF, UserRole.GARDEN_MANAGER]
+  },
+  courseList: {
+    name: 'Khóa học',
+    path: '/courses',
+    Component: ViewCourseList,
     roles: [UserRole.STAFF]
   }
 }

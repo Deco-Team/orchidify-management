@@ -1,6 +1,6 @@
 import { Box, Divider, Paper, Rating, Typography } from '@mui/material'
 import Carousel from '~/components/slider/Carousel'
-import { ClassRequestDto } from '~/data/classRequest.dto'
+import { ClassRequestMetadataDto, ClassRequestCreatedByDto } from '~/data/classRequest.dto'
 import { formatCourseLevel, formatCurrency } from '~/utils/format'
 
 interface FieldProps {
@@ -31,12 +31,11 @@ const Field: React.FC<FieldProps> = ({ label, content, rate }) => (
 )
 
 interface CourseInformationProps {
-  classRequest: ClassRequestDto
+  course: ClassRequestMetadataDto
+  createdBy: ClassRequestCreatedByDto | string
 }
 
-const CourseInformation = ({ classRequest }: CourseInformationProps) => {
-  const { metadata: course } = classRequest
-
+const CourseInformation = ({ course, createdBy }: CourseInformationProps) => {
   return (
     <Paper sx={{ width: '100%', marginTop: '1.25rem', padding: '1.5rem' }}>
       <Box display='flex' alignItems='center' marginBottom='1.25rem'>
@@ -56,10 +55,7 @@ const CourseInformation = ({ classRequest }: CourseInformationProps) => {
         <Box display='flex' flexDirection='column' gap={1} flexGrow='1'>
           <Field label='Mã khóa học' content={course.code} />
           <Field label='Tên khóa học' content={course.title} />
-          <Field
-            label='Giảng viên'
-            content={typeof classRequest.createdBy === 'string' ? '' : classRequest.createdBy.name}
-          />
+          <Field label='Giảng viên' content={typeof createdBy === 'string' ? '' : createdBy.name} />
           <Field label='Giá' content={formatCurrency(course.price)} />
           <Field label='Cấp độ' content={formatCourseLevel(course.level)} />
           <Field label='Thể loại' content={course.type.join(', ')} />

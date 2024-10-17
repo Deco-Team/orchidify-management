@@ -1,4 +1,4 @@
-import { FormHelperText, InputLabel, MenuItem, Select, SelectProps } from '@mui/material'
+import { Box, FormHelperText, InputLabel, MenuItem, Select, SelectProps } from '@mui/material'
 import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 
 interface ControlledSelectProps<TFieldValues extends FieldValues> {
@@ -14,6 +14,7 @@ const ControlledSelect = <TFieldValues extends FieldValues>({
   labelId,
   placeholder,
   items,
+  sx,
   ...props
 }: ControlledSelectProps<TFieldValues> & SelectProps) => {
   const {
@@ -22,7 +23,7 @@ const ControlledSelect = <TFieldValues extends FieldValues>({
   } = useController(controller)
 
   return (
-    <>
+    <Box sx={sx}>
       <InputLabel id={labelId} sx={{ marginBottom: '0.7rem', color: '#000000' }}>
         {label}
       </InputLabel>
@@ -35,7 +36,7 @@ const ControlledSelect = <TFieldValues extends FieldValues>({
         ))}
       </Select>
       {error ? <FormHelperText error>{error.message}</FormHelperText> : null}
-    </>
+    </Box>
   )
 }
 

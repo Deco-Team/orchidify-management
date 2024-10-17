@@ -1,24 +1,16 @@
 import { useCallback } from 'react'
-import { ClassRequestDetailResponseDto, ClassRequestListItemResponseDto } from '~/data/classRequest.dto'
-import { useProtectedApi } from './useProtectedApi'
-import { APP_MESSAGE } from '~/global/app-message'
+import { ListResponseDto } from '~/data/common.dto'
+import { AssignmentDto, CourseDetailResponseDto, CourseListItemResponseDto, SessionDto } from '~/data/course.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { ListResponseDto, SuccessResponseDto } from '~/data/common.dto'
+import { APP_MESSAGE } from '~/global/app-message'
+import { useProtectedApi } from './useProtectedApi'
 
-const ROOT_ENDPOINT = '/class-requests/management'
+const ROOT_ENDPOINT = '/courses/management'
 
-interface ApproveClassRequest {
-  gardenId: string
-}
-
-interface RejectClassRequest {
-  rejectReason: string
-}
-
-export const useClassRequestApi = () => {
+export const useCourseApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
 
-  const getAllClassRequests = useCallback(
+  const getCourseList = useCallback(
     async (
       page = 1,
       pageSize = 10,
@@ -31,7 +23,7 @@ export const useClassRequestApi = () => {
       filters.forEach((filter) => {
         filtersFormat = Object.assign({ [filter.field]: filter.value }, filtersFormat)
       })
-      const result = await callAppProtectedApi<ListResponseDto<ClassRequestListItemResponseDto>>(
+      const result = await callAppProtectedApi<ListResponseDto<CourseListItemResponseDto>>(
         endpoint,
         'GET',
         {},
@@ -52,16 +44,16 @@ export const useClassRequestApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('danh sách yêu cầu lớp học') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('danh sách khóa học') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
   )
 
-  const getClassRequestById = useCallback(
-    async (classRequestId: string) => {
-      const endpoint = `${ROOT_ENDPOINT}/${classRequestId}`
-      const result = await callAppProtectedApi<ClassRequestDetailResponseDto>(endpoint, 'GET', {}, {}, {})
+  const getCourseById = useCallback(
+    async (courseId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/${courseId}`
+      const result = await callAppProtectedApi<CourseDetailResponseDto>(endpoint, 'GET')
 
       if (result) {
         const { data, error } = result
@@ -71,16 +63,16 @@ export const useClassRequestApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('thông tin yêu cầu') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.ACTION_FAILED('Tạo khóa học') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
   )
 
-  const approveClassRequest = useCallback(
-    async (classRequestId: string, data: ApproveClassRequest) => {
-      const endpoint = `${ROOT_ENDPOINT}/${classRequestId}/approve`
-      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PATCH', {}, {}, data)
+  const getLessonById = useCallback(
+    async (coursesId: string, lessonId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/${coursesId}/lessons/${lessonId}`
+      const result = await callAppProtectedApi<SessionDto>(endpoint, 'GET')
 
       if (result) {
         const { data, error } = result
@@ -90,16 +82,16 @@ export const useClassRequestApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Chấp nhận yêu cầu') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('chi tiết bài học') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
   )
 
-  const rejectClassRequest = useCallback(
-    async (classRequestId: string, data: RejectClassRequest) => {
-      const endpoint = `${ROOT_ENDPOINT}/${classRequestId}/reject`
-      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PATCH', {}, {}, data)
+  const getAssignmentById = useCallback(
+    async (courseId: string, lessonId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/${courseId}/assignments/${lessonId}`
+      const result = await callAppProtectedApi<AssignmentDto>(endpoint, 'GET')
 
       if (result) {
         const { data, error } = result
@@ -109,11 +101,16 @@ export const useClassRequestApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Từ chối yêu cầu') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('chi tiết bài tập') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
   )
 
-  return { getAllClassRequests, getClassRequestById, approveClassRequest, rejectClassRequest }
+  return {
+    getCourseList,
+    getCourseById,
+    getLessonById,
+    getAssignmentById
+  }
 }

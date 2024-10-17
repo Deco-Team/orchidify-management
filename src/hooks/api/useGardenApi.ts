@@ -1,9 +1,10 @@
 import { useCallback } from 'react'
 import { IdResponseDto, ListResponseDto, SuccessResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { Garden } from '~/data/garden.dto'
+import { AvailableGardenDto, Garden } from '~/data/garden.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useProtectedApi } from './useProtectedApi'
+import { SlotNumber, Weekday } from '~/global/constants'
 
 const ROOT_ENDPOINT = '/gardens'
 
@@ -182,6 +183,43 @@ export const useGardenApi = () => {
     [callAppProtectedApi]
   )
 
+  const getAvailableGardens = useCallback(
+    async (
+      startDate: Date,
+      duration: number,
+      weekdays: Array<Weekday>,
+      slotNumbers: Array<SlotNumber>,
+      instructorId: string
+    ) => {
+      const endpoint = `${ROOT_ENDPOINT}/available`
+      const result = await callAppProtectedApi<ListResponseDto<AvailableGardenDto>>(
+        endpoint,
+        'GET',
+        {},
+        {
+          startDate: startDate.toISOString(),
+          duration: duration,
+          weekdays: weekdays,
+          slotNumbers: slotNumbers,
+          instructorId: instructorId
+        },
+        {}
+      )
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('vườn có thể chọn') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
   return {
     getAllGardens,
     getGardenById,
@@ -189,6 +227,7 @@ export const useGardenApi = () => {
     updateGardenInfo,
     activateGarden,
     deactivateGarden,
-    updateGardenManager
+    updateGardenManager,
+    getAvailableGardens
   }
 }
