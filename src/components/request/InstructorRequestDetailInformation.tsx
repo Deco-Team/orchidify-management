@@ -1,6 +1,6 @@
 import { Paper, Box, Typography, Divider } from '@mui/material'
 import RequestStatusTag from '~/components/tag/RequestStatusTag'
-import { ClassRequestDto } from '~/data/classRequest.dto'
+import { ClassRequestDetailResponseDto } from '~/data/classRequest.dto'
 import { RequestStatus } from '~/global/app-status'
 import { RequestType } from '~/global/constants'
 
@@ -31,10 +31,10 @@ const Field: React.FC<FieldProps> = ({ label, content, requestType, statusTag })
 )
 
 interface InstructorRequestDetailInformationProps {
-  classRequest: ClassRequestDto
+  request: ClassRequestDetailResponseDto
 }
 
-const InstructorRequestDetailInformationProps = ({ classRequest }: InstructorRequestDetailInformationProps) => {
+const InstructorRequestDetailInformationProps = ({ request }: InstructorRequestDetailInformationProps) => {
   return (
     <Paper sx={{ width: '100%', marginTop: '1.25rem', padding: '1.5rem' }}>
       <Box display='flex' alignItems='center' marginBottom='1.25rem'>
@@ -44,22 +44,19 @@ const InstructorRequestDetailInformationProps = ({ classRequest }: InstructorReq
         <Divider sx={{ flexGrow: 1 }} />
       </Box>
       <Box marginBottom='1.25rem'>
-        <Field label='Loại yêu cầu' requestType={classRequest.type} />
-        <Field
-          label='Tên giảng viên'
-          content={typeof classRequest.createdBy === 'string' ? '' : classRequest.createdBy.name}
-        />
-        <Field label='Thời gian tạo' content={new Date(classRequest.createdAt).toLocaleString('vi-VN')} />
-        <Field label='Cập nhật cuối' content={new Date(classRequest.createdAt).toLocaleString('vi-VN')} />
-        <Field label='Trạng thái' statusTag={classRequest.status} />
+        <Field label='Loại yêu cầu' requestType={request.type} />
+        <Field label='Tên giảng viên' content={typeof request.createdBy === 'string' ? '' : request.createdBy.name} />
+        <Field label='Thời gian tạo' content={new Date(request.createdAt).toLocaleString('vi-VN')} />
+        <Field label='Cập nhật cuối' content={new Date(request.createdAt).toLocaleString('vi-VN')} />
+        <Field label='Trạng thái' statusTag={request.status} />
       </Box>
-      {classRequest.status === RequestStatus.REJECTED ? (
+      {request.status === RequestStatus.REJECTED ? (
         <Box marginBottom='1.25rem'>
           <Typography variant='subtitle1' fontWeight={600} marginBottom='0.5rem'>
             Lý do từ chối
           </Typography>
           <Typography variant='subtitle1' fontWeight={400}>
-            {classRequest.rejectReason ? classRequest.rejectReason : 'Không có lý do'}
+            {request.rejectReason ? request.rejectReason : 'Không có lý do'}
           </Typography>
         </Box>
       ) : null}
@@ -68,7 +65,7 @@ const InstructorRequestDetailInformationProps = ({ classRequest }: InstructorReq
           Mô tả yêu cầu
         </Typography>
         <Typography variant='subtitle1' fontWeight={400}>
-          {classRequest.description}
+          {request.description}
         </Typography>
       </Box>
     </Paper>

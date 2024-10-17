@@ -9,13 +9,13 @@ import { TitleWrapper } from '~/pages/garden-manager/detail/ViewGardenManagerDet
 import { protectedRoute } from '~/routes/routes'
 import { notifyError } from '~/utils/toastify'
 import { ClassRequestColumns } from './columns'
-import { ClassRequestDto } from '~/data/classRequest.dto'
+import { ClassRequestListItemResponseDto } from '~/data/classRequest.dto'
 import { useClassRequestApi } from '~/hooks/api/useClassRequestApi'
 
 export default function ViewClassRequestList() {
   const navigate = useNavigate()
   const { getAllClassRequests } = useClassRequestApi()
-  const [data, setData] = useState<ListResponseDto<ClassRequestDto>>({
+  const [data, setData] = useState<ListResponseDto<ClassRequestListItemResponseDto>>({
     docs: [],
     totalDocs: 0,
     offset: 0,

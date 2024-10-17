@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { ClassRequestDto } from '~/data/classRequest.dto'
+import { ClassRequestDetailResponseDto, ClassRequestListItemResponseDto } from '~/data/classRequest.dto'
 import { useProtectedApi } from './useProtectedApi'
 import { APP_MESSAGE } from '~/global/app-message'
 import { ErrorResponseDto } from '~/data/error.dto'
@@ -31,7 +31,7 @@ export const useClassRequestApi = () => {
       filters.forEach((filter) => {
         filtersFormat = Object.assign({ [filter.field]: filter.value }, filtersFormat)
       })
-      const result = await callAppProtectedApi<ListResponseDto<ClassRequestDto>>(
+      const result = await callAppProtectedApi<ListResponseDto<ClassRequestListItemResponseDto>>(
         endpoint,
         'GET',
         {},
@@ -61,7 +61,7 @@ export const useClassRequestApi = () => {
   const getClassRequestById = useCallback(
     async (classRequestId: string) => {
       const endpoint = `${ROOT_ENDPOINT}/${classRequestId}`
-      const result = await callAppProtectedApi<ClassRequestDto>(endpoint, 'GET', {}, {}, {})
+      const result = await callAppProtectedApi<ClassRequestDetailResponseDto>(endpoint, 'GET', {}, {}, {})
 
       if (result) {
         const { data, error } = result

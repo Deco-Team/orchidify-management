@@ -1,27 +1,15 @@
 import { Paper } from '@mui/material'
-import CustomTabs from '~/components/tabs/CustomTabs'
-import LessonList from './components/LessonList'
-import { AssignmentDto, LessonDto } from '~/data/course.dto'
-import AssignmentList from './components/AssignmentList'
+import LessonList from './components/SessionList'
+import { SessionDto } from '~/data/course.dto'
 
 interface CourseResourcesProps {
-  lessons: Array<LessonDto>
-  assignments: Array<AssignmentDto>
+  sessions: Array<SessionDto>
 }
 
-const CourseResources = ({ lessons, assignments }: CourseResourcesProps) => {
+const CourseResources = ({ sessions }: CourseResourcesProps) => {
   return (
     <Paper sx={{ width: '100%', marginTop: '1.25rem', padding: '1.5rem' }}>
-      <CustomTabs
-        name='classRequestDetail'
-        items={[
-          { label: 'BÀI HỌC', content: <LessonList lessons={lessons} /> },
-          {
-            label: 'BÀI TẬP',
-            content: <AssignmentList assignments={assignments} />
-          }
-        ]}
-      />
+      <LessonList sessions={sessions} />
     </Paper>
   )
 }

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { ListResponseDto } from '~/data/common.dto'
-import { AssignmentDto, CourseDetailResponseDto, CourseListItemResponseDto, LessonDto } from '~/data/course.dto'
+import { AssignmentDto, CourseDetailResponseDto, CourseListItemResponseDto, SessionDto } from '~/data/course.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useProtectedApi } from './useProtectedApi'
@@ -72,7 +72,7 @@ export const useCourseApi = () => {
   const getLessonById = useCallback(
     async (coursesId: string, lessonId: string) => {
       const endpoint = `${ROOT_ENDPOINT}/${coursesId}/lessons/${lessonId}`
-      const result = await callAppProtectedApi<LessonDto>(endpoint, 'GET')
+      const result = await callAppProtectedApi<SessionDto>(endpoint, 'GET')
 
       if (result) {
         const { data, error } = result

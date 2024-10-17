@@ -6,7 +6,7 @@ import { notifyError } from '~/utils/toastify'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useClassRequestApi } from '~/hooks/api/useClassRequestApi'
 import { lazy, useEffect, useState } from 'react'
-import { ClassRequestDto } from '~/data/classRequest.dto'
+import { ClassRequestDetailResponseDto } from '~/data/classRequest.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { protectedRoute } from '~/routes/routes'
 import CourseInformation from './components/CourseInformation'
@@ -17,7 +17,7 @@ import ApproveRequestDialog from './components/ApproveRequestDialog'
 const RejectRequestDialog = lazy(() => import('./components/RejectRequestDialog'))
 
 export default function ViewClassRequestDetail() {
-  const [classRequest, setClassRequest] = useState<ClassRequestDto | null>(null)
+  const [classRequest, setClassRequest] = useState<ClassRequestDetailResponseDto | null>(null)
   const [error, setError] = useState<ErrorResponseDto | null>(null)
   const [openApproveDialog, setOpenApproveDialog] = useState<boolean>(false)
   const [openRejectDialog, setOpenRejectDialog] = useState<boolean>(false)
@@ -45,19 +45,21 @@ export default function ViewClassRequestDetail() {
         new Date(classRequest.metadata.startDate),
         classRequest.metadata.duration,
         classRequest.metadata.weekdays,
-        classRequest.metadata.slotNumbers
+        classRequest.metadata.slotNumbers,
+        typeof classRequest.createdBy === 'string' ? classRequest.createdBy : classRequest.createdBy._id
       )
 
       if (gardenListDto) {
         setAvailableGardens(gardenListDto.docs.map((garden) => garden))
+        setOpenApproveDialog(true)
+        return
       }
 
       if (apiError) {
         notifyError(apiError.message)
+        return
       }
     }
-
-    setOpenApproveDialog(true)
   }
 
   const reloadClassRequestData = async () => {
@@ -80,10 +82,10 @@ export default function ViewClassRequestDetail() {
         onApproveButtonClick={handleApproveButtonClick}
         onRejectButtonClick={() => setOpenRejectDialog(true)}
       />
-      <InstructorRequestDetailInformation classRequest={classRequest} />
+      <InstructorRequestDetailInformation request={classRequest} />
       <ClassInformation classRequest={classRequest} />
-      <CourseInformation classRequest={classRequest} />
-      <CourseResources lessons={classRequest.metadata.lessons} assignments={classRequest.metadata.assignments} />
+      <CourseInformation course={classRequest.metadata} createdBy={classRequest.createdBy} />
+      <CourseResources sessions={classRequest.metadata.sessions} />
       <ApproveRequestDialog
         requestId={classRequest._id}
         gardenOptions={availableGardens}

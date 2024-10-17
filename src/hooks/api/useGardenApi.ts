@@ -184,7 +184,13 @@ export const useGardenApi = () => {
   )
 
   const getAvailableGardens = useCallback(
-    async (startDate: Date, duration: number, weekdays: Array<Weekday>, slotNumbers: Array<SlotNumber>) => {
+    async (
+      startDate: Date,
+      duration: number,
+      weekdays: Array<Weekday>,
+      slotNumbers: Array<SlotNumber>,
+      instructorId: string
+    ) => {
       const endpoint = `${ROOT_ENDPOINT}/available`
       const result = await callAppProtectedApi<ListResponseDto<AvailableGardenDto>>(
         endpoint,
@@ -194,7 +200,8 @@ export const useGardenApi = () => {
           startDate: startDate.toISOString(),
           duration: duration,
           weekdays: weekdays,
-          slotNumbers: slotNumbers
+          slotNumbers: slotNumbers,
+          instructorId: instructorId
         },
         {}
       )
