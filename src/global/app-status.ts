@@ -10,7 +10,14 @@ export enum RequestStatus {
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
   EXPIRED = 'EXPIRED',
-  CANCELLED = 'CANCELLED'
+  CANCELED = 'CANCELED'
+}
+
+export enum ClassStatus {
+  PUBLISHED = 'PUBLISHED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
+  CANCELED = 'CANCELED'
 }
 
 export enum UserStatus {
