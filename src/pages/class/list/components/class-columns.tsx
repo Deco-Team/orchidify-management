@@ -8,11 +8,11 @@ export const classColumns: MRT_ColumnDef<ClassListItemResponseDto>[] = [
     header: 'Mã lớp học',
     size: 150
   },
-  // {
-  //   accessorFn: (row) => row.,
-  //   header: 'Mã khóa học',
-  //   size: 150
-  // },
+  {
+    accessorKey: 'course.code',
+    header: 'Mã khóa học',
+    size: 150
+  },
   {
     accessorKey: 'title',
     header: 'Tên khóa học',

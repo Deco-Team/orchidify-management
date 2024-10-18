@@ -16,6 +16,10 @@ export type ClassListItemResponseDto = {
   learnerQuantity: number
   weekdays: Array<Weekday>
   slotNumbers: Array<SlotNumber>
+  course: {
+    _id: string
+    code: string
+  }
   createdAt: string
   updatedAt: string
   rate?: number
