@@ -69,9 +69,9 @@ export const useCourseApi = () => {
     [callAppProtectedApi]
   )
 
-  const getLessonById = useCallback(
-    async (coursesId: string, lessonId: string) => {
-      const endpoint = `${ROOT_ENDPOINT}/${coursesId}/lessons/${lessonId}`
+  const getSessionById = useCallback(
+    async (coursesId: string, sessionId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/${coursesId}/sessions/${sessionId}`
       const result = await callAppProtectedApi<SessionDto>(endpoint, 'GET')
 
       if (result) {
@@ -82,7 +82,7 @@ export const useCourseApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('chi tiết bài học') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('chi tiết buổi học') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
@@ -110,7 +110,7 @@ export const useCourseApi = () => {
   return {
     getCourseList,
     getCourseById,
-    getLessonById,
+    getSessionById,
     getAssignmentById
   }
 }

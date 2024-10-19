@@ -26,7 +26,9 @@ const LessonTable = ({ sessions, courseId }: SessionTableProps) => {
         muiTableBodyRowProps: ({ row }) => ({
           onClick: () =>
             navigate(
-              protectedRoute.courseDetail.path.replace(':courseId', courseId).replace(':sessionId', row.original._id)
+              protectedRoute.courseSessionDetail.path
+                .replace(':courseId', courseId)
+                .replace(':sessionId', row.original._id)
             ),
           sx: {
             cursor: 'pointer'
