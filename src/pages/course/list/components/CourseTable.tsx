@@ -79,7 +79,7 @@ const CourseTable = () => {
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         muiTableBodyRowProps: ({ row }) => ({
-          onClick: () => navigate(protectedRoute.gardenDetail.path.replace(':id', row.original._id)),
+          onClick: () => navigate(protectedRoute.courseDetail.path.replace(':id', row.original._id)),
           sx: {
             cursor: 'pointer'
           }

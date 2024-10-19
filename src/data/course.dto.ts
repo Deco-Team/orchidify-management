@@ -58,4 +58,11 @@ export type CourseDetailResponseDto = {
   isPublished: boolean
   createdAt: string
   updatedAt: string
+  instructor: {
+    _id: string
+    name: string
+    idCardPhoto: string
+    avatar: string
+    bio: string
+  }
 }
