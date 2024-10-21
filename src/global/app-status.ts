@@ -18,6 +18,14 @@ export enum UserStatus {
   INACTIVE = 'INACTIVE'
 }
 
+export enum RecruitmentStatus {
+  PENDING = 'PENDING',
+  INTERVIEWING = 'INTERVIEWING',
+  SELECTED = 'SELECTED',
+  EXPIRED = 'EXPIRED',
+  REJECTED = 'REJECTED'
+}
+
 export enum GardenTimesheetStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',

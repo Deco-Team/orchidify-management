@@ -1,3 +1,4 @@
+import Typography from '@mui/material/Typography'
 import { MRT_ColumnDef } from 'material-react-table'
 import RequestStatusTag from '~/components/tag/RequestStatusTag'
 import { ClassRequestListItemResponseDto } from '~/data/classRequest.dto'
@@ -30,7 +31,16 @@ export const ClassRequestColumns: MRT_ColumnDef<ClassRequestListItemResponseDto>
     size: 150,
     Cell: ({ row }) => {
       const date = new Date(row.original.createdAt)
-      return date.toLocaleString('vi-VN')
+      return (
+        <>
+          <Typography variant='subtitle2' sx={{ fontWeight: 400 }}>
+            {new Date(date).toLocaleTimeString('vi-VN')}
+          </Typography>
+          <Typography variant='subtitle2' sx={{ fontWeight: 400 }}>
+            {new Date(date).toLocaleDateString('vi-VN')}
+          </Typography>
+        </>
+      )
     }
   },
   {
@@ -39,7 +49,16 @@ export const ClassRequestColumns: MRT_ColumnDef<ClassRequestListItemResponseDto>
     size: 150,
     Cell: ({ row }) => {
       const date = new Date(row.original.updatedAt)
-      return date.toLocaleString('vi-VN')
+      return (
+        <>
+          <Typography variant='subtitle2' sx={{ fontWeight: 400 }}>
+            {new Date(date).toLocaleTimeString('vi-VN')}
+          </Typography>
+          <Typography variant='subtitle2' sx={{ fontWeight: 400 }}>
+            {new Date(date).toLocaleDateString('vi-VN')}
+          </Typography>
+        </>
+      )
     }
   },
   {
