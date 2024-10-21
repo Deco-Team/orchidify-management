@@ -1,5 +1,5 @@
 import { Chip, SxProps, Theme } from '@mui/material'
-import { ClassStatus } from '~/global/constants'
+import { ClassStatus } from '~/global/app-status'
 
 interface ClassStatusTagProps {
   type: ClassStatus
@@ -11,7 +11,7 @@ const ClassStatusTag = ({ type }: ClassStatusTagProps) => {
 
   switch (type) {
     case ClassStatus.PUBLISHED: {
-      label = 'Đã công khai'
+      label = 'Công khai'
       styles = {
         backgroundColor: '#ffcf221f',
         '& .MuiChip-label': { color: '#ffcf22' }
@@ -42,23 +42,9 @@ const ClassStatusTag = ({ type }: ClassStatusTagProps) => {
       }
       break
     }
-    case ClassStatus.DELETED: {
-      label = 'Đã xóa'
-      styles = {
-        backgroundColor: 'transparent',
-        '& .MuiChip-label': { color: '#f66868', textDecoration: 'line-through' }
-      }
-      break
-    }
   }
 
-  return (
-    <Chip
-      label={label}
-      variant={label === ClassStatus.CANCELED || label === ClassStatus.DELETED ? 'outlined' : 'filled'}
-      sx={styles}
-    />
-  )
+  return <Chip label={label} variant={label === ClassStatus.CANCELED ? 'outlined' : 'filled'} sx={styles} />
 }
 
 export default ClassStatusTag

@@ -28,6 +28,7 @@ const Table = <TData extends MRT_RowData>({ title, tableOptions }: TableProps<TD
     enableDensityToggle: false,
     enableGlobalFilter: false,
     enableFilterMatchHighlighting: false,
+    enableColumnActions: false,
     localization: MRT_Localization_VI,
     muiTablePaperProps: {
       style: {

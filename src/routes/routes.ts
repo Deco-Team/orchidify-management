@@ -26,6 +26,7 @@ const ViewRecruitmentList = lazy(() => import('~/pages/recruitment/list/ViewRecr
 const ViewGardenTimesheet = lazy(() => import('~/pages/garden/garden-timesheet/GardenTimesheet'))
 const ViewCourseList = lazy(() => import('~/pages/course/list/ViewCourseList'))
 const CourseDetail = lazy(() => import('~/pages/course/detail/CourseDetail'))
+const ViewClassList = lazy(() => import('~/pages/class/list/ViewClassList'))
 
 export const publicRoute = {
   login: {
@@ -178,6 +179,12 @@ export const protectedRoute = {
     name: 'Chi tiết khóa học',
     path: '/courses/:id',
     Component: CourseDetail,
+    roles: [UserRole.STAFF]
+  },
+  classList: {
+    name: 'Lớp học',
+    path: '/classes',
+    Component: ViewClassList,
     roles: [UserRole.STAFF]
   }
 }

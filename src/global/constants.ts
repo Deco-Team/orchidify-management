@@ -28,14 +28,6 @@ export enum CourseLevel {
   ADVANCED = 'ADVANCED'
 }
 
-export enum ClassStatus {
-  PUBLISHED = 'PUBLISHED',
-  IN_PROGRESS = 'IN_PROGRESS',
-  COMPLETED = 'COMPLETED',
-  CANCELED = 'CANCELED',
-  DELETED = 'DELETED'
-}
-
 export enum RequestType {
   PUBLISH_CLASS = 'PUBLISH_CLASS'
 }

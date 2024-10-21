@@ -1,7 +1,8 @@
 import { Paper, Box, Typography, Divider, Grid } from '@mui/material'
 import ClassStatusTag from '~/components/tag/ClassStatusTag'
 import { ClassRequestDetailResponseDto } from '~/data/classRequest.dto'
-import { ClassStatus, SlotNumber, Weekday } from '~/global/constants'
+import { ClassStatus } from '~/global/app-status'
+import { SlotNumber, Weekday } from '~/global/constants'
 
 interface FieldProps {
   label: string
