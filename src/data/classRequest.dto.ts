@@ -54,7 +54,7 @@ export type ClassRequestListItemResponseDto = {
   classId?: string
 }
 
-type ClassRequestHistoryDto = {
+type ClassRequestStatusHistoryDto = {
   [key: string]: unknown
 }
 
@@ -64,7 +64,7 @@ export type ClassRequestDetailResponseDto = {
   description: string
   status: RequestStatus
   metadata: ClassRequestMetadataDto
-  histories: Array<ClassRequestHistoryDto>
+  histories: Array<ClassRequestStatusHistoryDto>
   createdBy: ClassRequestCreatedByDto | string
   createdAt: string
   updatedAt: string

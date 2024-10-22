@@ -87,8 +87,8 @@ const ClassTable = ({ statusFilter }: CourseTableProps) => {
         onPaginationChange: setPagination,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
-        muiTableBodyRowProps: () => ({
-          onClick: () => navigate(protectedRoute.dashboard.path),
+        muiTableBodyRowProps: ({ row }) => ({
+          onClick: () => navigate(protectedRoute.classDetail.path.replace(':id', row.original._id)),
           sx: {
             cursor: 'pointer'
           }
