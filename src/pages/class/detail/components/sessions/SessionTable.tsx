@@ -9,7 +9,7 @@ interface SessionTableProps {
   classId: string
 }
 
-const SessionTable = ({ sessions }: SessionTableProps) => {
+const SessionTable = ({ sessions, classId }: SessionTableProps) => {
   const navigate = useNavigate()
   return (
     <Table
@@ -23,13 +23,12 @@ const SessionTable = ({ sessions }: SessionTableProps) => {
         enableColumnFilters: false,
         enableHiding: false,
         enableColumnActions: false,
-        muiTableBodyRowProps: () => ({
+        muiTableBodyRowProps: ({ row }) => ({
           onClick: () =>
             navigate(
-              // protectedRoute.sessionDetail.path
-              //   .replace(':classId', classId)
-              //   .replace(':sessionId', row.original._id)
-              protectedRoute.dashboard.path
+              protectedRoute.classSessionDetail.path
+                .replace(':classId', classId)
+                .replace(':sessionId', row.original._id)
             ),
           sx: {
             cursor: 'pointer'
