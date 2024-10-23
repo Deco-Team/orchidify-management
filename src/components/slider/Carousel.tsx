@@ -27,7 +27,7 @@ const Carousel = ({ children }: SliderProps) => {
   const childrenArray = Children.toArray(children)
 
   const settings = {
-    dots: childrenArray.length > 1,
+    dots: childrenArray.length > 5,
     infinite: false,
     speed: 500,
     slidesToShow: Math.min(5, childrenArray.length),

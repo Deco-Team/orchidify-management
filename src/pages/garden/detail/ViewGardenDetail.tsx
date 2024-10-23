@@ -8,7 +8,7 @@ import Carousel from '~/components/slider/Carousel'
 import UserStatusTag from '~/components/tag/UserStatusTag'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { Garden } from '~/data/garden.dto'
-import { UserStatus } from '~/global/app-status'
+import { GardenStatus, UserStatus } from '~/global/app-status'
 import { useGardenApi } from '~/hooks/api/useGardenApi'
 import { ContentWrapper, Line, TitleWrapper } from '~/pages/garden-manager/detail/ViewGardenManagerDetail.styled'
 import { ButtonWrapper, Image } from '~/pages/garden/detail/ViewGardenDetail.styled'
@@ -205,7 +205,11 @@ const ViewGardenDetail = () => {
         </Carousel>
       </ContentWrapper>
       <ButtonWrapper>
-        <Button onClick={() => navigate(protectedRoute.viewGardenTimesheet.path.replace(':id', gardenId))}>Lịch</Button>
+        {data.status === GardenStatus.ACTIVE ? (
+          <Button onClick={() => navigate(protectedRoute.viewGardenTimesheet.path.replace(':id', gardenId))}>
+            Lịch
+          </Button>
+        ) : null}
       </ButtonWrapper>
       <DeactivateDialog
         open={openDeactivateDialog}

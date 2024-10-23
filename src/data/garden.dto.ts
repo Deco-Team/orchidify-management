@@ -1,9 +1,11 @@
+import { GardenStatus } from '~/global/app-status'
+
 export type Garden = {
   _id: string
   name: string
   description: string
   address: string
-  status: string
+  status: GardenStatus
   maxClass: number
   gardenManagerId: string
   createdAt: string
