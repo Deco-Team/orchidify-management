@@ -33,6 +33,11 @@ export enum RecruitmentStatus {
   REJECTED = 'REJECTED'
 }
 
+export enum GardenStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE'
+}
+
 export enum GardenTimesheetStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
