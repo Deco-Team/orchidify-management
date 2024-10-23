@@ -3,7 +3,7 @@ import { ListResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useProtectedApi } from './useProtectedApi'
-import { ClassListItemResponseDto } from '~/data/class.dto'
+import { ClassDetailResponseDto, ClassListItemResponseDto } from '~/data/class.dto'
 
 const ROOT_ENDPOINT = '/classes/management'
 
@@ -50,5 +50,24 @@ export const useClassApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getClassList }
+  const getClassById = useCallback(
+    async (classId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/${classId}`
+      const result = await callAppProtectedApi<ClassDetailResponseDto>(endpoint, 'GET', {}, {}, {})
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('thông tin lớp học') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return { getClassList, getClassById }
 }

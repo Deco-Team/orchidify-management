@@ -6,10 +6,10 @@ import { SessionDto } from '~/data/course.dto'
 
 interface SessionTableProps {
   sessions: SessionDto[]
-  courseId: string
+  classId: string
 }
 
-const SessionTable = ({ sessions, courseId }: SessionTableProps) => {
+const SessionTable = ({ sessions }: SessionTableProps) => {
   const navigate = useNavigate()
   return (
     <Table
@@ -23,12 +23,13 @@ const SessionTable = ({ sessions, courseId }: SessionTableProps) => {
         enableColumnFilters: false,
         enableHiding: false,
         enableColumnActions: false,
-        muiTableBodyRowProps: ({ row }) => ({
+        muiTableBodyRowProps: () => ({
           onClick: () =>
             navigate(
-              protectedRoute.courseSessionDetail.path
-                .replace(':courseId', courseId)
-                .replace(':sessionId', row.original._id)
+              // protectedRoute.sessionDetail.path
+              //   .replace(':classId', classId)
+              //   .replace(':sessionId', row.original._id)
+              protectedRoute.dashboard.path
             ),
           sx: {
             cursor: 'pointer'

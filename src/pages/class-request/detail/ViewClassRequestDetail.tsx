@@ -24,7 +24,7 @@ export default function ViewClassRequestDetail() {
   const [availableGardens, setAvailableGardens] = useState<Array<AvailableGardenDto>>([])
   const params = useParams()
   const navigate = useNavigate()
-  const classRequestId = params.id || '6706b281dc7f8e5149c286f7'
+  const classRequestId = params.id
   const { getClassRequestById } = useClassRequestApi()
   const { getAvailableGardens } = useGardenApi()
 
