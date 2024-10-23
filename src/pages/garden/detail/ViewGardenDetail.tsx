@@ -5,10 +5,9 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import Breadcrumbs from '~/components/breadscrumbs/Breadscrumbs'
 import Loading from '~/components/loading/Loading'
 import Carousel from '~/components/slider/Carousel'
-import UserStatusTag from '~/components/tag/UserStatusTag'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { Garden } from '~/data/garden.dto'
-import { GardenStatus, UserStatus } from '~/global/app-status'
+import { GardenStatus } from '~/global/app-status'
 import { useGardenApi } from '~/hooks/api/useGardenApi'
 import { ContentWrapper, Line, TitleWrapper } from '~/pages/garden-manager/detail/ViewGardenManagerDetail.styled'
 import { ButtonWrapper, Image } from '~/pages/garden/detail/ViewGardenDetail.styled'
@@ -19,6 +18,7 @@ import DeactivateDialog from './components/DeactivateDialog'
 import { APP_MESSAGE } from '~/global/app-message'
 import useAuth from '~/auth/useAuth'
 import { UserRole } from '~/global/constants'
+import GardenStatusTag from '~/components/tag/GardenStatusTag'
 
 const ViewGardenDetail = () => {
   const { userTokenPayload } = useAuth()
@@ -99,7 +99,7 @@ const ViewGardenDetail = () => {
           </Button>
           {userTokenPayload && userTokenPayload.role === UserRole.STAFF && (
             <>
-              {data?.status === UserStatus.ACTIVE ? (
+              {data?.status === GardenStatus.ACTIVE ? (
                 <Button color='error' onClick={handleOpenDeactivateDialog}>
                   Vô hiệu hóa
                 </Button>
@@ -181,7 +181,7 @@ const ViewGardenDetail = () => {
               <Typography fontWeight={500} width={'180px'}>
                 Trạng thái:
               </Typography>
-              <UserStatusTag type={data.status as UserStatus} />
+              <GardenStatusTag type={data.status} />
             </Box>
           </Grid>
           <Grid item xs={12}></Grid>
