@@ -32,6 +32,7 @@ const ViewClassDetail = lazy(() => import('~/pages/class/detail/ViewClassDetail'
 const ClassSessionDetail = lazy(() => import('~/pages/class/detail/session-detail/SessionDetail'))
 const ViewRecruitmentDetail = lazy(() => import('~/pages/recruitment/detail/ViewRecruitmentDetail'))
 const InstructorTimesheet = lazy(() => import('~/pages/instructor/detail/timesheet/InstructorTimesheet'))
+const AddInstructor = lazy(() => import('~/pages/instructor/add/AddInstructor'))
 
 export const publicRoute = {
   login: {
@@ -220,6 +221,12 @@ export const protectedRoute = {
     name: 'Chi tiết đơn tuyển',
     path: '/recruitments/:id',
     Component: ViewRecruitmentDetail,
+    roles: [UserRole.STAFF]
+  },
+  addInstructor: {
+    name: 'Thêm giảng viên',
+    path: '/instructors/add',
+    Component: AddInstructor,
     roles: [UserRole.STAFF]
   }
 }

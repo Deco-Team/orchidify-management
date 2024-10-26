@@ -81,7 +81,7 @@ const ViewInstructorList = () => {
           <Button
             color='secondary'
             onClick={() => {
-              navigate(protectedRoute.addGardenManager.path)
+              navigate(protectedRoute.addInstructor.path)
             }}
             sx={{ marginRight: '24px' }}
             endIcon={<AddIcon />}
