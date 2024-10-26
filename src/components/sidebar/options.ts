@@ -24,7 +24,7 @@ export const OptionsStaff = [
   { id: 3, text: 'Combo khóa học', link: protectedRoute.dashboard.path, Icon: AutoAwesomeMotion },
   { id: 4, text: 'Lớp học', link: protectedRoute.classList.path, Icon: Class },
   { id: 5, text: 'Yêu cầu lớp học', link: protectedRoute.classRequestList.path, Icon: NoteAlt },
-  { id: 6, text: 'Đơn tuyển', link: protectedRoute.dashboard.path, Icon: ContactPage },
+  { id: 6, text: 'Đơn tuyển', link: protectedRoute.recruitmentList.path, Icon: ContactPage },
   { id: 7, text: 'Giảng viên', link: protectedRoute.instructorList.path, Icon: CoPresent },
   { id: 8, text: 'Học viên', link: protectedRoute.learnerList.path, Icon: School },
   { id: 9, text: 'Nhà vườn', link: protectedRoute.gardenList.path, Icon: LocalFlorist },
