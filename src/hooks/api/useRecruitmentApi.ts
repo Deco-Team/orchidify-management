@@ -3,7 +3,7 @@ import { useProtectedApi } from './useProtectedApi'
 import { ListResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { APP_MESSAGE } from '~/global/app-message'
-import { RecruitmentListItemResponseDto } from '~/data/recruitment.dto'
+import { RecruitmentDetailResponeDto, RecruitmentListItemResponseDto } from '~/data/recruitment.dto'
 
 const ROOT_ENDPOINT = '/recruitments/management'
 
@@ -50,5 +50,24 @@ export const useRecruitmentApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getAllRecruitments }
+  const getRecruitmentById = useCallback(
+    async (recruitmentId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/${recruitmentId}`
+      const result = await callAppProtectedApi<RecruitmentDetailResponeDto>(endpoint, 'GET', {}, {}, {})
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('thông tin đơn tuyển') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return { getAllRecruitments, getRecruitmentById }
 }

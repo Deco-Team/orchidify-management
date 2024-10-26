@@ -1,4 +1,4 @@
-import { Divider, List, Typography, useTheme } from '@mui/material'
+import { Divider, List, ListSubheader } from '@mui/material'
 import { useState } from 'react'
 import { SessionDto } from '~/data/course.dto'
 import SessionListItem from './SessionListItem'
@@ -9,7 +9,6 @@ interface SessionListProps {
 
 const SessionList = ({ sessions }: SessionListProps) => {
   const [openItem, setOpenItem] = useState<string | null>(null)
-  const theme = useTheme()
 
   const handleClick = (item: string) => {
     if (openItem === item) {
@@ -22,15 +21,14 @@ const SessionList = ({ sessions }: SessionListProps) => {
   return (
     <List
       sx={{ width: '100%' }}
-      component='nav'
-      disablePadding
       aria-labelledby='session-list-subheader'
       subheader={
-        <Typography variant='subtitle1' marginBottom='0.5rem' sx={{ color: theme.palette.info.dark }}>
+        <ListSubheader component='div' id='session-list-subheader' sx={{ fontSize: 16, lineHeight: 4 }}>
           Danh sách nội dung buổi học
-        </Typography>
+        </ListSubheader>
       }
     >
+      <Divider />
       {sessions.map((session, index) => {
         const listItems = []
         if (openItem === session._id)

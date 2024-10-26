@@ -1,4 +1,5 @@
 import { RecruitmentStatus } from '~/global/app-status'
+import { UserRole } from '~/global/constants'
 
 type ApplicationInfo = {
   name: string
@@ -17,4 +18,23 @@ export type RecruitmentListItemResponseDto = {
   handledBy: string
   createdAt: string
   updatedAt: string
+}
+
+export type RecruitmentDetailResponeDto = {
+  _id: string
+  applicationInfo: ApplicationInfo
+  meetingUrl: string
+  status: RecruitmentStatus
+  rejectReason: string
+  handledBy: string
+  createdAt: string
+  updatedAt: string
+  histories: [
+    {
+      status: RecruitmentStatus
+      timestamp: string
+      userId?: string
+      userRole?: UserRole
+    }
+  ]
 }

@@ -86,7 +86,7 @@ export default function ViewRecruitmentList() {
           onSortingChange: setSorting,
           onColumnFiltersChange: setColumnFilters,
           muiTableBodyRowProps: ({ row }) => ({
-            onClick: () => navigate(protectedRoute.instructorDetail.path.replace(':id', row.original._id)),
+            onClick: () => navigate(protectedRoute.recruitmentDetail.path.replace(':id', row.original._id)),
             sx: {
               cursor: 'pointer'
             }
