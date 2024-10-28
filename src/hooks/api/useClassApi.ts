@@ -3,7 +3,7 @@ import { ListResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useProtectedApi } from './useProtectedApi'
-import { ClassDetailResponseDto, ClassListItemResponseDto } from '~/data/class.dto'
+import { ClassDetailResponseDto, ClassListItemResponseDto, ClassToolkitRequirementDto } from '~/data/class.dto'
 import { SessionDto } from '~/data/course.dto'
 
 const ROOT_ENDPOINT = '/classes/management'
@@ -89,5 +89,24 @@ export const useClassApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getClassList, getClassById, getSessionById }
+  const getClassToolkitRequirements = useCallback(
+    async (classId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/${classId}/gardenRequiredToolkits`
+      const result = await callAppProtectedApi<ClassToolkitRequirementDto>(endpoint, 'GET')
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('thông tin dụng cụ lớp học') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return { getClassList, getClassById, getSessionById, getClassToolkitRequirements }
 }
