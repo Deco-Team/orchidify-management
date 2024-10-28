@@ -9,10 +9,11 @@ interface EventProps {
     classId?: string
   }>
   onDatesChange: (viewType: string, startDate: string) => Promise<void>
+  onEventClick?: (info: { event: { id?: string }; view: { type: string } }) => void
 }
 
-const GardenCalendar = ({ events, onDatesChange }: EventProps) => {
-  return <Calendar events={events} onDatesChange={onDatesChange} />
+const GardenCalendar = ({ events, onDatesChange, onEventClick }: EventProps) => {
+  return <Calendar events={events} onDatesChange={onDatesChange} onEventClick={onEventClick} />
 }
 
 export default GardenCalendar

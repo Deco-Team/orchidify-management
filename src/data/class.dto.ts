@@ -80,3 +80,18 @@ export type ClassDetailResponseDto = {
   rate?: number
   cancelReason?: string
 }
+
+export type ClassToolkitRequirementDto = {
+  _id: string
+  code: string
+  title: string
+  courseId: string
+  course: {
+    code: string
+  }
+  instructorId: string
+  instructor: {
+    name: string
+  }
+  gardenRequiredToolkits: string
+}

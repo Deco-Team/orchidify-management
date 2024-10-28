@@ -10,9 +10,10 @@ import '~/components/calendar/Calendar.css'
 interface GardenCalendarProps {
   events: Array<object>
   onDatesChange: (viewType: string, startDate: string, endDate: string) => void
+  onEventClick?: (info: { event: object; view: { type: string } }) => void
 }
 
-const Calendar: React.FC<GardenCalendarProps> = ({ events = [], onDatesChange }) => {
+const Calendar: React.FC<GardenCalendarProps> = ({ events = [], onDatesChange, onEventClick }) => {
   const validRange = useMemo(() => {
     const today = new Date()
     const startDate = `${today.getFullYear() - 2}-${today.getMonth() + 1}-${today.getDate()}`
@@ -67,6 +68,7 @@ const Calendar: React.FC<GardenCalendarProps> = ({ events = [], onDatesChange })
       slotEventOverlap={false}
       expandRows={true}
       datesSet={handleDatesSet}
+      eventClick={onEventClick}
     />
   )
 }

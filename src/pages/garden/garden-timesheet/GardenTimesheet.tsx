@@ -7,19 +7,23 @@ import { ErrorResponseDto } from '~/data/error.dto'
 import { Slot } from '~/data/gardenTimesheet.dto'
 import { Garden } from '~/data/garden.dto'
 import { APP_MESSAGE } from '~/global/app-message'
-import { CalendarType } from '~/global/constants'
+import { CalendarType, UserRole } from '~/global/constants'
 import { useGardenApi } from '~/hooks/api/useGardenApi'
 import useGardenTimesheetApi from '~/hooks/api/useGardenTimesheetApi'
 import { protectedRoute } from '~/routes/routes'
 import { notifyError } from '~/utils/toastify'
 import GardenCalendar from './components/GardenCalendar'
 import { GardenTimesheetStatus } from '~/global/app-status'
+import ClassToolkitRequirementsDialog from './components/ClassToolkitRequirementsDialog'
+import useAuth from '~/auth/useAuth'
 
 const GardenTimesheet = () => {
   const navigate = useNavigate()
   const { getGardenById } = useGardenApi()
   const { getGardenTimesheet } = useGardenTimesheetApi()
+  const [classIdToolkitRequirements, setClassIdToolkitRequirements] = useState<string | null>(null)
   const params = useParams()
+  const { userTokenPayload } = useAuth()
   const gardenId = params.id
 
   const [data, setData] = useState<Garden | null>(null)
@@ -108,6 +112,7 @@ const GardenTimesheet = () => {
             slot.status !== GardenTimesheetStatus.INACTIVE
               ? {
                   ...slot,
+                  id: slot.classId,
                   title: slot.metadata ? `${slot.metadata.code} - ${slot.metadata.title}` : 'Lớp học',
                   display: 'block',
                   backgroundColor: '#0ea5e919'
@@ -123,6 +128,12 @@ const GardenTimesheet = () => {
         setEventData(transformedEventData)
       }
       setError(apiError)
+    }
+  }
+
+  const handleEventClick = ({ event, view }: { event: { id?: string }; view: { type: string } }) => {
+    if (mapViewTypeToApi(view.type) === CalendarType.WEEK && userTokenPayload?.role === UserRole.GARDEN_MANAGER) {
+      setClassIdToolkitRequirements(event.id!)
     }
   }
 
@@ -145,39 +156,46 @@ const GardenTimesheet = () => {
     protectedRoute.viewGardenTimesheet
   ]
   return data ? (
-    <Box sx={{ marginBottom: '40px' }}>
-      <Typography variant='h1' sx={{ fontSize: '2rem', paddingBottom: '8px', fontWeight: 700 }}>
-        Lịch
-      </Typography>
-      <Breadcrumbs items={breadcrumbsItems} />
-      <Paper sx={{ width: '100%', marginY: '20px', padding: '24px' }}>
-        <Box display='flex' alignItems='center' marginBottom='20px'>
-          <Typography variant='h2' sx={{ fontSize: '1.5rem', fontWeight: 700, paddingRight: '10px' }}>
-            Thông tin nhà vườn
-          </Typography>
-          <Divider sx={{ flexGrow: 1 }} />
-        </Box>
-        <Grid container mt={1} rowGap={'20px'}>
-          <Grid item xs={12}>
-            <Box sx={{ display: 'flex' }}>
-              <Typography fontWeight={500} width={'180px'}>
-                Tên nhà vườn:
-              </Typography>
-              {data.name}
-            </Box>
+    <>
+      <Box sx={{ marginBottom: '40px' }}>
+        <Typography variant='h1' sx={{ fontSize: '2rem', paddingBottom: '8px', fontWeight: 700 }}>
+          Lịch
+        </Typography>
+        <Breadcrumbs items={breadcrumbsItems} />
+        <Paper sx={{ width: '100%', marginY: '20px', padding: '24px' }}>
+          <Box display='flex' alignItems='center' marginBottom='20px'>
+            <Typography variant='h2' sx={{ fontSize: '1.5rem', fontWeight: 700, paddingRight: '10px' }}>
+              Thông tin nhà vườn
+            </Typography>
+            <Divider sx={{ flexGrow: 1 }} />
+          </Box>
+          <Grid container mt={1} rowGap={'20px'}>
+            <Grid item xs={12}>
+              <Box sx={{ display: 'flex' }}>
+                <Typography fontWeight={500} width={'180px'}>
+                  Tên nhà vườn:
+                </Typography>
+                {data.name}
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Box sx={{ display: 'flex' }}>
+                <Typography fontWeight={500} width={'180px'}>
+                  Địa chỉ:
+                </Typography>
+                {data.address}
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Box sx={{ display: 'flex' }}>
-              <Typography fontWeight={500} width={'180px'}>
-                Địa chỉ:
-              </Typography>
-              {data.address}
-            </Box>
-          </Grid>
-        </Grid>
-      </Paper>
-      <GardenCalendar events={eventData} onDatesChange={handleDatesChange} />
-    </Box>
+        </Paper>
+        <GardenCalendar events={eventData} onDatesChange={handleDatesChange} onEventClick={handleEventClick} />
+      </Box>
+      <ClassToolkitRequirementsDialog
+        open={!!classIdToolkitRequirements}
+        onClose={() => setClassIdToolkitRequirements(null)}
+        classId={classIdToolkitRequirements ?? ''}
+      />
+    </>
   ) : (
     <Loading />
   )
