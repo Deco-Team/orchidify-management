@@ -1,11 +1,19 @@
 import { useCallback } from 'react'
 import { useProtectedApi } from './useProtectedApi'
-import { ListResponseDto } from '~/data/common.dto'
+import { ListResponseDto, SuccessResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { RecruitmentDetailResponeDto, RecruitmentListItemResponseDto } from '~/data/recruitment.dto'
 
 const ROOT_ENDPOINT = '/recruitments/management'
+
+interface ApproveProcessApplicant {
+  meetingUrl: string
+}
+
+interface RejectApplicant {
+  rejectReason: string
+}
 
 export const useRecruitmentApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
@@ -69,5 +77,62 @@ export const useRecruitmentApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getAllRecruitments, getRecruitmentById }
+  const approveProcessApplicant = useCallback(
+    async (recruitmentId: string, data: ApproveProcessApplicant) => {
+      const endpoint = `${ROOT_ENDPOINT}/${recruitmentId}/process-application`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PATCH', {}, {}, data)
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('Xử lý đơn tuyển') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  const approveInterviewApplicant = useCallback(
+    async (recruitmentId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/${recruitmentId}/process-interview`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PATCH', {}, {}, {})
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('Duyệt hồ sơ') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  const rejectApplicant = useCallback(
+    async (classRequestId: string, data: RejectApplicant) => {
+      const endpoint = `${ROOT_ENDPOINT}/${classRequestId}/reject-process`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PATCH', {}, {}, data)
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('Từ chối đơn tuyển') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return { getAllRecruitments, getRecruitmentById, approveProcessApplicant, approveInterviewApplicant, rejectApplicant }
 }

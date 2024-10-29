@@ -11,6 +11,9 @@ import { useRecruitmentApi } from '~/hooks/api/useRecruitmentApi'
 import { protectedRoute } from '~/routes/routes'
 import { notifyError } from '~/utils/toastify'
 import Header from './components/Header'
+import ProcessDialog from './components/ProcessDialog'
+import ApproveDialog from './components/ApproveDialog'
+import RejectDialog from './components/RejectDialog'
 
 interface FieldProps {
   label: string
@@ -47,15 +50,25 @@ const Field: React.FC<FieldProps> = ({ label, content, statusTag, isLink = false
 const ViewRecruitmentDetail = () => {
   const [recruitment, setRecruitment] = useState<RecruitmentDetailResponeDto | null>(null)
   const [error, setError] = useState<ErrorResponseDto | null>(null)
+  const [openProcessDialog, setOpenProcessDialog] = useState<boolean>(false)
+  const [openApproveDialog, setOpenApproveDialog] = useState<boolean>(false)
+  const [openRejectDialog, setOpenRejectDialog] = useState<boolean>(false)
   const params = useParams()
   const navigate = useNavigate()
   const recruitmentId = params.id
 
   const { getRecruitmentById } = useRecruitmentApi()
 
-  const handleProcessButton = () => {}
-  const handleApproveButton = () => {}
-  const handleRejectButton = () => {}
+  const handleProcessButton = () => {
+    setOpenProcessDialog(true)
+  }
+  const handleApproveButton = () => {
+    setOpenApproveDialog(true)
+  }
+  const handleRejectButton = () => {
+    setOpenRejectDialog(true)
+  }
+
   const handleAddButton = () => {
     navigate(protectedRoute.addGardenManager.path)
   }
@@ -68,7 +81,7 @@ const ViewRecruitmentDetail = () => {
   useEffect(() => {
     if (recruitmentId) {
       // eslint-disable-next-line prettier/prettier
-      ;(async () => {
+      (async () => {
         const { data: recruitment, error: apiError } = await getRecruitmentById(recruitmentId)
         setRecruitment(recruitment)
         setError(apiError)
@@ -76,13 +89,23 @@ const ViewRecruitmentDetail = () => {
     }
   }, [recruitmentId, getRecruitmentById])
 
+  const reloadRecruitmentData = async () => {
+    if (recruitmentId) {
+      const { data: recruitment, error: apiError } = await getRecruitmentById(recruitmentId)
+      setRecruitment(recruitment)
+      setError(apiError)
+    }
+  }
+
   if (error) {
     notifyError(error.message)
-    navigate(protectedRoute.classRequestList.path, { replace: true })
+    navigate(protectedRoute.recruitmentList.path, { replace: true })
   }
+
   return recruitment ? (
     <>
       <Header
+        handledBy={recruitment.handledBy}
         recruitmentRequestStatus={recruitment.status}
         onProcessButtonClick={handleProcessButton}
         onApproveButtonClick={handleApproveButton}
@@ -138,6 +161,24 @@ const ViewRecruitmentDetail = () => {
           </Box>
         </Box>
       </Paper>
+      <ProcessDialog
+        recruimentId={recruitment._id}
+        open={openProcessDialog}
+        onSuccess={reloadRecruitmentData}
+        handleClose={() => setOpenProcessDialog(false)}
+      />
+      <ApproveDialog
+        recruitmentId={recruitment._id}
+        open={openApproveDialog}
+        handleClose={() => setOpenApproveDialog(false)}
+        onSuccess={reloadRecruitmentData}
+      />
+      <RejectDialog
+        recruitmentId={recruitment._id}
+        open={openRejectDialog}
+        onSuccess={reloadRecruitmentData}
+        handleClose={() => setOpenRejectDialog(false)}
+      />
     </>
   ) : (
     <Loading />
