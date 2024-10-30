@@ -52,7 +52,7 @@ const Header = ({
         </>
       )
     }
-    if (recruitmentRequestStatus === RecruitmentStatus.SELECTED) {
+    if (recruitmentRequestStatus === RecruitmentStatus.SELECTED && staffId === handledBy) {
       return (
         <Button color='secondary' onClick={onAddButtonClick} endIcon={<AddIcon />}>
           Thêm

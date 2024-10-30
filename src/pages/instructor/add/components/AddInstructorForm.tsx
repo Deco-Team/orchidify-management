@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Button, Divider, Grid, Paper, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { CloudinaryFileUploadedInfo } from '~/components/cloudinary/cloudinary-type'
 import { ControlledFileFieldUpload } from '~/components/form/ControlledFileUpload'
@@ -22,14 +22,6 @@ type FormValues = {
   idCardPhoto: CloudinaryFileUploadedInfo[]
 }
 
-const defaultFormValues: FormValues = {
-  name: '',
-  email: '',
-  phone: '',
-  dateOfBirth: '',
-  idCardPhoto: []
-}
-
 const validationSchema = z.object({
   name: z
     .string()
@@ -46,6 +38,17 @@ const validationSchema = z.object({
 })
 
 const AddInstructorForm = () => {
+  const location = useLocation()
+  const initialData = location.state || {}
+
+  const defaultFormValues: FormValues = {
+    name: initialData.name || '',
+    email: initialData.email || '',
+    phone: initialData.phone || '',
+    dateOfBirth: '',
+    idCardPhoto: []
+  }
+
   const {
     handleSubmit,
     control,
@@ -86,6 +89,7 @@ const AddInstructorForm = () => {
               label='Tên giảng viên'
               fullWidth
               size='small'
+              disabled
             />
           </Grid>
           <Grid item xs={12} lg={6}>
@@ -94,6 +98,7 @@ const AddInstructorForm = () => {
               label='Email'
               fullWidth
               size='small'
+              disabled
             />
           </Grid>
           <Grid item xs={12} lg={6}>
@@ -102,6 +107,7 @@ const AddInstructorForm = () => {
               label='Số điện thoại'
               fullWidth
               size='small'
+              disabled
             />
           </Grid>
           <Grid item xs={12} lg={6}>

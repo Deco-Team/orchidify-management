@@ -70,7 +70,13 @@ const ViewRecruitmentDetail = () => {
   }
 
   const handleAddButton = () => {
-    navigate(protectedRoute.addInstructor.path)
+    navigate(protectedRoute.addInstructor.path, {
+      state: {
+        name: recruitment?.applicationInfo.name,
+        email: recruitment?.applicationInfo.email,
+        phone: recruitment?.applicationInfo.phone
+      }
+    })
   }
 
   const handleDownload = (url: string) => {
