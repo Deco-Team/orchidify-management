@@ -70,7 +70,7 @@ const ViewRecruitmentDetail = () => {
   }
 
   const handleAddButton = () => {
-    navigate(protectedRoute.addGardenManager.path)
+    navigate(protectedRoute.addInstructor.path)
   }
 
   const handleDownload = (url: string) => {

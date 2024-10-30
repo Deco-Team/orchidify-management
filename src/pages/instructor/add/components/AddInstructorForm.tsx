@@ -8,12 +8,16 @@ import ControlledOutlinedInput from '~/components/form/ControlledOutlinedInput'
 import { APP_MESSAGE } from '~/global/app-message'
 import { FileFormat, FileSize } from '~/global/constants'
 import { StyledForm } from './AddInstructorForm.styled'
+import { useInstructorApi } from '~/hooks/api/useInstructorApi'
+import { useNavigate } from 'react-router-dom'
+import { protectedRoute } from '~/routes/routes'
+import { notifyError, notifySuccess } from '~/utils/toastify'
 
 type FormValues = {
   name: string
   email: string
   phone: string
-  dateOfBirth: Date
+  dateOfBirth: string
   idCardPhoto: CloudinaryFileUploadedInfo[]
 }
 
@@ -21,7 +25,7 @@ const defaultFormValues: FormValues = {
   name: '',
   email: '',
   phone: '',
-  dateOfBirth: new Date(),
+  dateOfBirth: '',
   idCardPhoto: []
 }
 
@@ -50,16 +54,17 @@ const AddInstructorForm = () => {
     resolver: zodResolver(validationSchema)
   })
 
-  const onSubmit = handleSubmit(async (formValue) => {
-    console.log(formValue)
+  const { addInstructor } = useInstructorApi()
+  const navigate = useNavigate()
 
-    // const { error } = await addGardenManager({ ...formValue, idCardPhoto: formValue.idCardPhoto[0].url })
-    // if (error) {
-    //   notifyError(error.message)
-    //   return
-    // }
-    // notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Thêm quản lý vườn'))
-    // navigate(protectedRoute.gardenManagerList.path, { replace: true })
+  const onSubmit = handleSubmit(async (formValue) => {
+    const { error } = await addInstructor({ ...formValue, idCardPhoto: formValue.idCardPhoto[0].url })
+    if (error) {
+      notifyError(error.message)
+      return
+    }
+    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Thêm giảng viên'))
+    navigate(protectedRoute.instructorList.path, { replace: true })
   })
 
   return (
