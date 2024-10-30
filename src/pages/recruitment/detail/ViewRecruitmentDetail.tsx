@@ -105,7 +105,7 @@ const ViewRecruitmentDetail = () => {
   return recruitment ? (
     <>
       <Header
-        handledBy={recruitment.handledBy}
+        handledBy={recruitment.handledBy._id}
         recruitmentRequestStatus={recruitment.status}
         onProcessButtonClick={handleProcessButton}
         onApproveButtonClick={handleApproveButton}
@@ -119,7 +119,7 @@ const ViewRecruitmentDetail = () => {
           </Typography>
           <Divider sx={{ flexGrow: 1 }} />
         </Box>
-        <Field label='Tên ứng viên' content={recruitment.applicationInfo.name} />
+        {/* <Field label='Tên ứng viên' content={recruitment.applicationInfo.name} /> */}
         <Field label='Email' content={recruitment.applicationInfo.email} />
         <Field label='Số điện thoại' content={recruitment.applicationInfo.phone} />
         <Box marginY='1rem'>
@@ -131,7 +131,7 @@ const ViewRecruitmentDetail = () => {
           </Typography>
         </Box>
         <Divider sx={{ flexGrow: 1 }} />
-        <Field label='Nhân viên duyệt' content={recruitment.handledBy} />
+        <Field label='Nhân viên duyệt' content={recruitment.handledBy.name} />
         <Field label='Thời gian tạo' content={new Date(recruitment.createdAt).toLocaleString('vi-VN')} />
         <Field label='Cập nhật cuối' content={new Date(recruitment.updatedAt).toLocaleString('vi-VN')} />
         <Field label='Trạng thái' statusTag={recruitment.status} />
