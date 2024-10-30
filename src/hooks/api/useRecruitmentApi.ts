@@ -109,7 +109,7 @@ export const useRecruitmentApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Duyệt hồ sơ') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.ACTION_FAILED('Chấp nhận ứng viên') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
@@ -128,7 +128,7 @@ export const useRecruitmentApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.ACTION_FAILED('Từ chối đơn tuyển') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.ACTION_FAILED('Từ chối đơn ứng tuyển') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]

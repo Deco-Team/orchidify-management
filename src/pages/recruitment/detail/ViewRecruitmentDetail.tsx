@@ -138,6 +138,16 @@ const ViewRecruitmentDetail = () => {
         {recruitment.status === RecruitmentStatus.INTERVIEWING ? (
           <Field label='Đường dẫn cuộc họp' content={recruitment.meetingUrl} isLink={true} />
         ) : null}
+        {recruitment.rejectReason && (
+          <Box marginY='1rem'>
+            <Typography variant='subtitle1' fontWeight={600} marginBottom='0.5rem'>
+              Lý do từ chối:
+            </Typography>
+            <Typography variant='subtitle1' fontWeight={400}>
+              {recruitment.rejectReason}
+            </Typography>
+          </Box>
+        )}
         <Box marginTop='1rem'>
           <Typography variant='subtitle1' fontWeight={600} marginBottom='0.5rem'>
             CV

@@ -45,7 +45,7 @@ const RejectDialog = ({ recruitmentId, open, handleClose, onSuccess }: RejectDia
     if (error) {
       notifyError(error.message)
     } else {
-      notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Từ chối ứng viên'))
+      notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Từ chối đơn ứng tuyển'))
       onSuccess()
     }
     handleClose()
@@ -61,8 +61,8 @@ const RejectDialog = ({ recruitmentId, open, handleClose, onSuccess }: RejectDia
       onSubmit={handleSubmit(handleReject)}
       handleCancel={handleCancel}
       isProcessing={isSubmitting}
-      title='Xác nhận từ chối ứng viên'
-      description={APP_MESSAGE.CONFIRM_ACTION('từ chối hồ sơ này')}
+      title='Xác nhận từ chối đơn ứng tuyển'
+      description={APP_MESSAGE.CONFIRM_ACTION('từ chối đơn ứng tuyển này')}
       confirmButtonText='Từ chối'
       confirmButtonColor='error'
       cancelButtonText='Hủy'

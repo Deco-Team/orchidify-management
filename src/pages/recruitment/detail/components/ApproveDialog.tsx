@@ -21,7 +21,7 @@ const ApproveDialog = ({ recruitmentId, open, handleClose, onSuccess }: DialogPr
     if (error) {
       notifyError(error.message)
     } else {
-      notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Duyệt hồ sơ'))
+      notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Chấp nhận ứng viên'))
       onSuccess()
     }
     handleClose()
@@ -39,7 +39,7 @@ const ApproveDialog = ({ recruitmentId, open, handleClose, onSuccess }: DialogPr
       handleCancel={handleCancel}
       isProcessing={isProcessing}
       title='Xác nhận chấp nhận ứng viên'
-      description={APP_MESSAGE.CONFIRM_ACTION('duyệt hồ sơ này')}
+      description={APP_MESSAGE.CONFIRM_ACTION('chấp nhận ứng viên này')}
       confirmButtonText='Chấp nhận'
       confirmButtonColor='secondary'
       cancelButtonText='Hủy'
