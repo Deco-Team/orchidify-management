@@ -57,7 +57,7 @@ export const RecruitmentColumns: MRT_ColumnDef<RecruitmentListItemResponseDto>[]
     }
   },
   {
-    accessorKey: 'handledBy',
+    accessorKey: 'handledBy.name',
     header: 'Nhân viên duyệt',
     size: 250
   },

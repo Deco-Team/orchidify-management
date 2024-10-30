@@ -11,6 +11,9 @@ import { useRecruitmentApi } from '~/hooks/api/useRecruitmentApi'
 import { protectedRoute } from '~/routes/routes'
 import { notifyError } from '~/utils/toastify'
 import Header from './components/Header'
+import ProcessDialog from './components/ProcessDialog'
+import ApproveDialog from './components/ApproveDialog'
+import RejectDialog from './components/RejectDialog'
 
 interface FieldProps {
   label: string
@@ -47,15 +50,25 @@ const Field: React.FC<FieldProps> = ({ label, content, statusTag, isLink = false
 const ViewRecruitmentDetail = () => {
   const [recruitment, setRecruitment] = useState<RecruitmentDetailResponeDto | null>(null)
   const [error, setError] = useState<ErrorResponseDto | null>(null)
+  const [openProcessDialog, setOpenProcessDialog] = useState<boolean>(false)
+  const [openApproveDialog, setOpenApproveDialog] = useState<boolean>(false)
+  const [openRejectDialog, setOpenRejectDialog] = useState<boolean>(false)
   const params = useParams()
   const navigate = useNavigate()
   const recruitmentId = params.id
 
   const { getRecruitmentById } = useRecruitmentApi()
 
-  const handleProcessButton = () => {}
-  const handleApproveButton = () => {}
-  const handleRejectButton = () => {}
+  const handleProcessButton = () => {
+    setOpenProcessDialog(true)
+  }
+  const handleApproveButton = () => {
+    setOpenApproveDialog(true)
+  }
+  const handleRejectButton = () => {
+    setOpenRejectDialog(true)
+  }
+
   const handleAddButton = () => {
     navigate(protectedRoute.addGardenManager.path)
   }
@@ -68,7 +81,7 @@ const ViewRecruitmentDetail = () => {
   useEffect(() => {
     if (recruitmentId) {
       // eslint-disable-next-line prettier/prettier
-      ;(async () => {
+      (async () => {
         const { data: recruitment, error: apiError } = await getRecruitmentById(recruitmentId)
         setRecruitment(recruitment)
         setError(apiError)
@@ -76,13 +89,23 @@ const ViewRecruitmentDetail = () => {
     }
   }, [recruitmentId, getRecruitmentById])
 
+  const reloadRecruitmentData = async () => {
+    if (recruitmentId) {
+      const { data: recruitment, error: apiError } = await getRecruitmentById(recruitmentId)
+      setRecruitment(recruitment)
+      setError(apiError)
+    }
+  }
+
   if (error) {
     notifyError(error.message)
-    navigate(protectedRoute.classRequestList.path, { replace: true })
+    navigate(protectedRoute.recruitmentList.path, { replace: true })
   }
+
   return recruitment ? (
     <>
       <Header
+        handledBy={recruitment.handledBy._id}
         recruitmentRequestStatus={recruitment.status}
         onProcessButtonClick={handleProcessButton}
         onApproveButtonClick={handleApproveButton}
@@ -96,7 +119,7 @@ const ViewRecruitmentDetail = () => {
           </Typography>
           <Divider sx={{ flexGrow: 1 }} />
         </Box>
-        <Field label='Tên ứng viên' content={recruitment.applicationInfo.name} />
+        {/* <Field label='Tên ứng viên' content={recruitment.applicationInfo.name} /> */}
         <Field label='Email' content={recruitment.applicationInfo.email} />
         <Field label='Số điện thoại' content={recruitment.applicationInfo.phone} />
         <Box marginY='1rem'>
@@ -108,13 +131,23 @@ const ViewRecruitmentDetail = () => {
           </Typography>
         </Box>
         <Divider sx={{ flexGrow: 1 }} />
-        <Field label='Nhân viên duyệt' content={recruitment.handledBy} />
+        <Field label='Nhân viên duyệt' content={recruitment.handledBy.name} />
         <Field label='Thời gian tạo' content={new Date(recruitment.createdAt).toLocaleString('vi-VN')} />
         <Field label='Cập nhật cuối' content={new Date(recruitment.updatedAt).toLocaleString('vi-VN')} />
         <Field label='Trạng thái' statusTag={recruitment.status} />
         {recruitment.status === RecruitmentStatus.INTERVIEWING ? (
           <Field label='Đường dẫn cuộc họp' content={recruitment.meetingUrl} isLink={true} />
         ) : null}
+        {recruitment.rejectReason && (
+          <Box marginY='1rem'>
+            <Typography variant='subtitle1' fontWeight={600} marginBottom='0.5rem'>
+              Lý do từ chối:
+            </Typography>
+            <Typography variant='subtitle1' fontWeight={400}>
+              {recruitment.rejectReason}
+            </Typography>
+          </Box>
+        )}
         <Box marginTop='1rem'>
           <Typography variant='subtitle1' fontWeight={600} marginBottom='0.5rem'>
             CV
@@ -138,6 +171,24 @@ const ViewRecruitmentDetail = () => {
           </Box>
         </Box>
       </Paper>
+      <ProcessDialog
+        recruimentId={recruitment._id}
+        open={openProcessDialog}
+        onSuccess={reloadRecruitmentData}
+        handleClose={() => setOpenProcessDialog(false)}
+      />
+      <ApproveDialog
+        recruitmentId={recruitment._id}
+        open={openApproveDialog}
+        handleClose={() => setOpenApproveDialog(false)}
+        onSuccess={reloadRecruitmentData}
+      />
+      <RejectDialog
+        recruitmentId={recruitment._id}
+        open={openRejectDialog}
+        onSuccess={reloadRecruitmentData}
+        handleClose={() => setOpenRejectDialog(false)}
+      />
     </>
   ) : (
     <Loading />

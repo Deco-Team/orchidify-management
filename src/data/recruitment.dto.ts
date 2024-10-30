@@ -25,8 +25,11 @@ export type RecruitmentDetailResponeDto = {
   applicationInfo: ApplicationInfo
   meetingUrl: string
   status: RecruitmentStatus
-  rejectReason: string
-  handledBy: string
+  rejectReason?: string
+  handledBy: {
+    _id: string
+    name: string
+  }
   createdAt: string
   updatedAt: string
   histories: [
