@@ -1,17 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Button, Divider, Grid, Paper, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { CloudinaryFileUploadedInfo } from '~/components/cloudinary/cloudinary-type'
 import { ControlledFileFieldUpload } from '~/components/form/ControlledFileUpload'
 import ControlledOutlinedInput from '~/components/form/ControlledOutlinedInput'
 import { APP_MESSAGE } from '~/global/app-message'
 import { FileFormat, FileSize } from '~/global/constants'
-import { StyledForm } from './AddInstructorForm.styled'
 import { useInstructorApi } from '~/hooks/api/useInstructorApi'
-import { useNavigate } from 'react-router-dom'
 import { protectedRoute } from '~/routes/routes'
 import { notifyError, notifySuccess } from '~/utils/toastify'
+import { StyledForm } from './AddInstructorForm.styled'
+import dayjs from 'dayjs'
 
 type FormValues = {
   name: string
@@ -67,6 +68,8 @@ const AddInstructorForm = () => {
     navigate(protectedRoute.instructorList.path, { replace: true })
   })
 
+  const minDate = dayjs().subtract(18, 'years').format('YYYY-MM-DD')
+
   return (
     <StyledForm onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
       <Paper sx={{ width: '100%', marginY: '40px', padding: '24px' }}>
@@ -108,6 +111,9 @@ const AddInstructorForm = () => {
               type='date'
               fullWidth
               size='small'
+              inputProps={{
+                max: minDate
+              }}
             />
           </Grid>
           <Grid item xs={12} lg={6}>
