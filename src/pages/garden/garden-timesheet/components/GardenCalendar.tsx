@@ -9,7 +9,7 @@ interface EventProps {
     classId?: string
   }>
   onDatesChange: (viewType: string, startDate: string) => Promise<void>
-  onEventClick?: (info: { event: { id?: string }; view: { type: string } }) => void
+  onEventClick?: (info: { event: { extendedProps?: { classId?: string } }; view: { type: string } }) => void
 }
 
 const GardenCalendar = ({ events, onDatesChange, onEventClick }: EventProps) => {

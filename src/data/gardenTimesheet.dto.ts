@@ -1,14 +1,28 @@
 import { GardenTimesheetStatus } from '~/global/app-status'
 
-export interface Slot {
+type BaseSlotMetadata = {
+  code: string
+  title: string
+  sessionTitle: string
+  sessionNumber: number
+}
+
+export type GardenTimesheetItemResponseDto = {
   _id: string
   start: string
   end: string
   status: GardenTimesheetStatus
   classId?: string
   slotNumber?: number
-  metadata?: {
-    code: string
-    title: string
-  }
+  metadata?: BaseSlotMetadata
+}
+
+export type InstructorTimesheetItemResponseDto = {
+  _id: string
+  start: string
+  end: string
+  status: GardenTimesheetStatus
+  classId?: string
+  slotNumber?: number
+  metadata?: BaseSlotMetadata
 }

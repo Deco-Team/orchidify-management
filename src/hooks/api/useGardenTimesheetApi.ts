@@ -1,17 +1,25 @@
 import { useCallback } from 'react'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { Slot } from '~/data/gardenTimesheet.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useProtectedApi } from './useProtectedApi'
+import { ListResponseDto } from '~/data/common.dto'
+import { GardenTimesheetItemResponseDto, InstructorTimesheetItemResponseDto } from '~/data/gardenTimesheet.dto'
 
 const ROOT_ENDPOINT = '/garden-timesheets/management'
 
 const useGardenTimesheetApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
+
   const getGardenTimesheet = useCallback(
     async (gardenId: string, date: string, type: string) => {
       const endpoint = `${ROOT_ENDPOINT}`
-      const result = await callAppProtectedApi<{ docs: Slot[] }>(endpoint, 'GET', {}, { gardenId, date, type }, {})
+      const result = await callAppProtectedApi<ListResponseDto<GardenTimesheetItemResponseDto>>(
+        endpoint,
+        'GET',
+        {},
+        { gardenId, date, type },
+        {}
+      )
 
       if (result) {
         const { data, error } = result
@@ -27,7 +35,32 @@ const useGardenTimesheetApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getGardenTimesheet }
+  const getInstructorTimesheet = useCallback(
+    async (instructorId: string, date: string, type: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/instructor-timesheet`
+      const result = await callAppProtectedApi<ListResponseDto<InstructorTimesheetItemResponseDto>>(
+        endpoint,
+        'GET',
+        {},
+        { instructorId, date, type },
+        {}
+      )
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data.docs, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('thông tin lịch giảng viên') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return { getGardenTimesheet, getInstructorTimesheet }
 }
 
 export default useGardenTimesheetApi

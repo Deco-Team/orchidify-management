@@ -1,10 +1,10 @@
 import { Box, Divider, Grid, Paper, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { lazy, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Breadcrumbs from '~/components/breadscrumbs/Breadscrumbs'
 import Loading from '~/components/loading/Loading'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { Slot } from '~/data/gardenTimesheet.dto'
+import { GardenTimesheetItemResponseDto } from '~/data/gardenTimesheet.dto'
 import { Garden } from '~/data/garden.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { CalendarType, UserRole } from '~/global/constants'
@@ -14,8 +14,19 @@ import { protectedRoute } from '~/routes/routes'
 import { notifyError } from '~/utils/toastify'
 import GardenCalendar from './components/GardenCalendar'
 import { GardenTimesheetStatus } from '~/global/app-status'
-import ClassToolkitRequirementsDialog from './components/ClassToolkitRequirementsDialog'
+const ClassToolkitRequirementsDialog = lazy(() => import('./components/ClassToolkitRequirementsDialog'))
 import useAuth from '~/auth/useAuth'
+
+const mapViewTypeToApi = (viewType: string) => {
+  switch (viewType) {
+    case 'dayGridMonth':
+      return CalendarType.MONTH
+    case 'timeGridWeek':
+      return CalendarType.WEEK
+    default:
+      return CalendarType.MONTH
+  }
+}
 
 const GardenTimesheet = () => {
   const navigate = useNavigate()
@@ -29,18 +40,7 @@ const GardenTimesheet = () => {
   const [data, setData] = useState<Garden | null>(null)
   const [error, setError] = useState<ErrorResponseDto | null>(null)
 
-  const [eventData, setEventData] = useState<Slot[]>([])
-
-  const mapViewTypeToApi = (viewType: string) => {
-    switch (viewType) {
-      case 'dayGridMonth':
-        return CalendarType.MONTH
-      case 'timeGridWeek':
-        return CalendarType.WEEK
-      default:
-        return CalendarType.MONTH
-    }
-  }
+  const [eventData, setEventData] = useState<GardenTimesheetItemResponseDto[]>([])
 
   useEffect(() => {
     if (gardenId) {
@@ -57,7 +57,7 @@ const GardenTimesheet = () => {
       const apiViewType = mapViewTypeToApi(viewType)
       const { data: gardenTimesheet, error: apiError } = await getGardenTimesheet(gardenId, startDate, apiViewType)
       if (gardenTimesheet) {
-        let transformedEventData: (Slot & {
+        let transformedEventData: (GardenTimesheetItemResponseDto & {
           title?: string
           allDay?: boolean
           display?: string
@@ -65,7 +65,10 @@ const GardenTimesheet = () => {
         })[] = []
 
         if (apiViewType === CalendarType.MONTH) {
-          const gardenTimesheetMap = new Map<string, { [key: string]: Slot & { classQuantity: number } }>()
+          const gardenTimesheetMap = new Map<
+            string,
+            { [key: string]: GardenTimesheetItemResponseDto & { classQuantity: number } }
+          >()
           gardenTimesheet.forEach((slot) => {
             if (slot.status !== GardenTimesheetStatus.INACTIVE) {
               const date = new Date(slot.start).getDate().toString()
@@ -112,7 +115,6 @@ const GardenTimesheet = () => {
             slot.status !== GardenTimesheetStatus.INACTIVE
               ? {
                   ...slot,
-                  id: slot.classId,
                   title: slot.metadata ? `${slot.metadata.code} - ${slot.metadata.title}` : 'Lớp học',
                   display: 'block',
                   backgroundColor: '#0ea5e919'
@@ -131,9 +133,15 @@ const GardenTimesheet = () => {
     }
   }
 
-  const handleEventClick = ({ event, view }: { event: { id?: string }; view: { type: string } }) => {
+  const handleEventClick = ({
+    event,
+    view
+  }: {
+    event: { extendedProps?: { classId?: string } }
+    view: { type: string }
+  }) => {
     if (mapViewTypeToApi(view.type) === CalendarType.WEEK && userTokenPayload?.role === UserRole.GARDEN_MANAGER) {
-      setClassIdToolkitRequirements(event.id!)
+      setClassIdToolkitRequirements(event.extendedProps?.classId ?? null)
     }
   }
 

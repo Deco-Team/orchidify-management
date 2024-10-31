@@ -62,8 +62,7 @@ const ViewInstructorDetail = () => {
 
   useEffect(() => {
     if (instructorId) {
-      // eslint-disable-next-line prettier/prettier
-      (async () => {
+      ;(async () => {
         const { data: instructor, error: apiError } = await getInstructorById(instructorId)
         setData(instructor)
         setError(apiError)
@@ -118,7 +117,9 @@ const ViewInstructorDetail = () => {
                   Giảng viên
                 </Typography>
               </Box>
-              <Button>Lịch dạy</Button>
+              <Button onClick={() => navigate(protectedRoute.instructorTimesheet.path.replace(':id', data._id))}>
+                Lịch dạy
+              </Button>
             </Box>
             <Typography variant='h6' fontSize={14}>
               {data.bio}
