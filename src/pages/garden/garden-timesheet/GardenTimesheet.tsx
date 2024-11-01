@@ -1,7 +1,6 @@
 import { Box, Divider, Grid, Paper, Typography } from '@mui/material'
 import { lazy, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import Breadcrumbs from '~/components/breadscrumbs/Breadscrumbs'
 import Loading from '~/components/loading/Loading'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { GardenTimesheetItemResponseDto } from '~/data/gardenTimesheet.dto'
@@ -16,6 +15,7 @@ import GardenCalendar from './components/GardenCalendar'
 import { GardenTimesheetStatus } from '~/global/app-status'
 const ClassToolkitRequirementsDialog = lazy(() => import('./components/ClassToolkitRequirementsDialog'))
 import useAuth from '~/auth/useAuth'
+import Header from './components/Header'
 
 const mapViewTypeToApi = (viewType: string) => {
   switch (viewType) {
@@ -117,7 +117,8 @@ const GardenTimesheet = () => {
                   ...slot,
                   title: slot.metadata ? `${slot.metadata.code} - ${slot.metadata.title}` : 'Lớp học',
                   display: 'block',
-                  backgroundColor: '#0ea5e919'
+                  backgroundColor: '#0ea5e919',
+                  classNames: userTokenPayload?.role === UserRole.GARDEN_MANAGER ? 'clickable-event' : null
                 }
               : {
                   ...slot,
@@ -155,21 +156,13 @@ const GardenTimesheet = () => {
     notifyError(error.message)
   }
 
-  const breadcrumbsItems = [
-    protectedRoute.gardenList,
-    {
-      ...protectedRoute.gardenDetail,
-      path: protectedRoute.gardenDetail.path.replace(':id', gardenId)
-    },
-    protectedRoute.viewGardenTimesheet
-  ]
   return data ? (
     <>
       <Box sx={{ marginBottom: '40px' }}>
-        <Typography variant='h1' sx={{ fontSize: '2rem', paddingBottom: '8px', fontWeight: 700 }}>
-          Lịch
-        </Typography>
-        <Breadcrumbs items={breadcrumbsItems} />
+        <Header
+          gardenId={gardenId}
+          onUpdateButtonClick={() => navigate(protectedRoute.updateGardenTimesheet.path.replace(':id', gardenId))}
+        />
         <Paper sx={{ width: '100%', marginY: '20px', padding: '24px' }}>
           <Box display='flex' alignItems='center' marginBottom='20px'>
             <Typography variant='h2' sx={{ fontSize: '1.5rem', fontWeight: 700, paddingRight: '10px' }}>
