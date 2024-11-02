@@ -49,7 +49,7 @@ const ViewInstructorDetail = () => {
   }
 
   const handleUpdateButton = () => {
-    if (instructorId) navigate(protectedRoute.updateGardenManager.path.replace(':id', instructorId))
+    if (instructorId) navigate(protectedRoute.updateInstructor.path.replace(':id', instructorId))
   }
 
   const handleReloadData = async () => {
