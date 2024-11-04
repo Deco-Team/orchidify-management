@@ -10,10 +10,26 @@ import '~/components/calendar/Calendar.css'
 interface GardenCalendarProps {
   events: Array<object>
   onDatesChange: (viewType: string, startDate: string, endDate: string) => void
+  headerToolbar?: object
+  eventClassNames?: string[]
+  dayCellClassNames?: string[] | ((arg: { date: Date }) => string[])
   onEventClick?: (info: { event: object; view: { type: string } }) => void
+  onDateClick?: (info: { date: Date; view: { type: string } }) => void
 }
 
-const Calendar: React.FC<GardenCalendarProps> = ({ events = [], onDatesChange, onEventClick }) => {
+const Calendar: React.FC<GardenCalendarProps> = ({
+  events = [],
+  onDatesChange,
+  headerToolbar = {
+    left: 'prev,next today',
+    center: 'title',
+    right: 'dayGridMonth,timeGridWeek'
+  },
+  eventClassNames = [],
+  dayCellClassNames = [],
+  onEventClick,
+  onDateClick
+}) => {
   const validRange = useMemo(() => {
     const today = new Date()
     const startDate = `${today.getFullYear() - 2}-${today.getMonth() + 1}-${today.getDate()}`
@@ -35,11 +51,7 @@ const Calendar: React.FC<GardenCalendarProps> = ({ events = [], onDatesChange, o
   return (
     <FullCalendar
       plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-      headerToolbar={{
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek'
-      }}
+      headerToolbar={headerToolbar}
       initialView={'dayGridMonth'}
       validRange={validRange}
       editable={false}
@@ -69,6 +81,9 @@ const Calendar: React.FC<GardenCalendarProps> = ({ events = [], onDatesChange, o
       expandRows={true}
       datesSet={handleDatesSet}
       eventClick={onEventClick}
+      dateClick={onDateClick}
+      eventClassNames={eventClassNames}
+      dayCellClassNames={dayCellClassNames}
     />
   )
 }

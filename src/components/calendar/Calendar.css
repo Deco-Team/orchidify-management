@@ -120,3 +120,24 @@
   font-weight: 700;
   color: #0369a1;
 }
+
+/* Optional style for making events clickable */
+.clickable-event {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.clickable-event:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Optional style for making dayGrids clickable */
+.clickable-day {
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.clickable-day:hover {
+  background-color: rgba(0, 123, 255, 0.1); /* Light blue hover effect */
+}

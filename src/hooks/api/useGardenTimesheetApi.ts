@@ -7,6 +7,12 @@ import { GardenTimesheetItemResponseDto, InstructorTimesheetItemResponseDto } fr
 
 const ROOT_ENDPOINT = '/garden-timesheets/management'
 
+interface UpdateGardenTimesheetRequestDto {
+  gardenId: string
+  date: string
+  status: string
+}
+
 const useGardenTimesheetApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
 
@@ -30,6 +36,31 @@ const useGardenTimesheetApi = () => {
       return {
         data: null,
         error: { message: APP_MESSAGE.LOAD_DATA_FAILED('thông tin lịch nhà vườn') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  const updateGardenTimesheet = useCallback(
+    async (gardenTimesheet: UpdateGardenTimesheetRequestDto) => {
+      const endpoint = `${ROOT_ENDPOINT}`
+      const result = await callAppProtectedApi<ListResponseDto<GardenTimesheetItemResponseDto>>(
+        endpoint,
+        'PUT',
+        {},
+        {},
+        gardenTimesheet
+      )
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data.docs, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('Cập nhật lịch nhà vườn') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
@@ -60,7 +91,7 @@ const useGardenTimesheetApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getGardenTimesheet, getInstructorTimesheet }
+  return { getGardenTimesheet, updateGardenTimesheet, getInstructorTimesheet }
 }
 
 export default useGardenTimesheetApi
