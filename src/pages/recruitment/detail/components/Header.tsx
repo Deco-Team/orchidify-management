@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import PageHeader from '~/components/header/PageHeader'
 import { RecruitmentStatus } from '~/global/app-status'
 import { protectedRoute } from '~/routes/routes'
@@ -7,6 +7,7 @@ import useAuth from '~/auth/useAuth'
 
 interface HeaderProps {
   recruitmentRequestStatus: RecruitmentStatus
+  isInstructorAdded: boolean
   handledBy: string
   onProcessButtonClick: () => void
   onApproveButtonClick: () => void
@@ -16,6 +17,7 @@ interface HeaderProps {
 
 const Header = ({
   recruitmentRequestStatus,
+  isInstructorAdded,
   handledBy,
   onProcessButtonClick,
   onApproveButtonClick,
@@ -54,9 +56,14 @@ const Header = ({
     }
     if (recruitmentRequestStatus === RecruitmentStatus.SELECTED && staffId === handledBy) {
       return (
-        <Button color='secondary' onClick={onAddButtonClick} endIcon={<AddIcon />}>
-          Thêm
-        </Button>
+        <Box display='flex' alignItems='center'>
+          <Typography variant='subtitle1' fontStyle='italic' height='fit-content' marginRight='0.5rem'>
+            Đã thêm giảng viên
+          </Typography>
+          <Button color='secondary' onClick={onAddButtonClick} endIcon={<AddIcon />} disabled={isInstructorAdded}>
+            Thêm
+          </Button>
+        </Box>
       )
     }
   }

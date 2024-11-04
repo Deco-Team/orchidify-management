@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Loading from '~/components/loading/Loading'
 import RecruitmentStatusTag from '~/components/tag/RecruitmentStatusTag'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { RecruitmentDetailResponeDto } from '~/data/recruitment.dto'
+import { RecruitmentDetailResponseDto } from '~/data/recruitment.dto'
 import { RecruitmentStatus } from '~/global/app-status'
 import { useRecruitmentApi } from '~/hooks/api/useRecruitmentApi'
 import { protectedRoute } from '~/routes/routes'
@@ -48,7 +48,7 @@ const Field: React.FC<FieldProps> = ({ label, content, statusTag, isLink = false
 }
 
 const ViewRecruitmentDetail = () => {
-  const [recruitment, setRecruitment] = useState<RecruitmentDetailResponeDto | null>(null)
+  const [recruitment, setRecruitment] = useState<RecruitmentDetailResponseDto | null>(null)
   const [error, setError] = useState<ErrorResponseDto | null>(null)
   const [openProcessDialog, setOpenProcessDialog] = useState<boolean>(false)
   const [openApproveDialog, setOpenApproveDialog] = useState<boolean>(false)
@@ -112,6 +112,7 @@ const ViewRecruitmentDetail = () => {
     <>
       <Header
         handledBy={recruitment.handledBy._id}
+        isInstructorAdded={recruitment.isInstructorAdded}
         recruitmentRequestStatus={recruitment.status}
         onProcessButtonClick={handleProcessButton}
         onApproveButtonClick={handleApproveButton}
