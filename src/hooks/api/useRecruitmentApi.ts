@@ -3,7 +3,7 @@ import { useProtectedApi } from './useProtectedApi'
 import { ListResponseDto, SuccessResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { APP_MESSAGE } from '~/global/app-message'
-import { RecruitmentDetailResponeDto, RecruitmentListItemResponseDto } from '~/data/recruitment.dto'
+import { RecruitmentDetailResponseDto, RecruitmentListItemResponseDto } from '~/data/recruitment.dto'
 
 const ROOT_ENDPOINT = '/recruitments/management'
 
@@ -61,7 +61,7 @@ export const useRecruitmentApi = () => {
   const getRecruitmentById = useCallback(
     async (recruitmentId: string) => {
       const endpoint = `${ROOT_ENDPOINT}/${recruitmentId}`
-      const result = await callAppProtectedApi<RecruitmentDetailResponeDto>(endpoint, 'GET', {}, {}, {})
+      const result = await callAppProtectedApi<RecruitmentDetailResponseDto>(endpoint, 'GET', {}, {}, {})
 
       if (result) {
         const { data, error } = result
