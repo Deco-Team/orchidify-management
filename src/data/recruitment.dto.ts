@@ -20,12 +20,13 @@ export type RecruitmentListItemResponseDto = {
   updatedAt: string
 }
 
-export type RecruitmentDetailResponeDto = {
+export type RecruitmentDetailResponseDto = {
   _id: string
   applicationInfo: ApplicationInfo
   meetingUrl: string
   status: RecruitmentStatus
   rejectReason?: string
+  isInstructorAdded: boolean
   handledBy: {
     _id: string
     name: string

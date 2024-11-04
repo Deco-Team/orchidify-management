@@ -31,7 +31,7 @@ export const classColumns: MRT_ColumnDef<ClassListItemResponseDto>[] = [
   {
     accessorKey: 'duration',
     size: 150,
-    header: 'Thời gian',
+    header: 'Thời lượng',
     enableColumnFilter: false,
     Cell: ({ row }) => {
       return `${row.original.duration} tuần`

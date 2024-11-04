@@ -102,7 +102,7 @@ const ViewInstructorDetail = () => {
       <ContentWrapper theme={theme}>
         <Avatar>
           <Image
-            src={data.avatar}
+            src={data.idCardPhoto}
             alt='Your Avatar'
             theme={theme}
             onError={(event) => (event.currentTarget.src = avatar)}

@@ -1,11 +1,19 @@
 import { useCallback } from 'react'
 import { useProtectedApi } from './useProtectedApi'
-import { ListResponseDto, SuccessResponseDto } from '~/data/common.dto'
+import { IdResponseDto, ListResponseDto, SuccessResponseDto } from '~/data/common.dto'
 import { Instructor } from '~/data/instructor.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 
 const ROOT_ENDPOINT = '/instructors/management'
+
+interface AddInstructorRequest {
+  email: string
+  name: string
+  phone: string
+  dateOfBirth: string
+  idCardPhoto: string
+}
 
 export const useInstructorApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
@@ -107,5 +115,23 @@ export const useInstructorApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getAllInstructors, getInstructorById, activateInstructor, deactivateInstructor }
+  const addInstructor = useCallback(
+    async (instructor: AddInstructorRequest) => {
+      const result = await callAppProtectedApi<IdResponseDto>(ROOT_ENDPOINT, 'POST', {}, {}, instructor)
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('thêm giảng viên') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return { getAllInstructors, getInstructorById, activateInstructor, deactivateInstructor, addInstructor }
 }
