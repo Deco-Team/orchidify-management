@@ -1,13 +1,18 @@
 import Calendar from '~/components/calendar/Calendar'
-import { GardenTimesheetStatus } from '~/global/app-status'
+
+export type CalendarEvent = {
+  start: string
+  end: string
+  title?: string
+  allDay?: boolean
+  display?: string
+  backgroundColor?: string
+  classNames?: string
+  classId?: string
+}
 
 interface EventProps {
-  events: Array<{
-    start: string
-    end: string
-    status: GardenTimesheetStatus
-    classId?: string
-  }>
+  events: Array<CalendarEvent>
   onDatesChange: (viewType: string, startDate: string) => Promise<void>
   onEventClick?: (info: { event: { extendedProps?: { classId?: string } }; view: { type: string } }) => void
 }

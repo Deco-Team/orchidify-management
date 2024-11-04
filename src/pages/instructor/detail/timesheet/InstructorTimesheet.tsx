@@ -5,7 +5,6 @@ import { ErrorResponseDto } from '~/data/error.dto'
 import { notifyError } from '~/utils/toastify'
 import useGardenTimesheetApi from '~/hooks/api/useGardenTimesheetApi'
 import { Navigate, useParams } from 'react-router-dom'
-import { GardenTimesheetStatus } from '~/global/app-status'
 import Header from './components/Header'
 import { protectedRoute } from '~/routes/routes'
 import { APP_MESSAGE } from '~/global/app-message'
@@ -48,20 +47,13 @@ const InstructorTimesheet = () => {
       )
 
       if (instructorTimesheet) {
-        const transformedEventData = instructorTimesheet.map((slot) =>
-          slot.status !== GardenTimesheetStatus.INACTIVE
-            ? {
-                ...slot,
-                title: slot.metadata ? `${slot.metadata.code} - ${slot.metadata.title}` : 'Lớp học',
-                display: 'block',
-                backgroundColor: '#0ea5e919'
-              }
-            : {
-                ...slot,
-                display: 'background',
-                backgroundColor: '#d0d0d0'
-              }
-        )
+        const transformedEventData: CalendarEvent[] = instructorTimesheet.map<CalendarEvent>((slot) => ({
+          start: slot.start,
+          end: slot.end,
+          title: slot.metadata ? `${slot.metadata.code} - ${slot.metadata.title}` : 'Lớp học',
+          display: 'block',
+          backgroundColor: '#0ea5e919'
+        }))
         setCalendarEvents(transformedEventData)
       }
 

@@ -16,7 +16,7 @@ interface BreadcrumbsProps {
 
 const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
   return (
-    <MuiBreadcrumbs aria-label='breadcrumb'>
+    <MuiBreadcrumbs maxItems={3} aria-label='breadcrumb'>
       {items.map((item, index) => {
         const last = index === items.length - 1
 

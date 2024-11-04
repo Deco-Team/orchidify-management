@@ -1,25 +1,32 @@
 import { useState } from 'react'
 import AlertDialog from '~/components/dialog/AlertDialog'
 import { APP_MESSAGE } from '~/global/app-message'
-import { notifySuccess } from '~/utils/toastify'
+import { GardenTimesheetStatus } from '~/global/app-status'
+import useGardenTimesheetApi from '~/hooks/api/useGardenTimesheetApi'
+import { notifyError, notifySuccess } from '~/utils/toastify'
 
 interface DialogProps {
   open: boolean
+  gardenId: string
+  date: string
   handleClose: () => void
   onSuccess: () => void
 }
 
-const DeactivateDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
+const DeactivateDialog = ({ open, gardenId, date, handleClose, onSuccess }: DialogProps) => {
   const [isProcessing, setIsProcessing] = useState(false)
+  const { updateGardenTimesheet } = useGardenTimesheetApi()
 
   const handleDeactivate = async () => {
     setIsProcessing(true)
-    // if (error) {
-    //   notifyError(error.message)
-    // } else {
-    notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Cập nhật lịch'))
-    onSuccess()
-    // }
+    const { error } = await updateGardenTimesheet({ gardenId, date, status: GardenTimesheetStatus.INACTIVE })
+
+    if (error) {
+      notifyError(error.message)
+    } else {
+      notifySuccess(APP_MESSAGE.ACTION_SUCCESS('Cập nhật lịch nhà vườn'))
+      onSuccess()
+    }
     handleClose()
     setIsProcessing(false)
   }
@@ -35,7 +42,7 @@ const DeactivateDialog = ({ open, handleClose, onSuccess }: DialogProps) => {
       handleConfirm={() => handleDeactivate()}
       handleCancel={handleCancel}
       isProcessing={isProcessing}
-      title='Xác nhận cập nhật lịch'
+      title='Xác nhận cập nhật lịch nhà vườn'
       description={APP_MESSAGE.CONFIRM_ACTION('nghỉ ngày này')}
       confirmButtonText='Xác nhận'
       confirmButtonColor='error'

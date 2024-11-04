@@ -11,7 +11,7 @@ import { useGardenApi } from '~/hooks/api/useGardenApi'
 import useGardenTimesheetApi from '~/hooks/api/useGardenTimesheetApi'
 import { protectedRoute } from '~/routes/routes'
 import { notifyError } from '~/utils/toastify'
-import GardenCalendar from './components/GardenCalendar'
+import GardenCalendar, { CalendarEvent } from './components/GardenCalendar'
 import { GardenTimesheetStatus } from '~/global/app-status'
 const ClassToolkitRequirementsDialog = lazy(() => import('./components/ClassToolkitRequirementsDialog'))
 import useAuth from '~/auth/useAuth'
@@ -40,7 +40,7 @@ const GardenTimesheet = () => {
   const [data, setData] = useState<Garden | null>(null)
   const [error, setError] = useState<ErrorResponseDto | null>(null)
 
-  const [eventData, setEventData] = useState<GardenTimesheetItemResponseDto[]>([])
+  const [eventData, setEventData] = useState<CalendarEvent[]>([])
 
   useEffect(() => {
     if (gardenId) {
@@ -57,12 +57,7 @@ const GardenTimesheet = () => {
       const apiViewType = mapViewTypeToApi(viewType)
       const { data: gardenTimesheet, error: apiError } = await getGardenTimesheet(gardenId, startDate, apiViewType)
       if (gardenTimesheet) {
-        let transformedEventData: (GardenTimesheetItemResponseDto & {
-          title?: string
-          allDay?: boolean
-          display?: string
-          backgroundColor?: string
-        })[] = []
+        let transformedEventData: CalendarEvent[] = []
 
         if (apiViewType === CalendarType.MONTH) {
           const gardenTimesheetMap = new Map<
@@ -93,7 +88,8 @@ const GardenTimesheet = () => {
               }
             } else {
               transformedEventData.push({
-                ...slot,
+                start: slot.start,
+                end: slot.end,
                 allDay: true,
                 display: 'background',
                 backgroundColor: '#d0d0d0'
@@ -104,24 +100,29 @@ const GardenTimesheet = () => {
           gardenTimesheetMap.forEach((value) => {
             transformedEventData.push(
               ...Object.keys(value).map((slotNumber) => ({
-                ...value[slotNumber],
+                start: value[slotNumber].start,
+                end: value[slotNumber].end,
                 title: `Tiết ${slotNumber} (${value[slotNumber].classQuantity})`,
-                display: 'block'
+                display: 'block',
+                classId: value[slotNumber].classId
               }))
             )
           })
         } else {
-          transformedEventData = gardenTimesheet.map((slot) =>
+          transformedEventData = gardenTimesheet.map<CalendarEvent>((slot) =>
             slot.status !== GardenTimesheetStatus.INACTIVE
               ? {
-                  ...slot,
+                  start: slot.start,
+                  end: slot.end,
                   title: slot.metadata ? `${slot.metadata.code} - ${slot.metadata.title}` : 'Lớp học',
                   display: 'block',
                   backgroundColor: '#0ea5e919',
-                  classNames: userTokenPayload?.role === UserRole.GARDEN_MANAGER ? 'clickable-event' : null
+                  classNames: userTokenPayload?.role === UserRole.GARDEN_MANAGER ? 'clickable-event' : undefined,
+                  classId: slot.classId
                 }
               : {
-                  ...slot,
+                  start: slot.start,
+                  end: slot.end,
                   display: 'background',
                   backgroundColor: '#d0d0d0'
                 }

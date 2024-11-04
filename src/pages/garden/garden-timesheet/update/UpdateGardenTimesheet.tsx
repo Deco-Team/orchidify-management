@@ -1,11 +1,11 @@
 import { CalendarType } from '~/global/constants'
-import GardenCalendar from './components/GardenCalendar'
+import GardenCalendar, { CalendarEvent } from './components/GardenCalendar'
 import useGardenTimesheetApi from '~/hooks/api/useGardenTimesheetApi'
 import { useGardenApi } from '~/hooks/api/useGardenApi'
 import { lazy, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { Slot } from '~/data/gardenTimesheet.dto'
+import { GardenTimesheetItemResponseDto } from '~/data/gardenTimesheet.dto'
 import { GardenTimesheetStatus } from '~/global/app-status'
 import { APP_MESSAGE } from '~/global/app-message'
 import { protectedRoute } from '~/routes/routes'
@@ -18,16 +18,13 @@ import { Box, Typography } from '@mui/material'
 const ActivateDialog = lazy(() => import('./components/ActivateDialog'))
 const DeactivateDialog = lazy(() => import('./components/DeactivateDialog'))
 
-const transformGardenTimesheetData = (data: Slot[]) => {
-  const transformedGardenTimesheetData: (Slot & {
-    title?: string
-    allDay?: boolean
-    display?: string
-    backgroundColor?: string
-    hasEvent?: boolean
-  })[] = []
+const transformGardenTimesheetData = (data: GardenTimesheetItemResponseDto[]) => {
+  const transformedGardenTimesheetData: CalendarEvent[] = []
 
-  const gardenTimesheetMap = new Map<string, { [key: string]: Slot & { classQuantity: number } }>()
+  const gardenTimesheetMap = new Map<
+    string,
+    { [key: string]: GardenTimesheetItemResponseDto & { classQuantity: number } }
+  >()
   data.forEach((slot) => {
     if (slot.status !== GardenTimesheetStatus.INACTIVE) {
       const date = new Date(slot.start).getDate().toString()
@@ -52,7 +49,9 @@ const transformGardenTimesheetData = (data: Slot[]) => {
       }
     } else {
       transformedGardenTimesheetData.push({
-        ...slot,
+        start: slot.start,
+        end: slot.end,
+        status: slot.status,
         allDay: true,
         display: 'background',
         backgroundColor: '#d0d0d0'
@@ -63,7 +62,9 @@ const transformGardenTimesheetData = (data: Slot[]) => {
   gardenTimesheetMap.forEach((value) => {
     transformedGardenTimesheetData.push(
       ...Object.keys(value).map((slotNumber) => ({
-        ...value[slotNumber],
+        start: value[slotNumber].start,
+        end: value[slotNumber].end,
+        status: value[slotNumber].status,
         title: `Tiết ${slotNumber} (${value[slotNumber].classQuantity})`,
         display: 'block',
         hasEvent: true
@@ -77,18 +78,11 @@ const transformGardenTimesheetData = (data: Slot[]) => {
 export default function UpdateGardenTimesheet() {
   const [gardenData, setGardenData] = useState<Garden | null>(null)
   const [calendarStartDate, setCalendarStartDate] = useState<string>(new Date().toISOString())
-  const [eventData, setEventData] = useState<
-    (Slot & {
-      title?: string
-      allDay?: boolean
-      display?: string
-      backgroundColor?: string
-      hasEvent?: boolean
-    })[]
-  >([])
+  const [eventData, setEventData] = useState<CalendarEvent[]>([])
   const [error, setError] = useState<ErrorResponseDto | null>(null)
   const [openActivateDialog, setOpenActivateDialog] = useState<boolean>(false)
   const [openDeactivateDialog, setOpenDeactivateDialog] = useState<boolean>(false)
+  const [selectedDate, setSelectedDate] = useState<string | null>(null)
 
   const { getGardenById } = useGardenApi()
   const { getGardenTimesheet } = useGardenTimesheetApi()
@@ -156,6 +150,7 @@ export default function UpdateGardenTimesheet() {
       } else {
         setOpenDeactivateDialog(true)
       }
+      setSelectedDate(date.toISOString())
     }
   }
 
@@ -171,11 +166,15 @@ export default function UpdateGardenTimesheet() {
       <GardenCalendar events={eventData} onDatesChange={handleDatesChange} onDateClick={handleDateClick} />
       <DeactivateDialog
         open={openDeactivateDialog}
+        gardenId={gardenId}
+        date={selectedDate ?? ''}
         handleClose={() => setOpenDeactivateDialog(false)}
         onSuccess={handleReloadData}
       />
       <ActivateDialog
         open={openActivateDialog}
+        gardenId={gardenId}
+        date={selectedDate ?? ''}
         handleClose={() => setOpenActivateDialog(false)}
         onSuccess={handleReloadData}
       />
