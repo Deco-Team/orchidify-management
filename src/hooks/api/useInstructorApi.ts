@@ -15,6 +15,12 @@ interface AddInstructorRequest {
   idCardPhoto: string
 }
 
+interface UpdateInstructorRequest {
+  name: string
+  dateOfBirth: string
+  phone: string
+}
+
 export const useInstructorApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
 
@@ -133,5 +139,31 @@ export const useInstructorApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getAllInstructors, getInstructorById, activateInstructor, deactivateInstructor, addInstructor }
+  const updateInstructor = useCallback(
+    async (instructorId: string, instructor: UpdateInstructorRequest) => {
+      const endpoint = `${ROOT_ENDPOINT}/${instructorId}`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PUT', {}, {}, instructor)
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('cập nhật giảng viên') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return {
+    getAllInstructors,
+    getInstructorById,
+    activateInstructor,
+    deactivateInstructor,
+    addInstructor,
+    updateInstructor
+  }
 }

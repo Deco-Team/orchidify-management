@@ -34,6 +34,7 @@ const ClassSessionDetail = lazy(() => import('~/pages/class/detail/session-detai
 const ViewRecruitmentDetail = lazy(() => import('~/pages/recruitment/detail/ViewRecruitmentDetail'))
 const InstructorTimesheet = lazy(() => import('~/pages/instructor/detail/timesheet/InstructorTimesheet'))
 const AddInstructor = lazy(() => import('~/pages/instructor/add/AddInstructor'))
+const UpdateInstructor = lazy(() => import('~/pages/instructor/update/UpdateInstructor'))
 
 export const publicRoute = {
   login: {
@@ -234,6 +235,12 @@ export const protectedRoute = {
     name: 'Thêm giảng viên',
     path: '/instructors/add',
     Component: AddInstructor,
+    roles: [UserRole.STAFF]
+  },
+  updateInstructor: {
+    name: 'Cập nhật nhân viên',
+    path: '/instructors/:id/update',
+    Component: UpdateInstructor,
     roles: [UserRole.STAFF]
   }
 }
