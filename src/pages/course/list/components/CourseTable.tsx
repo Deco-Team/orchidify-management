@@ -9,9 +9,11 @@ import { useCourseApi } from '~/hooks/api/useCourseApi'
 import { protectedRoute } from '~/routes/routes'
 import { notifyError } from '~/utils/toastify'
 import { courseColumns } from './columns'
+import { useSettingApi } from '~/hooks/api/useSettingApi'
 
 const CourseTable = () => {
   const { getCourseList } = useCourseApi()
+  const { getCourseTypes } = useSettingApi()
   const [data, setData] = useState<ListResponseDto<CourseListItemResponseDto>>({
     docs: [],
     totalDocs: 0,
@@ -35,8 +37,7 @@ const CourseTable = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    // eslint-disable-next-line prettier/prettier
-    (async () => {
+    ;(async () => {
       const { data: courses, error: apiError } = await getCourseList(
         pagination.pageIndex + 1,
         pagination.pageSize,
@@ -63,6 +64,21 @@ const CourseTable = () => {
       setError(apiError)
     })()
   }, [getCourseList, pagination.pageIndex, pagination.pageSize, sorting, columnFilters])
+
+  useEffect(() => {
+    ;(async () => {
+      const { data: courseTypes, error: apiError } = await getCourseTypes()
+      const transformedCourseTypes: string[] = []
+
+      if (courseTypes) {
+        courseTypes.docs.forEach((type) => type.groupItems.forEach((item) => transformedCourseTypes.push(item)))
+        courseColumns[courseColumns.findIndex((column) => column.id === 'type')].filterSelectOptions =
+          transformedCourseTypes
+      }
+
+      setError(apiError)
+    })()
+  }, [getCourseTypes])
 
   if (error) {
     notifyError(error.message)
