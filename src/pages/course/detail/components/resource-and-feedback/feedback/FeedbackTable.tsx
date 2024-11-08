@@ -85,7 +85,7 @@ const FeedbackTable = ({ courseId }: FeedbackTableProps) => {
           columns: feedbackColumns,
           data: data.docs || [],
           rowCount: data.totalDocs,
-          layoutMode: 'grid-no-grow',
+          layoutMode: 'grid',
           enableHiding: false,
           enableColumnActions: false,
           onPaginationChange: setPagination,

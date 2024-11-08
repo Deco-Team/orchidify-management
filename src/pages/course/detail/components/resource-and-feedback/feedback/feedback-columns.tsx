@@ -7,6 +7,7 @@ export const feedbackColumns: MRT_ColumnDef<FeedbackListItemResponseDto>[] = [
     accessorKey: 'learner.name',
     header: 'Tên học viên',
     size: 200,
+    grow: false,
     enableColumnFilter: false,
     enableSorting: false,
     muiTableBodyCellProps: {
@@ -28,6 +29,7 @@ export const feedbackColumns: MRT_ColumnDef<FeedbackListItemResponseDto>[] = [
     accessorKey: 'rate',
     header: 'Sao đánh giá',
     size: 180,
+    grow: false,
     filterVariant: 'select',
     filterSelectOptions: ['5', '4', '3', '2', '1'],
     Cell: ({ row }) => (
