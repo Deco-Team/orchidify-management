@@ -1,7 +1,8 @@
 import { Paper } from '@mui/material'
 import CustomTabs from '~/components/tabs/CustomTabs'
-import SessionTable from './resource/SessionTable'
 import { SessionDto } from '~/data/course.dto'
+import SessionTable from './resource/SessionTable'
+import FeedbackTable from './feedback/FeedbackTable'
 
 interface CourseDetailResourceAndFeedbackProps {
   sessions: SessionDto[]
@@ -13,8 +14,12 @@ const CourseDetailResourceAndFeedback = ({ sessions, courseId }: CourseDetailRes
     <Paper sx={{ width: '100%', marginTop: '1.25rem', padding: '1.5rem' }}>
       <CustomTabs
         name='courseDetail'
-        items={[{ label: 'BUỔI HỌC', content: <SessionTable courseId={courseId} sessions={sessions} /> }]}
+        items={[
+          { label: 'BUỔI HỌC', content: <SessionTable courseId={courseId} sessions={sessions} /> },
+          { label: 'ĐÁNH GIÁ', content: <FeedbackTable courseId={courseId} /> }
+        ]}
       />
+      '
     </Paper>
   )
 }

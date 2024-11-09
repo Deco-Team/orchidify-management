@@ -36,7 +36,7 @@ const Table = <TData extends MRT_RowData>({ title, tableOptions }: TableProps<TD
       }
     },
     renderTopToolbarCustomActions: () => (
-      <Typography variant='subtitle1' my={'auto'} sx={{ color: theme.palette.info.dark }}>
+      <Typography variant='subtitle1' my={'auto'} marginLeft='0.5rem' sx={{ color: theme.palette.info.dark }}>
         {title}
       </Typography>
     ),
