@@ -29,7 +29,7 @@ export const OptionsStaff = [
   { id: 8, text: 'Học viên', link: protectedRoute.learnerList.path, Icon: School },
   { id: 9, text: 'Nhà vườn', link: protectedRoute.gardenList.path, Icon: LocalFlorist },
   { id: 10, text: 'Quản lý vườn', link: protectedRoute.gardenManagerList.path, Icon: ManageAccounts },
-  { id: 11, text: 'Yêu cầu rút tiền', link: protectedRoute.dashboard.path, Icon: RequestQuote }
+  { id: 11, text: 'Yêu cầu rút tiền', link: protectedRoute.payoutRequestList.path, Icon: RequestQuote }
 ]
 
 export const OptionsGardenManager = [

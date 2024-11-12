@@ -35,6 +35,8 @@ const ViewRecruitmentDetail = lazy(() => import('~/pages/recruitment/detail/View
 const InstructorTimesheet = lazy(() => import('~/pages/instructor/detail/timesheet/InstructorTimesheet'))
 const AddInstructor = lazy(() => import('~/pages/instructor/add/AddInstructor'))
 const UpdateInstructor = lazy(() => import('~/pages/instructor/update/UpdateInstructor'))
+const ViewPayoutRequestList = lazy(() => import('~/pages/payout-request/list/ViewPayoutRequestList'))
+const ViewPayoutRequestDetail = lazy(() => import('~/pages/payout-request/detail/ViewPayoutRequestDetail'))
 
 export const publicRoute = {
   login: {
@@ -241,6 +243,18 @@ export const protectedRoute = {
     name: 'Cập nhật nhân viên',
     path: '/instructors/:id/update',
     Component: UpdateInstructor,
+    roles: [UserRole.STAFF]
+  },
+  payoutRequestList: {
+    name: 'Yêu cầu rút tiền',
+    path: '/payout-requests',
+    Component: ViewPayoutRequestList,
+    roles: [UserRole.STAFF]
+  },
+  payoutRequestDetail: {
+    name: 'Chi tiết yêu cầu',
+    path: '/payout-requests/:id',
+    Component: ViewPayoutRequestDetail,
     roles: [UserRole.STAFF]
   }
 }
