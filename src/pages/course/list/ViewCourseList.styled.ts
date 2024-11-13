@@ -1,11 +1,6 @@
 import styled from '@emotion/styled'
 import { Theme } from '@mui/material'
 
-export const TitleWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`
 export const ContentWrapper = styled.div<{ theme: Theme }>`
   display: flex;
   flex-direction: column;

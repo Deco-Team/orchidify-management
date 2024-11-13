@@ -91,6 +91,7 @@ const CourseTable = () => {
         columns: courseColumns,
         data: data.docs || [],
         rowCount: data.totalDocs,
+        layoutMode: 'grid',
         onPaginationChange: setPagination,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,

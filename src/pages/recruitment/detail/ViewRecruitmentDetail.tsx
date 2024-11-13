@@ -111,7 +111,7 @@ const ViewRecruitmentDetail = () => {
   return recruitment ? (
     <>
       <Header
-        handledBy={recruitment.handledBy._id}
+        handledBy={recruitment.handledBy?._id}
         isInstructorAdded={recruitment.isInstructorAdded}
         recruitmentRequestStatus={recruitment.status}
         onProcessButtonClick={handleProcessButton}
@@ -126,7 +126,7 @@ const ViewRecruitmentDetail = () => {
           </Typography>
           <Divider sx={{ flexGrow: 1 }} />
         </Box>
-        {/* <Field label='Tên ứng viên' content={recruitment.applicationInfo.name} /> */}
+        <Field label='Tên ứng viên' content={recruitment.applicationInfo.name} />
         <Field label='Email' content={recruitment.applicationInfo.email} />
         <Field label='Số điện thoại' content={recruitment.applicationInfo.phone} />
         <Box marginY='1rem'>
@@ -138,7 +138,7 @@ const ViewRecruitmentDetail = () => {
           </Typography>
         </Box>
         <Divider sx={{ flexGrow: 1 }} />
-        <Field label='Nhân viên duyệt' content={recruitment.handledBy.name} />
+        {recruitment.handledBy ? <Field label='Nhân viên duyệt' content={recruitment.handledBy.name} /> : null}
         <Field label='Thời gian tạo' content={new Date(recruitment.createdAt).toLocaleString('vi-VN')} />
         <Field label='Cập nhật cuối' content={new Date(recruitment.updatedAt).toLocaleString('vi-VN')} />
         <Field label='Trạng thái' statusTag={recruitment.status} />
@@ -148,7 +148,7 @@ const ViewRecruitmentDetail = () => {
         {recruitment.rejectReason && (
           <Box marginY='1rem'>
             <Typography variant='subtitle1' fontWeight={600} marginBottom='0.5rem'>
-              Lý do từ chối:
+              Lí do từ chối:
             </Typography>
             <Typography variant='subtitle1' fontWeight={400}>
               {recruitment.rejectReason}
@@ -179,7 +179,7 @@ const ViewRecruitmentDetail = () => {
         </Box>
       </Paper>
       <ProcessDialog
-        recruimentId={recruitment._id}
+        recruitmentId={recruitment._id}
         open={openProcessDialog}
         onSuccess={reloadRecruitmentData}
         handleClose={() => setOpenProcessDialog(false)}

@@ -20,13 +20,13 @@ const validationSchema = z.object({
 })
 
 interface ProcessDialogProps {
-  recruimentId: string
+  recruitmentId: string
   open: boolean
   handleClose: () => void
   onSuccess: () => void
 }
 
-const ProcessDialog = ({ recruimentId, open, handleClose, onSuccess }: ProcessDialogProps) => {
+const ProcessDialog = ({ recruitmentId, open, handleClose, onSuccess }: ProcessDialogProps) => {
   const {
     handleSubmit,
     control,
@@ -38,7 +38,7 @@ const ProcessDialog = ({ recruimentId, open, handleClose, onSuccess }: ProcessDi
   const { approveProcessApplicant } = useRecruitmentApi()
 
   const handleApprove = async (data: FormValues) => {
-    const { error } = await approveProcessApplicant(recruimentId, data)
+    const { error } = await approveProcessApplicant(recruitmentId, data)
     if (error) {
       notifyError(error.message)
     } else {

@@ -1,10 +1,10 @@
 import { Typography } from '@mui/material'
 import { MRT_ColumnDef } from 'material-react-table'
-import { CourseListItemResponseDto } from '~/data/course.dto'
+import { ChildCourseDetailDto } from '~/data/courseCombo.dto'
 import { CourseLevel } from '~/global/constants'
 import { formatCourseLevel, formatCurrency } from '~/utils/format'
 
-export const courseColumns: MRT_ColumnDef<CourseListItemResponseDto>[] = [
+export const childCourseColumns: MRT_ColumnDef<ChildCourseDetailDto>[] = [
   {
     accessorKey: 'code',
     header: 'Mã khóa học',
@@ -14,13 +14,6 @@ export const courseColumns: MRT_ColumnDef<CourseListItemResponseDto>[] = [
   {
     accessorKey: 'title',
     header: 'Tên khóa học'
-  },
-  {
-    accessorKey: 'instructor.name',
-    size: 250,
-    grow: false,
-    header: 'Giảng viên',
-    enableColumnFilter: false
   },
   {
     accessorKey: 'price',
@@ -95,7 +88,6 @@ export const courseColumns: MRT_ColumnDef<CourseListItemResponseDto>[] = [
     },
     muiTableBodyCellProps: {
       align: 'right'
-    },
-    enableColumnFilter: false
+    }
   }
 ]
