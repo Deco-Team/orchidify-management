@@ -37,6 +37,8 @@ const AddInstructor = lazy(() => import('~/pages/instructor/add/AddInstructor'))
 const UpdateInstructor = lazy(() => import('~/pages/instructor/update/UpdateInstructor'))
 const ViewPayoutRequestList = lazy(() => import('~/pages/payout-request/list/ViewPayoutRequestList'))
 const ViewPayoutRequestDetail = lazy(() => import('~/pages/payout-request/detail/ViewPayoutRequestDetail'))
+const ViewCourseComboList = lazy(() => import('~/pages/course-combo/list/ViewCourseComboList'))
+const ViewCourseComboDetail = lazy(() => import('~/pages/course-combo/detail/ViewCourseComboDetail'))
 
 export const publicRoute = {
   login: {
@@ -255,6 +257,18 @@ export const protectedRoute = {
     name: 'Chi tiết yêu cầu',
     path: '/payout-requests/:id',
     Component: ViewPayoutRequestDetail,
+    roles: [UserRole.STAFF]
+  },
+  courseComboList: {
+    name: 'Combo khóa học',
+    path: '/course-combos',
+    Component: ViewCourseComboList,
+    roles: [UserRole.STAFF]
+  },
+  courseComboDetail: {
+    name: 'Chi tiết Combo khóa học',
+    path: '/course-combos/:id',
+    Component: ViewCourseComboDetail,
     roles: [UserRole.STAFF]
   }
 }

@@ -70,8 +70,7 @@ const ClassTable = ({ statusFilter }: CourseTableProps) => {
       }
       setError(apiError)
     })()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getClassList, pagination.pageIndex, pagination.pageSize, sorting, columnFilters])
+  }, [getClassList, pagination.pageIndex, pagination.pageSize, sorting, columnFilters, statusFilter])
 
   if (error) {
     notifyError(error.message)
@@ -84,6 +83,7 @@ const ClassTable = ({ statusFilter }: CourseTableProps) => {
         columns: classColumns,
         data: data.docs || [],
         rowCount: data.totalDocs,
+        layoutMode: 'grid',
         onPaginationChange: setPagination,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,

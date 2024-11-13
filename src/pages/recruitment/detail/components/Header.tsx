@@ -8,7 +8,7 @@ import useAuth from '~/auth/useAuth'
 interface HeaderProps {
   recruitmentRequestStatus: RecruitmentStatus
   isInstructorAdded: boolean
-  handledBy: string
+  handledBy?: string
   onProcessButtonClick: () => void
   onApproveButtonClick: () => void
   onRejectButtonClick: () => void

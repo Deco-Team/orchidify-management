@@ -47,7 +47,7 @@ const InstructorRequestDetailInformationProps = ({ request }: InstructorRequestD
         <Field label='Loại yêu cầu' requestType={request.type} />
         <Field label='Tên giảng viên' content={typeof request.createdBy === 'string' ? '' : request.createdBy.name} />
         <Field label='Thời gian tạo' content={new Date(request.createdAt).toLocaleString('vi-VN')} />
-        <Field label='Cập nhật cuối' content={new Date(request.createdAt).toLocaleString('vi-VN')} />
+        <Field label='Cập nhật cuối' content={new Date(request.updatedAt).toLocaleString('vi-VN')} />
         <Field label='Trạng thái' statusTag={request.status} />
       </Box>
       {request.status === RequestStatus.REJECTED ? (

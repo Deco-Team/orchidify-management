@@ -27,7 +27,7 @@ export type RecruitmentDetailResponseDto = {
   status: RecruitmentStatus
   rejectReason?: string
   isInstructorAdded: boolean
-  handledBy: {
+  handledBy?: {
     _id: string
     name: string
   }

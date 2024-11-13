@@ -1,21 +1,18 @@
-import { Typography } from '@mui/material'
 import { MRT_ColumnFiltersState, MRT_PaginationState, MRT_SortingState } from 'material-react-table'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import PageHeader from '~/components/header/PageHeader'
 import Table from '~/components/table/Table'
 import { ListResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { TitleWrapper } from '~/pages/garden-manager/detail/ViewGardenManagerDetail.styled'
 import { protectedRoute } from '~/routes/routes'
 import { notifyError } from '~/utils/toastify'
-import { ClassRequestColumns } from './columns'
-import { ClassRequestListItemResponseDto } from '~/data/classRequest.dto'
-import { useClassRequestApi } from '~/hooks/api/useClassRequestApi'
+import { CourseComboColumns } from './columns'
+import { useNavigate } from 'react-router-dom'
+import { CourseComboListItemResponseDto } from '~/data/courseCombo.dto'
+import { useCourseComboApi } from '~/hooks/api/useCourseComboApi'
 
-export default function ViewClassRequestList() {
-  const navigate = useNavigate()
-  const { getAllClassRequests } = useClassRequestApi()
-  const [data, setData] = useState<ListResponseDto<ClassRequestListItemResponseDto>>({
+export default function ViewCourseComboList() {
+  const [data, setData] = useState<ListResponseDto<CourseComboListItemResponseDto>>({
     docs: [],
     totalDocs: 0,
     offset: 0,
@@ -28,25 +25,26 @@ export default function ViewClassRequestList() {
     prevPage: null,
     nextPage: null
   })
+  const [error, setError] = useState<ErrorResponseDto | null>(null)
+  const navigate = useNavigate()
+  const { getCourseComboList } = useCourseComboApi()
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
     pageSize: 10
   })
   const [sorting, setSorting] = useState<MRT_SortingState>([])
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([])
-  const [error, setError] = useState<ErrorResponseDto | null>(null)
 
   useEffect(() => {
-    // eslint-disable-next-line prettier/prettier
-    (async () => {
-      const { data: classRequests, error: apiError } = await getAllClassRequests(
+    ;(async () => {
+      const { data: courseComboList, error: apiError } = await getCourseComboList(
         pagination.pageIndex + 1,
         pagination.pageSize,
         sorting.map((sort) => ({ field: sort.id, desc: sort.desc })),
         columnFilters.map((filter) => ({ field: filter.id, value: filter.value }))
       )
-      if (classRequests) {
-        setData(classRequests)
+      if (courseComboList) {
+        setData(courseComboList)
       } else {
         setData({
           docs: [],
@@ -64,7 +62,7 @@ export default function ViewClassRequestList() {
       }
       setError(apiError)
     })()
-  }, [getAllClassRequests, pagination.pageIndex, pagination.pageSize, sorting, columnFilters])
+  }, [getCourseComboList, pagination.pageIndex, pagination.pageSize, sorting, columnFilters])
 
   if (error) {
     notifyError(error.message)
@@ -72,15 +70,11 @@ export default function ViewClassRequestList() {
 
   return (
     <>
-      <TitleWrapper>
-        <Typography variant='h5' fontSize={34} fontWeight={700}>
-          Yêu cầu lớp học
-        </Typography>
-      </TitleWrapper>
+      <PageHeader title='Combo khóa học' />
       <Table
-        title='Danh sách lớp học'
+        title='Danh sách Combo khóa học'
         tableOptions={{
-          columns: ClassRequestColumns,
+          columns: CourseComboColumns,
           data: data.docs || [],
           rowCount: data.totalDocs,
           layoutMode: 'grid',
@@ -88,7 +82,7 @@ export default function ViewClassRequestList() {
           onSortingChange: setSorting,
           onColumnFiltersChange: setColumnFilters,
           muiTableBodyRowProps: ({ row }) => ({
-            onClick: () => navigate(protectedRoute.classRequestDetail.path.replace(':id', row.original._id)),
+            onClick: () => navigate(protectedRoute.courseComboDetail.path.replace(':id', row.original._id)),
             sx: {
               cursor: 'pointer'
             }

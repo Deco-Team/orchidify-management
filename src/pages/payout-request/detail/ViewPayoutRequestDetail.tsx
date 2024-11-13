@@ -103,14 +103,6 @@ const ViewPayoutRequestDetail = () => {
         <Field label='Thời gian tạo' content={new Date(payoutRequest.createdAt).toLocaleString('vi-VN')} />
         <Field label='Cập nhật cuối' content={new Date(payoutRequest.updatedAt).toLocaleString('vi-VN')} />
         <Field label='Trạng thái' statusTag={payoutRequest.status} />
-        <Box marginTop='1.5rem'>
-          <Typography variant='subtitle1' fontWeight={600} marginBottom='0.5rem'>
-            Mô tả yêu cầu
-          </Typography>
-          <Typography variant='subtitle1' fontWeight={400}>
-            {payoutRequest.description}
-          </Typography>
-        </Box>
         {payoutRequest.status === RequestStatus.REJECTED ? (
           <Box marginTop='1.5rem'>
             <Typography variant='subtitle1' fontWeight={600} marginBottom='0.5rem'>
@@ -121,6 +113,14 @@ const ViewPayoutRequestDetail = () => {
             </Typography>
           </Box>
         ) : null}
+        <Box marginTop='1.5rem'>
+          <Typography variant='subtitle1' fontWeight={600} marginBottom='0.5rem'>
+            Mô tả yêu cầu
+          </Typography>
+          <Typography variant='subtitle1' fontWeight={400}>
+            {payoutRequest.description}
+          </Typography>
+        </Box>
       </Paper>
       <ApproveRequestDialog
         payoutRequestId={payoutRequest._id}

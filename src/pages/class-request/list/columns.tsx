@@ -10,7 +10,8 @@ export const ClassRequestColumns: MRT_ColumnDef<ClassRequestListItemResponseDto>
   {
     accessorKey: 'type',
     header: 'Loại yêu cầu',
-    size: 150,
+    size: 140,
+    grow: false,
     Cell: ({ row }) => {
       const type = row.original.type
       return formatRequestType(type)
@@ -18,21 +19,39 @@ export const ClassRequestColumns: MRT_ColumnDef<ClassRequestListItemResponseDto>
     filterVariant: 'multi-select',
     filterSelectOptions: [{ label: 'Mở lớp học', value: RequestType.PUBLISH_CLASS }]
   },
+  // {
+  //   accessorFn: (row) => row.metadata.code,
+  //   header: 'Mã lớp học',
+  //   size: 150
+  // },
   {
     accessorFn: (row) => row.metadata.code,
     header: 'Mã khóa học',
-    size: 150
+    size: 140,
+    grow: false
   },
   {
     accessorFn: (row) => row.metadata.title,
-    header: 'Tên khóa học',
-    size: 300
+    header: 'Tên khóa học'
+  },
+  {
+    accessorKey: 'createdBy.name',
+    header: 'Giảng viên',
+    size: 250,
+    grow: false
   },
   {
     accessorKey: 'createdAt',
     header: 'Thời gian tạo',
     size: 150,
+    grow: false,
     enableColumnFilter: false,
+    muiTableBodyCellProps: {
+      style: {
+        flexDirection: 'column',
+        alignItems: 'flex-start'
+      }
+    },
     Cell: ({ cell }) => {
       const date = cell.getValue() as string
       return (
@@ -51,7 +70,14 @@ export const ClassRequestColumns: MRT_ColumnDef<ClassRequestListItemResponseDto>
     accessorKey: 'updatedAt',
     header: 'Cập nhật cuối',
     size: 150,
+    grow: false,
     enableColumnFilter: false,
+    muiTableBodyCellProps: {
+      style: {
+        flexDirection: 'column',
+        alignItems: 'flex-start'
+      }
+    },
     Cell: ({ cell }) => {
       const date = cell.getValue() as string
       return (
@@ -69,7 +95,8 @@ export const ClassRequestColumns: MRT_ColumnDef<ClassRequestListItemResponseDto>
   {
     accessorKey: 'status',
     header: 'Trạng thái',
-    size: 150,
+    size: 130,
+    grow: false,
     Cell: ({ row }) => {
       const type = row.original.status
       return <RequestStatusTag type={type} />
@@ -81,29 +108,7 @@ export const ClassRequestColumns: MRT_ColumnDef<ClassRequestListItemResponseDto>
       { label: 'Từ chối', value: RequestStatus.REJECTED },
       { label: 'Hủy', value: RequestStatus.CANCELED },
       { label: 'Hết hạn', value: RequestStatus.EXPIRED }
-    ]
-  },
-  {
-    accessorKey: 'rejectReason',
-    header: 'Lý do từ chối',
-    size: 170,
-    enableColumnFilter: false,
-    Cell: ({ cell }) => {
-      const reason = cell.getValue() as string
-      return (
-        <Typography
-          variant='subtitle2'
-          sx={{
-            fontWeight: 400,
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-            maxWidth: '130px',
-            overflow: 'hidden'
-          }}
-        >
-          {reason}
-        </Typography>
-      )
-    }
+    ],
+    enableSorting: false
   }
 ]

@@ -18,6 +18,15 @@ export interface AssignmentDto {
   attachments: BaseMediaDto[]
 }
 
+export type InstructorCourseDto = {
+  _id: string
+  email: string
+  name: string
+  bio: string
+  idCardPhoto: string
+  avatar: string
+}
+
 export type CourseListItemResponseDto = {
   _id: string
   code: string
@@ -32,6 +41,7 @@ export type CourseListItemResponseDto = {
   rate: number
   discount: number
   instructorId: string
+  instructor: InstructorCourseDto
   isPublished: boolean
   createdAt: string
   updatedAt: string
