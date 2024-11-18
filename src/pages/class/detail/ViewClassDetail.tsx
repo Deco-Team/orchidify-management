@@ -10,11 +10,15 @@ import { protectedRoute } from '~/routes/routes'
 import ClassInformation from './components/ClassInformation'
 import CourseInformation from './components/CourseInformation'
 import SessionLearnerFeedbackList from './components/SessionLearnerFeedbackList'
+import CompleteDialog from './components/CompleteDialog'
 
 export default function ViewClassDetail() {
-  const [classDetail, setClassRDetail] = useState<ClassDetailResponseDto | null>(null)
+  const [classDetail, setClassDetail] = useState<ClassDetailResponseDto | null>(null)
   const [error, setError] = useState<ErrorResponseDto | null>(null)
   const { getClassById } = useClassApi()
+
+  const [openCompleteDialog, setOpenCompleteDialog] = useState(false)
+
   const params = useParams()
   const navigate = useNavigate()
 
@@ -25,7 +29,7 @@ export default function ViewClassDetail() {
       // eslint-disable-next-line prettier/prettier
       (async () => {
         const { data: classDetail, error: apiError } = await getClassById(classId)
-        setClassRDetail(classDetail)
+        setClassDetail(classDetail)
         setError(apiError)
       })()
     }
@@ -36,15 +40,35 @@ export default function ViewClassDetail() {
     navigate(protectedRoute.classList.path, { replace: true })
   }
 
+  const handleReloadData = async () => {
+    if (classId) {
+      const { data: classDetail, error: apiError } = await getClassById(classId)
+      setClassDetail(classDetail)
+      setError(apiError)
+    }
+  }
+
   return classDetail ? (
     <>
-      <Header classStatus={classDetail.status} onCompleteButtonClick={() => {}} onCancelButtonClick={() => {}} />
+      <Header
+        classStatus={classDetail.status}
+        startDate={classDetail.startDate}
+        duration={classDetail.duration}
+        weekdays={classDetail.weekdays}
+        onCompleteButtonClick={() => setOpenCompleteDialog(true)}
+        onCancelButtonClick={() => {}}
+      />
       <ClassInformation classDetail={classDetail} />
       <CourseInformation classDetail={classDetail} />
       <SessionLearnerFeedbackList
         classId={classDetail._id}
         sessions={classDetail.sessions}
         learners={classDetail.learners}
+      />
+      <CompleteDialog
+        open={openCompleteDialog}
+        handleClose={() => setOpenCompleteDialog(false)}
+        onSuccess={handleReloadData}
       />
     </>
   ) : (

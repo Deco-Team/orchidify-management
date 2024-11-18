@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { ListResponseDto } from '~/data/common.dto'
+import { ListResponseDto, SuccessResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useProtectedApi } from './useProtectedApi'
@@ -108,5 +108,24 @@ export const useClassApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getClassList, getClassById, getSessionById, getClassToolkitRequirements }
+  const completeClass = useCallback(
+    async (classId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/${classId}/complete`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PATCH')
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('Kết thúc khóa học') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return { getClassList, getClassById, getSessionById, getClassToolkitRequirements, completeClass }
 }
