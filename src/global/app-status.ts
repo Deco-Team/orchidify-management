@@ -45,3 +45,12 @@ export enum GardenTimesheetStatus {
   LOCKED = 'LOCKED',
   NOT_AVAILABLE = 'NOT_AVAILABLE'
 }
+
+export enum TransactionStatus {
+  DRAFT = 'DRAFT',
+  CAPTURED = 'CAPTURED',
+  ERROR = 'ERROR',
+  CANCELED = 'CANCELED',
+  DELETED = 'DELETED',
+  REFUNDED = 'REFUNDED'
+}

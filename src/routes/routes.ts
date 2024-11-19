@@ -39,6 +39,8 @@ const ViewPayoutRequestList = lazy(() => import('~/pages/payout-request/list/Vie
 const ViewPayoutRequestDetail = lazy(() => import('~/pages/payout-request/detail/ViewPayoutRequestDetail'))
 const ViewCourseComboList = lazy(() => import('~/pages/course-combo/list/ViewCourseComboList'))
 const ViewCourseComboDetail = lazy(() => import('~/pages/course-combo/detail/ViewCourseComboDetail'))
+const ViewTransactionList = lazy(() => import('~/pages/transaction/list/ViewTransactionList'))
+const ViewTransactionDetail = lazy(() => import('~/pages/transaction/detail/ViewTransactionDetail'))
 
 export const publicRoute = {
   login: {
@@ -270,5 +272,17 @@ export const protectedRoute = {
     path: '/course-combos/:id',
     Component: ViewCourseComboDetail,
     roles: [UserRole.STAFF]
+  },
+  transactionList: {
+    name: 'Giao dịch',
+    path: '/transactions',
+    Component: ViewTransactionList,
+    roles: [UserRole.ADMIN]
+  },
+  transactionDetail: {
+    name: 'Chi tiết giao dịch',
+    path: '/transactions/:id',
+    Component: ViewTransactionDetail,
+    roles: [UserRole.ADMIN]
   }
 }

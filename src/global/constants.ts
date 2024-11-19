@@ -9,7 +9,8 @@ export enum UserRole {
   INSTRUCTOR = 'INSTRUCTOR',
   ADMIN = 'ADMIN',
   STAFF = 'STAFF',
-  GARDEN_MANAGER = 'GARDEN_MANAGER'
+  GARDEN_MANAGER = 'GARDEN_MANAGER',
+  SYSTEM = 'SYSTEM'
 }
 
 export const FileSize = {
@@ -29,7 +30,8 @@ export enum CourseLevel {
 }
 
 export enum RequestType {
-  PUBLISH_CLASS = 'PUBLISH_CLASS'
+  PUBLISH_CLASS = 'PUBLISH_CLASS',
+  CANCEL_CLASS = 'CANCEL_CLASS'
 }
 
 export enum Weekday {
@@ -52,4 +54,16 @@ export enum SlotNumber {
 export enum CalendarType {
   MONTH = 'MONTH',
   WEEK = 'WEEK'
+}
+
+export enum PaymentType {
+  PAYMENT = 'PAYMENT',
+  PAYOUT = 'PAYOUT'
+}
+
+export enum PaymentMethod {
+  PAY_OS = 'PAY_OS',
+  MOMO = 'MOMO',
+  ZALO_PAY = 'ZALO_PAY',
+  STRIPE = 'STRIPE'
 }
