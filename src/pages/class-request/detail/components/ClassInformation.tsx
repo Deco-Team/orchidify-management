@@ -2,7 +2,7 @@ import { Paper, Box, Typography, Divider, Grid } from '@mui/material'
 import ClassStatusTag from '~/components/tag/ClassStatusTag'
 import { ClassRequestDetailResponseDto } from '~/data/classRequest.dto'
 import { ClassStatus } from '~/global/app-status'
-import { SlotNumber, Weekday } from '~/global/constants'
+import { RequestType, SlotNumber, Weekday } from '~/global/constants'
 
 interface FieldProps {
   label: string
@@ -69,18 +69,52 @@ const ClassInformation = ({ classRequest }: ClassInformationProps) => {
         <Divider sx={{ flexGrow: 1 }} />
       </Box>
       <Grid container>
-        <Grid item xs={6}>
-          <Field label='Ngày bắt đầu' content={new Date(classRequest.metadata.startDate).toLocaleDateString('vi-VN')} />
-        </Grid>
-        <Grid item xs={6}>
-          <Field label='Thời lượng' content={`${classRequest.metadata.duration} tuần`} />
-        </Grid>
-        <Grid item xs={6}>
-          <Field label='Ngày học trong tuần' weekDays={classRequest.metadata.weekdays} />
-        </Grid>
-        <Grid item xs={6}>
-          <Field label='Tiết học' slotNumbers={classRequest.metadata.slotNumbers} />
-        </Grid>
+        {classRequest.type === RequestType.PUBLISH_CLASS ? (
+          <>
+            <Grid item xs={6}>
+              <Field
+                label='Ngày bắt đầu'
+                content={new Date(classRequest.metadata.startDate).toLocaleDateString('vi-VN')}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <Field label='Thời lượng' content={`${classRequest.metadata.duration} tuần`} />
+            </Grid>
+            <Grid item xs={6}>
+              <Field label='Ngày học trong tuần' weekDays={classRequest.metadata.weekdays} />
+            </Grid>
+            <Grid item xs={6}>
+              <Field label='Tiết học' slotNumbers={classRequest.metadata.slotNumbers} />
+            </Grid>
+          </>
+        ) : (
+          <>
+            <Grid item xs={12}>
+              <Field label='Mã lớp học' content={classRequest.class!.code} />
+            </Grid>
+            <Grid item xs={12}>
+              <Field
+                label='Số lượng học viên'
+                content={`${classRequest.class!.learnerQuantity}/${classRequest.class!.learnerLimit}`}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Field label='Trạng thái' statusTag={classRequest.class!.status} />
+            </Grid>
+            <Grid item xs={12}>
+              <Field
+                label='Ngày bắt đầu'
+                content={new Date(classRequest.class!.startDate).toLocaleDateString('vi-VN')}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <Field label='Ngày học trong tuần' weekDays={classRequest.class!.weekdays} />
+            </Grid>
+            <Grid item xs={6}>
+              <Field label='Tiết học' slotNumbers={classRequest.class!.slotNumbers} />
+            </Grid>
+          </>
+        )}
       </Grid>
     </Paper>
   )

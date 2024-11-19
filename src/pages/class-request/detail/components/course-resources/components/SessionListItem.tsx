@@ -12,6 +12,10 @@ interface SessionListItemProps {
 }
 
 const SessionListItem = ({ session, open, onClick }: SessionListItemProps) => {
+  const videos = session.media.filter((value) => value.resource_type === 'video')
+
+  const images = session.media.filter((value) => value.resource_type === 'image')
+
   return (
     <>
       <ListItemButton onClick={onClick}>
@@ -48,23 +52,21 @@ const SessionListItem = ({ session, open, onClick }: SessionListItemProps) => {
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', gap: 4 }}>
-            {session.media.some((value) => value.resource_type === 'video') && (
+            {videos.length > 0 && (
               <Box display='flex' flexDirection='column' gap='0.5rem' width='50%'>
                 <Typography variant='subtitle1' fontWeight={600}>
                   Video bài học
                 </Typography>
-                {session.media
-                  .filter((value) => value.resource_type === 'video')
-                  .map((value) => (
-                    <video
-                      key={value.public_id}
-                      controls
-                      style={{ width: '100%', borderRadius: 4, backgroundColor: '#00000025' }}
-                    >
-                      <source src={value.url} type='video/mp4' />
-                      {APP_MESSAGE.LOAD_DATA_FAILED('video')}
-                    </video>
-                  ))}
+                {videos.map((value) => (
+                  <video
+                    key={value.public_id}
+                    controls
+                    style={{ width: '100%', borderRadius: 4, backgroundColor: '#00000025' }}
+                  >
+                    <source src={value.url} type='video/mp4' />
+                    {APP_MESSAGE.LOAD_DATA_FAILED('video')}
+                  </video>
+                ))}
               </Box>
             )}
 
@@ -80,43 +82,47 @@ const SessionListItem = ({ session, open, onClick }: SessionListItemProps) => {
                 Tài nguyên bài học
               </Typography>
               <Carousel
-                slidesToShow={3}
-                responsive={[
-                  {
-                    breakpoint: 1440,
-                    settings: {
-                      slidesToShow: 2
+                {...(videos.length > 0 && {
+                  slidesToShow: 3,
+                  responsive: [
+                    {
+                      breakpoint: 1440,
+                      settings: {
+                        slidesToShow: 2
+                      }
                     }
-                  }
-                ]}
+                  ]
+                })}
               >
-                {session.media
-                  .filter((value) => value.resource_type === 'image')
-                  .map((value) => (
-                    <div
-                      key={value.public_id}
-                      style={{
-                        boxSizing: 'border-box'
-                      }}
-                    >
-                      <div style={{ width: '200px', height: '200px', padding: '0 2px' }}>
-                        <img
-                          src={value.url}
-                          alt={`Lesson resource ${value.public_id}`}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }}
-                        />
-                      </div>
+                {images.map((value) => (
+                  <div
+                    key={value.public_id}
+                    style={{
+                      boxSizing: 'border-box'
+                    }}
+                  >
+                    <div style={{ width: '200px', height: '200px', padding: '0 2px' }}>
+                      <img
+                        src={value.url}
+                        alt={`Lesson resource ${value.public_id}`}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }}
+                      />
                     </div>
-                  ))}
+                  </div>
+                ))}
               </Carousel>
             </Box>
           </Box>
         </Box>
-        <Divider sx={{ margin: '1.25rem 0' }} />
         {/*
           Only allow 1 assignment per session 
         */}
-        {session.assignments.length > 0 ? <AssignmentDetailInformation assignment={session.assignments[0]} /> : null}
+        {session.assignments.length > 0 ? (
+          <>
+            <Divider sx={{ margin: '1.25rem 0' }} />
+            <AssignmentDetailInformation assignment={session.assignments[0]} />
+          </>
+        ) : null}
       </Collapse>
     </>
   )

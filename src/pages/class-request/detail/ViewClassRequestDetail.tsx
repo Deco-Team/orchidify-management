@@ -13,7 +13,9 @@ import CourseInformation from './components/CourseInformation'
 import CourseResources from './components/course-resources/CourseResources'
 import { AvailableGardenDto } from '~/data/garden.dto'
 import { useGardenApi } from '~/hooks/api/useGardenApi'
-import ApproveRequestDialog from './components/ApproveRequestDialog'
+import ApprovePublishedClassRequestDialog from './components/ApprovePublishedRequestDialog'
+import ApproveCancelledClassRequestDialog from './components/ApproveCancelledClassRequestDialog'
+import { RequestType } from '~/global/constants'
 const RejectRequestDialog = lazy(() => import('./components/RejectRequestDialog'))
 
 export default function ViewClassRequestDetail() {
@@ -41,23 +43,27 @@ export default function ViewClassRequestDetail() {
 
   const handleApproveButtonClick = async () => {
     if (classRequest) {
-      const { data: gardenListDto, error: apiError } = await getAvailableGardens(
-        new Date(classRequest.metadata.startDate),
-        classRequest.metadata.duration,
-        classRequest.metadata.weekdays,
-        classRequest.metadata.slotNumbers,
-        typeof classRequest.createdBy === 'string' ? classRequest.createdBy : classRequest.createdBy._id
-      )
+      if (classRequest.type === RequestType.PUBLISH_CLASS) {
+        const { data: gardenListDto, error: apiError } = await getAvailableGardens(
+          new Date(classRequest.metadata.startDate),
+          classRequest.metadata.duration,
+          classRequest.metadata.weekdays,
+          classRequest.metadata.slotNumbers,
+          typeof classRequest.createdBy === 'string' ? classRequest.createdBy : classRequest.createdBy._id
+        )
 
-      if (gardenListDto) {
-        setAvailableGardens(gardenListDto.docs.map((garden) => garden))
+        if (gardenListDto) {
+          setAvailableGardens(gardenListDto.docs.map((garden) => garden))
+          setOpenApproveDialog(true)
+          return
+        }
+
+        if (apiError) {
+          notifyError(apiError.message)
+          return
+        }
+      } else {
         setOpenApproveDialog(true)
-        return
-      }
-
-      if (apiError) {
-        notifyError(apiError.message)
-        return
       }
     }
   }
@@ -84,15 +90,34 @@ export default function ViewClassRequestDetail() {
       />
       <InstructorRequestDetailInformation request={classRequest} />
       <ClassInformation classRequest={classRequest} />
-      <CourseInformation course={classRequest.metadata} createdBy={classRequest.createdBy} />
-      <CourseResources sessions={classRequest.metadata.sessions} />
-      <ApproveRequestDialog
-        requestId={classRequest._id}
-        gardenOptions={availableGardens}
-        open={openApproveDialog}
-        onSuccess={reloadClassRequestData}
-        handleClose={() => setOpenApproveDialog(false)}
+      <CourseInformation
+        type={classRequest.type}
+        course={classRequest.type === RequestType.PUBLISH_CLASS ? classRequest.metadata : classRequest.class!}
+        createdBy={classRequest.createdBy}
       />
+      <CourseResources
+        sessions={
+          classRequest.type === RequestType.PUBLISH_CLASS
+            ? classRequest.metadata.sessions
+            : classRequest.class!.sessions
+        }
+      />
+      {classRequest.type === RequestType.PUBLISH_CLASS ? (
+        <ApprovePublishedClassRequestDialog
+          requestId={classRequest._id}
+          gardenOptions={availableGardens}
+          open={openApproveDialog}
+          onSuccess={reloadClassRequestData}
+          handleClose={() => setOpenApproveDialog(false)}
+        />
+      ) : (
+        <ApproveCancelledClassRequestDialog
+          requestId={classRequest._id}
+          open={openApproveDialog}
+          onSuccess={reloadClassRequestData}
+          handleClose={() => setOpenApproveDialog(false)}
+        />
+      )}
       <RejectRequestDialog
         requestId={classRequest._id}
         open={openRejectDialog}

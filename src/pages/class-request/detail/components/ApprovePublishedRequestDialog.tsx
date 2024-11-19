@@ -20,7 +20,7 @@ const validationSchema = z.object({
   gardenId: z.string().min(1, APP_MESSAGE.REQUIRED_FIELD('Nhà vườn'))
 })
 
-interface ApproveRequestDialogProps {
+interface ApprovePublishedRequestDialogProps {
   requestId: string
   gardenOptions: AvailableGardenDto[]
   open: boolean
@@ -28,13 +28,13 @@ interface ApproveRequestDialogProps {
   onSuccess: () => void
 }
 
-const ApproveRequestDialog = ({
+const ApprovePublishedClassRequestDialog = ({
   requestId,
   gardenOptions,
   open,
   handleClose,
   onSuccess
-}: ApproveRequestDialogProps) => {
+}: ApprovePublishedRequestDialogProps) => {
   const {
     handleSubmit,
     control,
@@ -94,4 +94,4 @@ const ApproveRequestDialog = ({
   )
 }
 
-export default ApproveRequestDialog
+export default ApprovePublishedClassRequestDialog
