@@ -11,11 +11,11 @@ import { ClassStatus } from '~/global/app-status'
 import { ClassListItemResponseDto } from '~/data/class.dto'
 import { useClassApi } from '~/hooks/api/useClassApi'
 
-interface CourseTableProps {
+interface ClassTableProps {
   statusFilter?: ClassStatus
 }
 
-const ClassTable = ({ statusFilter }: CourseTableProps) => {
+const ClassTable = ({ statusFilter }: ClassTableProps) => {
   const { getClassList } = useClassApi()
   const [data, setData] = useState<ListResponseDto<ClassListItemResponseDto>>({
     docs: [],

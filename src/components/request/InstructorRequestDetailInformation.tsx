@@ -23,7 +23,7 @@ const Field: React.FC<FieldProps> = ({ label, content, requestType, statusTag })
     )}
     {requestType && (
       <Typography variant='subtitle1' fontWeight={400}>
-        {requestType === RequestType.PUBLISH_CLASS ? 'Yêu cầu mở lớp' : ''}
+        {requestType === RequestType.PUBLISH_CLASS ? 'Yêu cầu mở lớp' : 'Yêu cầu hủy lớp học'}
       </Typography>
     )}
     {statusTag && <RequestStatusTag type={statusTag} />}

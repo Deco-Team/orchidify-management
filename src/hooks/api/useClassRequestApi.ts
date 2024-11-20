@@ -78,7 +78,7 @@ export const useClassRequestApi = () => {
   )
 
   const approveClassRequest = useCallback(
-    async (classRequestId: string, data: ApproveClassRequest) => {
+    async (classRequestId: string, data?: ApproveClassRequest) => {
       const endpoint = `${ROOT_ENDPOINT}/${classRequestId}/approve`
       const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PATCH', {}, {}, data)
 

@@ -1,6 +1,7 @@
 import { Box, Divider, Paper, Rating, Typography } from '@mui/material'
 import Carousel from '~/components/slider/Carousel'
-import { ClassRequestMetadataDto, ClassRequestCreatedByDto } from '~/data/classRequest.dto'
+import { ClassRequestMetadataDto, ClassRequestCreatedByDto, ClassRequestClassDto } from '~/data/classRequest.dto'
+import { RequestType } from '~/global/constants'
 import { formatCourseLevel, formatCurrency } from '~/utils/format'
 
 interface FieldProps {
@@ -31,11 +32,12 @@ const Field: React.FC<FieldProps> = ({ label, content, rate }) => (
 )
 
 interface CourseInformationProps {
-  course: ClassRequestMetadataDto
+  type: RequestType
+  course: ClassRequestMetadataDto | ClassRequestClassDto
   createdBy: ClassRequestCreatedByDto | string
 }
 
-const CourseInformation = ({ course, createdBy }: CourseInformationProps) => {
+const CourseInformation = ({ type, course, createdBy }: CourseInformationProps) => {
   return (
     <Paper sx={{ width: '100%', marginTop: '1.25rem', padding: '1.5rem' }}>
       <Box display='flex' alignItems='center' marginBottom='1.25rem'>
@@ -53,7 +55,11 @@ const CourseInformation = ({ course, createdBy }: CourseInformationProps) => {
           />
         </Box>
         <Box display='flex' flexDirection='column' gap={1} flexGrow='1'>
-          <Field label='Mã khóa học' content={course.code} />
+          {type === RequestType.PUBLISH_CLASS ? (
+            <Field label='Mã khóa học' content={course.code} />
+          ) : (
+            <Field label='Mã khóa học' content={course.course?.code} />
+          )}
           <Field label='Tên khóa học' content={course.title} />
           <Field label='Giảng viên' content={typeof createdBy === 'string' ? '' : createdBy.name} />
           <Field label='Giá' content={formatCurrency(course.price)} />

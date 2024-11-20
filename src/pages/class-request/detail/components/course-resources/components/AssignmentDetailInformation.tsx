@@ -10,6 +10,7 @@ const AssignmentDetailInformation = ({ assignment }: { assignment: AssignmentDto
     const pdfUrl = url
     const link = document.createElement('a')
     link.href = pdfUrl
+    link.target = '_blank'
     link.download = 'document.pdf' // specify the filename
     document.body.appendChild(link)
     link.click()
@@ -49,7 +50,7 @@ const AssignmentDetailInformation = ({ assignment }: { assignment: AssignmentDto
                 {value.resource_type === 'image' ? (
                   <img
                     src={value.url}
-                    alt={`Lesson resource ${value.public_id}`}
+                    alt={`Assignment resource ${value.public_id}`}
                     style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }}
                   />
                 ) : (
