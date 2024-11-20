@@ -11,6 +11,7 @@ import ClassInformation from './components/ClassInformation'
 import CourseInformation from './components/CourseInformation'
 import SessionLearnerFeedbackList from './components/SessionLearnerFeedbackList'
 import CompleteDialog from './components/CompleteDialog'
+import CancelDialog from './components/CancelDialog'
 
 export default function ViewClassDetail() {
   const [classDetail, setClassDetail] = useState<ClassDetailResponseDto | null>(null)
@@ -18,6 +19,7 @@ export default function ViewClassDetail() {
   const { getClassById } = useClassApi()
 
   const [openCompleteDialog, setOpenCompleteDialog] = useState(false)
+  const [openCancelDialog, setOpenCancelDialog] = useState(false)
 
   const params = useParams()
   const navigate = useNavigate()
@@ -26,8 +28,7 @@ export default function ViewClassDetail() {
 
   useEffect(() => {
     if (classId) {
-      // eslint-disable-next-line prettier/prettier
-      (async () => {
+      ;(async () => {
         const { data: classDetail, error: apiError } = await getClassById(classId)
         setClassDetail(classDetail)
         setError(apiError)
@@ -56,7 +57,7 @@ export default function ViewClassDetail() {
         duration={classDetail.duration}
         weekdays={classDetail.weekdays}
         onCompleteButtonClick={() => setOpenCompleteDialog(true)}
-        onCancelButtonClick={() => {}}
+        onCancelButtonClick={() => setOpenCancelDialog(true)}
       />
       <ClassInformation classDetail={classDetail} />
       <CourseInformation classDetail={classDetail} />
@@ -68,6 +69,12 @@ export default function ViewClassDetail() {
       <CompleteDialog
         open={openCompleteDialog}
         handleClose={() => setOpenCompleteDialog(false)}
+        onSuccess={handleReloadData}
+      />
+      <CancelDialog
+        classId={classDetail._id}
+        open={openCancelDialog}
+        handleClose={() => setOpenCancelDialog(false)}
         onSuccess={handleReloadData}
       />
     </>

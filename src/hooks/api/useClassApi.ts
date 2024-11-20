@@ -8,6 +8,10 @@ import { SessionDto } from '~/data/course.dto'
 
 const ROOT_ENDPOINT = '/classes/management'
 
+interface CancelClassRequest {
+  cancelReason: string
+}
+
 export const useClassApi = () => {
   const { callAppProtectedApi } = useProtectedApi()
 
@@ -127,5 +131,24 @@ export const useClassApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getClassList, getClassById, getSessionById, getClassToolkitRequirements, completeClass }
+  const cancelClass = useCallback(
+    async (classId: string, request: CancelClassRequest) => {
+      const endpoint = `${ROOT_ENDPOINT}/${classId}/cancel`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PATCH', {}, {}, request)
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('Hủy lớp học') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return { getClassList, getClassById, getSessionById, getClassToolkitRequirements, completeClass, cancelClass }
 }
