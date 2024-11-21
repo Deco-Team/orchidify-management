@@ -5,7 +5,6 @@ import OptionList from './OptionList'
 import { Logout } from '@mui/icons-material'
 import Loading from '../loading/Loading'
 import { protectedRoute } from '~/routes/routes'
-import logo from '~/assets/logo.png'
 
 const LogoutConfirmation = lazy(() => import('./LogoutConfirmation'))
 
@@ -34,7 +33,7 @@ const Sidebar = ({ open, drawerwidth }: SidebarProps) => {
     >
       <DrawerHeader to={protectedRoute.dashboard.path}>
         <LogoWrapper>
-          <Logo src={logo} alt='logo' />
+          <Logo src='/logo.png' alt='logo' />
           <Typography variant='h6'>Orchidify</Typography>
         </LogoWrapper>
       </DrawerHeader>

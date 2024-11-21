@@ -4,6 +4,9 @@ import useAuth from '~/auth/useAuth'
 import Layout from '~/components/layout/Layout'
 import { protectedRoute, publicRoute } from './routes'
 import { UserRole } from '~/global/constants'
+import { getRegistrationToken } from '~/utils/firebase/cloud-messaging'
+import { useNotificationApi } from '~/hooks/api/useNotificationApi'
+import getBrowserAndOS from '~/utils/getBrowserAndOS'
 
 interface ProtectedRouteProps {
   roles: UserRole[]
@@ -13,10 +16,28 @@ interface ProtectedRouteProps {
 
 export default function ProtectedRoute({ element, roles, name }: ProtectedRouteProps) {
   const { userTokenPayload } = useAuth()
+  const { registerUserDevice } = useNotificationApi()
 
   useEffect(() => {
     if (name) document.title = name
   }, [name])
+
+  useEffect(() => {
+    if (userTokenPayload) {
+      ;(async () => {
+        const fcmToken = await getRegistrationToken()
+
+        if (fcmToken) {
+          const currentToken = localStorage.getItem('fcm_token')
+          if (!currentToken || currentToken !== fcmToken) {
+            const { browser, os } = getBrowserAndOS()
+            registerUserDevice({ fcmToken, browser, os })
+            localStorage.setItem('fcm_token', fcmToken)
+          }
+        }
+      })()
+    }
+  }, [])
 
   if (!userTokenPayload) {
     return <Navigate to={publicRoute.login.path} replace={true} />
