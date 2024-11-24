@@ -28,6 +28,7 @@
     "@mui/x-date-pickers": "7.14.0",
     "axios": "1.7",
     "dayjs": "1.11.13",
+    "firebase": "11.0.1",
     "jose": "5",
     "lodash": "4.17",
     "material-react-table": "2.13.2",
