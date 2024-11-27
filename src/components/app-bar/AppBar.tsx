@@ -1,6 +1,8 @@
-import { Badge, Box, IconButton, Toolbar } from '@mui/material'
+import { Box, IconButton, Toolbar } from '@mui/material'
 import { StyledAppBar } from './AppBar.styled'
 import { Menu, Notifications } from '@mui/icons-material'
+import PopupState, { bindTrigger } from 'material-ui-popup-state'
+import NotificationDialog from './NotificationDialog'
 
 interface AppBarProps {
   open: boolean
@@ -32,11 +34,21 @@ const AppBar = ({ open, drawerwidth, handleDrawer }: AppBarProps) => {
         </IconButton>
         <Box sx={{ flexGrow: 1 }} />
         <Box>
-          <IconButton size='large' aria-label='show 17 new notifications' color='inherit'>
-            <Badge badgeContent={17} color='error'>
-              <Notifications sx={{ color: '#2EC4B6' }} />
-            </Badge>
-          </IconButton>
+          <PopupState variant='popover' popupId='demo-popup-popover'>
+            {(popupState) => (
+              <>
+                <IconButton
+                  size='large'
+                  aria-label='show 17 new notifications'
+                  color='inherit'
+                  {...bindTrigger(popupState)}
+                >
+                  <Notifications sx={{ color: '#2EC4B6' }} />
+                </IconButton>
+                <NotificationDialog popupState={popupState} />
+              </>
+            )}
+          </PopupState>
         </Box>
       </Toolbar>
     </StyledAppBar>

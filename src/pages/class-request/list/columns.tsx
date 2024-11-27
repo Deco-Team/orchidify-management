@@ -28,26 +28,30 @@ export const ClassRequestColumns: MRT_ColumnDef<ClassRequestListItemResponseDto>
     size: 150,
     Cell: ({ row: { original } }) => {
       return original.type === RequestType.PUBLISH_CLASS ? 'Không có dữ liệu' : original.metadata.code
-    }
+    },
+    enableColumnFilter: false
   },
   {
-    accessorKey: 'metadata.course',
+    accessorFn: (row) => row.metadata.course,
     header: 'Mã khóa học',
     size: 140,
     grow: false,
     Cell: ({ row: { original } }) => {
       return original.type === RequestType.PUBLISH_CLASS ? original.metadata.code : original.metadata.course!.code
-    }
+    },
+    enableColumnFilter: false
   },
   {
     accessorFn: (row) => row.metadata.title,
-    header: 'Tên khóa học'
+    header: 'Tên khóa học',
+    enableColumnFilter: false
   },
   {
     accessorKey: 'createdBy.name',
     header: 'Giảng viên',
     size: 250,
-    grow: false
+    grow: false,
+    enableColumnFilter: false
   },
   {
     accessorKey: 'createdAt',

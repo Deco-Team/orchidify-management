@@ -1,4 +1,4 @@
-import { CourseLevel, RequestType } from '~/global/constants'
+import { CourseLevel, NotificationType, RequestType } from '~/global/constants'
 
 export const formatNumber = (num: number): string => {
   const numStr = num.toString()
@@ -42,5 +42,16 @@ export function formatRequestType(type: RequestType): string {
       return 'Yêu cầu hủy lớp'
     default:
       return 'Chưa xác định'
+  }
+}
+
+export function formatNotificationType(type: string): string {
+  switch (type) {
+    case NotificationType.CLASS_REQUEST:
+      return 'class-requests'
+    case NotificationType.PAYOUT_REQUEST:
+      return 'payout-requests'
+    default:
+      return ''
   }
 }
