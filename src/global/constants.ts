@@ -67,3 +67,9 @@ export enum PaymentMethod {
   ZALO_PAY = 'ZALO_PAY',
   STRIPE = 'STRIPE'
 }
+
+export enum NotificationType {
+  CLASS = 'CLASS',
+  CLASS_REQUEST = 'CLASS_REQUEST',
+  PAYOUT_REQUEST = 'PAYOUT_REQUEST'
+}

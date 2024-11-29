@@ -1,4 +1,4 @@
-import { Box, Button, Typography, useTheme } from '@mui/material'
+import { Box, Button, Typography, useTheme, Avatar as MuiAvatar } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Breadcrumbs from '~/components/breadscrumbs/Breadscrumbs'
@@ -14,12 +14,10 @@ import {
   ContentText,
   ContentWrapper,
   Line,
-  TitleWrapper,
-  Image
+  TitleWrapper
 } from '~/pages/garden-manager/detail/ViewGardenManagerDetail.styled'
 import { protectedRoute } from '~/routes/routes'
 import { notifyError } from '~/utils/toastify'
-import avatar from '~/assets/avatar.png'
 import DeactivateDialog from './components/DeactivateDialog'
 import ActivateDialog from './components/ActivateDialog'
 
@@ -107,11 +105,14 @@ const ViewLearnerDetail = () => {
       </TitleWrapper>
       <ContentWrapper theme={theme}>
         <Avatar>
-          <Image
+          <MuiAvatar
             src={data.avatar}
             alt='Your Avatar'
-            theme={theme}
-            onError={(event) => (event.currentTarget.src = avatar)}
+            sx={{
+              width: '10rem',
+              height: '10rem',
+              margin: '20px'
+            }}
           />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <Typography variant='h6' fontSize={20} fontWeight={500}>
@@ -134,11 +135,19 @@ const ViewLearnerDetail = () => {
           <Field label='Tên học viên' content={<ContentText>{data?.name || ''}</ContentText>} theme={theme} />
           <Field
             label='Ngày sinh'
-            content={<ContentText>{new Date(data.dateOfBirth).toLocaleDateString('vi-VN')}</ContentText>}
+            content={
+              <ContentText>
+                {data.dateOfBirth ? new Date(data.dateOfBirth).toLocaleDateString('vi-VN') : 'Chưa cập nhật'}
+              </ContentText>
+            }
             theme={theme}
           />
           <Field label='Email' content={<ContentText>{data?.email || ''}</ContentText>} theme={theme} />
-          <Field label='Số điện thoại' content={<ContentText>{data?.phone || ''}</ContentText>} theme={theme} />
+          <Field
+            label='Số điện thoại'
+            content={<ContentText>{data?.phone || 'Chưa cập nhật'}</ContentText>}
+            theme={theme}
+          />
           <Field
             label='Trạng thái'
             content={data ? <UserStatusTag type={UserStatus[data.status]} /> : null}

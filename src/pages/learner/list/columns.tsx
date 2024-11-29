@@ -17,15 +17,21 @@ export const LearnerColumns: MRT_ColumnDef<Learner>[] = [
   {
     accessorKey: 'phone',
     header: 'Số điện thoại',
-    size: 100
+    size: 100,
+    Cell: ({ cell }) => {
+      return <>{cell.getValue() || 'Chưa cập nhật'}</>
+    }
   },
   {
     accessorKey: 'dateOfBirth',
     header: 'Ngày sinh',
     size: 100,
     Cell: ({ cell }) => {
-      const date = new Date(cell.getValue() as unknown as string)
-      return date.toLocaleDateString('vi-VN')
+      return (
+        <>
+          {cell.getValue() ? new Date(cell.getValue() as string | number).toLocaleDateString('vi-VN') : 'Chưa cập nhật'}
+        </>
+      )
     }
   },
   {

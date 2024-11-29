@@ -32,6 +32,7 @@
     "jose": "5",
     "lodash": "4.17",
     "material-react-table": "2.13.2",
+    "material-ui-popup-state": "^5.3.1",
     "react": "18.3",
     "react-dom": "18.3",
     "react-hook-form": "7.53",
