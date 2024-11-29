@@ -53,9 +53,9 @@ const ViewLearnerDetail = () => {
     setOpenDeactivateDialog(false)
   }
 
-  const handleUpdateButton = () => {
-    if (learnerId) navigate(protectedRoute.updateGardenManager.path.replace(':id', learnerId))
-  }
+  // const handleUpdateButton = () => {
+  //   if (learnerId) navigate(protectedRoute.updateGardenManager.path.replace(':id', learnerId))
+  // }
 
   const handleReloadData = async () => {
     if (learnerId) {
@@ -91,9 +91,9 @@ const ViewLearnerDetail = () => {
           <Breadcrumbs items={breadcrumbsItems} />
         </div>
         <div style={{ display: 'flex' }}>
-          <Button color='warning' onClick={handleUpdateButton} sx={{ marginRight: '24px' }}>
+          {/* <Button color='warning' onClick={handleUpdateButton} sx={{ marginRight: '24px' }}>
             Cập nhật
-          </Button>
+          </Button> */}
           {data?.status === UserStatus.ACTIVE ? (
             <Button color='error' onClick={handleOpenDeactivateDialog}>
               Vô hiệu hóa

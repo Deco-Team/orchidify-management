@@ -244,7 +244,7 @@ export const protectedRoute = {
     roles: [UserRole.STAFF]
   },
   updateInstructor: {
-    name: 'Cập nhật nhân viên',
+    name: 'Cập nhật giảng viên',
     path: '/instructors/:id/update',
     Component: UpdateInstructor,
     roles: [UserRole.STAFF]
