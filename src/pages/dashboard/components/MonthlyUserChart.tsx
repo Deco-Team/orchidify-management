@@ -1,30 +1,57 @@
 import { Box, MenuItem, Paper, Select, Typography } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import Chart from 'react-apexcharts'
+import { ListResponseDto } from '~/data/common.dto'
+import { ErrorResponseDto } from '~/data/error.dto'
+import { ReportUserByMonthListItemResponseDto } from '~/data/report.dto'
+import { useReportApi } from '~/hooks/api/useReportApi'
+import { notifyError } from '~/utils/toastify'
 
 const MonthlyUserChart = () => {
-  const [selectedYear, setSelectedYear] = useState<string>('2024')
-  const [chartData, setChartData] = useState<{ learner: { quantity: number }; instructor: { quantity: number } }[]>([])
+  const [selectedYear, setSelectedYear] = useState<number>(2024)
+  const { getReportUserDataByMonth } = useReportApi()
+  const [chartData, setChartData] = useState<ListResponseDto<ReportUserByMonthListItemResponseDto>>({
+    docs: [],
+    totalDocs: 0,
+    offset: 0,
+    limit: 0,
+    totalPages: 0,
+    page: 0,
+    pagingCounter: 0,
+    hasPrevPage: false,
+    hasNextPage: false,
+    prevPage: null,
+    nextPage: null
+  })
+  const [error, setError] = useState<ErrorResponseDto | null>(null)
 
   useEffect(() => {
     ;(async () => {
-      // Fetch data from API
-      setChartData([
-        { learner: { quantity: 43 }, instructor: { quantity: 11 } },
-        { learner: { quantity: 26 }, instructor: { quantity: 47 } },
-        { learner: { quantity: 44 }, instructor: { quantity: 12 } },
-        { learner: { quantity: 31 }, instructor: { quantity: 10 } },
-        { learner: { quantity: 46 }, instructor: { quantity: 40 } },
-        { learner: { quantity: 7 }, instructor: { quantity: 40 } },
-        { learner: { quantity: 2 }, instructor: { quantity: 48 } },
-        { learner: { quantity: 25 }, instructor: { quantity: 18 } },
-        { learner: { quantity: 8 }, instructor: { quantity: 18 } },
-        { learner: { quantity: 12 }, instructor: { quantity: 18 } },
-        { learner: { quantity: 32 }, instructor: { quantity: 33 } },
-        { learner: { quantity: 20 }, instructor: { quantity: 10 } }
-      ])
+      const { data: reportData, error: apiError } = await getReportUserDataByMonth(selectedYear)
+      if (reportData) {
+        setChartData(reportData)
+      } else {
+        setChartData({
+          docs: [],
+          totalDocs: 0,
+          offset: 0,
+          limit: 0,
+          totalPages: 0,
+          page: 0,
+          pagingCounter: 0,
+          hasPrevPage: false,
+          hasNextPage: false,
+          prevPage: null,
+          nextPage: null
+        })
+      }
+      setError(apiError)
     })()
-  }, [selectedYear])
+  }, [getReportUserDataByMonth, selectedYear])
+
+  if (error) {
+    notifyError(error.message)
+  }
 
   return (
     <Paper>
@@ -37,18 +64,25 @@ const MonthlyUserChart = () => {
         borderBottom='1px solid #0000001F'
       >
         <Typography fontSize='1.25rem' fontWeight='500'>
-          Lớp học
+          Số người dùng mỗi tháng
         </Typography>
-        <Select size='small' displayEmpty value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
-          <MenuItem value=''>Chọn năm</MenuItem>
-          {[{ name: '2024', value: '2024' }].map((item) => (
+        <Select
+          size='small'
+          displayEmpty
+          value={selectedYear}
+          onChange={(e) => {
+            if (typeof e.target.value === 'string') setSelectedYear(Number.parseInt(e.target.value))
+            else setSelectedYear(e.target.value)
+          }}
+        >
+          {[{ name: '2024', value: 2024 }].map((item) => (
             <MenuItem key={item.name} value={item.value}>
               {item.name}
             </MenuItem>
           ))}
         </Select>
       </Box>
-      <ChartDisplay data={chartData} />
+      <ChartDisplay data={chartData.docs} />
     </Paper>
   )
 }
@@ -56,15 +90,15 @@ const MonthlyUserChart = () => {
 export default MonthlyUserChart
 
 interface ChartDisplayProps {
-  data: { learner: { quantity: number }; instructor: { quantity: number } }[]
+  data: ReportUserByMonthListItemResponseDto[]
 }
 
 const ChartDisplay = ({ data }: ChartDisplayProps) => {
-  const chartSeries: ApexAxisChartSeries = useMemo(() => {
+  const chartSeries: ApexCharts.ApexOptions['series'] = useMemo(() => {
     const leanerQuantities: number[] = []
     const instructorQuantities: number[] = []
 
-    const series: ApexAxisChartSeries = [
+    const series: ApexCharts.ApexOptions['series'] = [
       { name: 'Học viên', color: '#2EC4B6', data: leanerQuantities },
       { name: 'Giảng viên', color: '#F56767', data: instructorQuantities }
     ]
@@ -123,7 +157,6 @@ const ChartDisplay = ({ data }: ChartDisplayProps) => {
         }
       }
     },
-    yaxis: { stepSize: 25 },
     legend: {
       fontSize: '12px',
       labels: {

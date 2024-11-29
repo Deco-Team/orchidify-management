@@ -19,7 +19,7 @@ export const LearnerColumns: MRT_ColumnDef<Learner>[] = [
     header: 'Số điện thoại',
     size: 100,
     Cell: ({ cell }) => {
-      return <>{cell.getValue() || 'Chưa cập nhật'}</>
+      return (cell.getValue() as string) || 'Chưa cập nhật'
     }
   },
   {
