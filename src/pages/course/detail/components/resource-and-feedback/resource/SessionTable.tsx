@@ -18,6 +18,7 @@ const SessionTable = ({ sessions, courseId }: SessionTableProps) => {
         columns: sessionColumns,
         data: sessions || [],
         rowCount: sessions.length,
+        manualSorting: false,
         enableBottomToolbar: false,
         enableSorting: true,
         enableColumnFilters: false,

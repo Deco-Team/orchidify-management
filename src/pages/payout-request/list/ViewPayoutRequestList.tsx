@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import Table from '~/components/table/Table'
 import { ListResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { PayoutRequestListResponseDto } from '~/data/payoutRequest.dto'
+import { PayoutRequestListItemDto } from '~/data/payoutRequest.dto'
 import { usePayoutRequestApi } from '~/hooks/api/usePayoutRequestApi'
 import { TitleWrapper } from '~/pages/garden-manager/detail/ViewGardenManagerDetail.styled'
 import { protectedRoute } from '~/routes/routes'
@@ -15,7 +15,7 @@ import { PayoutRequestColumns } from './columns'
 const ViewPayoutRequestList = () => {
   const navigate = useNavigate()
   const { getAllPayoutRequests } = usePayoutRequestApi()
-  const [data, setData] = useState<ListResponseDto<PayoutRequestListResponseDto>>({
+  const [data, setData] = useState<ListResponseDto<PayoutRequestListItemDto>>({
     docs: [],
     totalDocs: 0,
     offset: 0,

@@ -37,9 +37,9 @@ export function formatCourseLevel(level: CourseLevel): string {
 export function formatRequestType(type: RequestType): string {
   switch (type) {
     case RequestType.PUBLISH_CLASS:
-      return 'Yêu cầu mở lớp'
+      return 'Mở lớp học'
     case RequestType.CANCEL_CLASS:
-      return 'Yêu cầu hủy lớp'
+      return 'Hủy lớp học'
     default:
       return 'Chưa xác định'
   }
