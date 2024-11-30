@@ -55,8 +55,8 @@ const StaffStatisticSection = () => {
   }
 
   return (
-    <Grid container gap='1.875rem' marginBottom='1.25rem'>
-      <Grid item xs={5.6} lg={2.7}>
+    <Grid container spacing='1.875rem' marginBottom='1.25rem'>
+      <Grid item xs={6} lg={3}>
         <StatisticCard
           title='Khóa học'
           value={
@@ -68,7 +68,7 @@ const StaffStatisticSection = () => {
           iconBgcolor='#FF9242'
         />
       </Grid>
-      <Grid item xs={5.6} lg={2.7}>
+      <Grid item xs={6} lg={3}>
         <StatisticCard
           title='Học viên'
           value={
@@ -80,7 +80,7 @@ const StaffStatisticSection = () => {
           iconBgcolor='#5BADD0'
         />
       </Grid>
-      <Grid item xs={5.6} lg={2.7}>
+      <Grid item xs={6} lg={3}>
         <StatisticCard
           title='Giảng viên'
           value={
@@ -92,7 +92,7 @@ const StaffStatisticSection = () => {
           iconBgcolor='#FFCF22'
         />
       </Grid>
-      <Grid item xs={5.6} lg={2.7}>
+      <Grid item xs={6} lg={3}>
         <StatisticCard
           title='Combo khóa học'
           value={
