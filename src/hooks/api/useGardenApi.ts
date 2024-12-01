@@ -11,6 +11,7 @@ const ROOT_ENDPOINT = '/gardens'
 interface AddGardenRequest {
   name: string
   address: string
+  addressLink: string
   gardenManagerId: string
   description: string
   images: string[]

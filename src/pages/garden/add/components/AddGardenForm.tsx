@@ -16,6 +16,7 @@ import GardenImageUpload from './GardenImageUpload'
 type FormValues = {
   name: string
   address: string
+  addressLink: string
   gardenManagerId: string
   description: string
   images: CloudinaryFileUploadedInfo[]
@@ -25,6 +26,7 @@ type FormValues = {
 const defaultFormValues: FormValues = {
   name: '',
   address: '',
+  addressLink: '',
   gardenManagerId: '',
   description: '',
   images: [],
@@ -40,6 +42,10 @@ const validationSchema = z.object({
     .string()
     .min(1, APP_MESSAGE.REQUIRED_FIELD('Địa chỉ'))
     .max(100, APP_MESSAGE.FIELD_TOO_LONG('Địa chỉ', 100)),
+  addressLink: z
+    .string()
+    .min(1, APP_MESSAGE.REQUIRED_FIELD('Link địa chỉ'))
+    .max(100, APP_MESSAGE.FIELD_TOO_LONG('Link địa chỉ', 100)),
   gardenManagerId: z.string().min(1, APP_MESSAGE.REQUIRED_FIELD('Quản lý vườn')),
   description: z
     .string()
@@ -66,7 +72,7 @@ const AddGardenForm = () => {
   })
 
   const onSubmit = handleSubmit(async (formValue) => {
-    const { error } = await addGarden({ ...formValue, images: formValue.images.map((image) => image.url) })
+    const { error } = await addGarden({ ...formValue, images: formValue.images.map((image) => image.secure_url) })
     if (error) {
       notifyError(error.message)
       return
@@ -94,6 +100,20 @@ const AddGardenForm = () => {
             />
           </Grid>
           <Grid item xs={12} lg={6}>
+            <GardenManagerSelect controller={{ name: 'gardenManagerId', control: control }} />
+          </Grid>
+          <Grid item container xs={12} columnSpacing='30px'>
+            <Grid item xs={12} lg={6}>
+              <ControlledOutlinedInput
+                controller={{ name: 'maxClass', control: control }}
+                label='Số lớp học tối đa mỗi tiết'
+                inputMode='numeric'
+                fullWidth
+                size='small'
+              />
+            </Grid>
+          </Grid>
+          <Grid item xs={12} lg={6}>
             <ControlledOutlinedInput
               controller={{ name: 'address', control: control }}
               label='Địa chỉ'
@@ -103,15 +123,11 @@ const AddGardenForm = () => {
           </Grid>
           <Grid item xs={12} lg={6}>
             <ControlledOutlinedInput
-              controller={{ name: 'maxClass', control: control }}
-              label='Số lớp học tối đa'
-              inputMode='numeric'
+              controller={{ name: 'addressLink', control: control }}
+              label='Link địa chỉ'
               fullWidth
               size='small'
             />
-          </Grid>
-          <Grid item xs={12} lg={6}>
-            <GardenManagerSelect controller={{ name: 'gardenManagerId', control: control }} />
           </Grid>
           <Grid item xs={12}>
             <ControlledOutlinedInput
