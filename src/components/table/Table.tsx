@@ -3,17 +3,13 @@ import { MaterialReactTable, MRT_RowData, MRT_TableOptions, useMaterialReactTabl
 import { MRT_Localization_VI } from 'material-react-table/locales/vi'
 
 interface TableProps<TData extends MRT_RowData> {
-  title: string
+  title?: string
   tableOptions: Omit<
     MRT_TableOptions<TData>,
-    | 'manualPagination'
-    | 'manualSorting'
-    | 'manualFiltering'
     | 'enableDensityToggle'
     | 'enableGlobalFilter'
     | 'enableFilterMatchHighlighting'
     | 'localization'
-    | 'muiTablePaperProps'
     | 'renderTopToolbarCustomActions'
   >
 }
@@ -35,11 +31,13 @@ const Table = <TData extends MRT_RowData>({ title, tableOptions }: TableProps<TD
         marginTop: '1.5rem'
       }
     },
-    renderTopToolbarCustomActions: () => (
-      <Typography variant='subtitle1' my={'auto'} marginLeft='0.5rem' sx={{ color: theme.palette.info.dark }}>
-        {title}
-      </Typography>
-    ),
+    renderTopToolbarCustomActions: title
+      ? () => (
+          <Typography variant='subtitle1' my={'auto'} marginLeft='0.5rem' sx={{ color: theme.palette.info.dark }}>
+            {title}
+          </Typography>
+        )
+      : undefined,
     ...tableOptions
   })
 

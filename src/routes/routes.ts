@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 import { UserRole } from '~/global/constants'
 
-const Home = lazy(() => import('~/pages/Home'))
+const Dashboard = lazy(() => import('~/pages/dashboard/Dashboard'))
 const Login = lazy(() => import('~/pages/login/Login'))
 const ViewGardenManagerList = lazy(() => import('~/pages/garden-manager/list/ViewGardenManagerList'))
 const ViewGardenManagerDetail = lazy(() => import('~/pages/garden-manager/detail/ViewGardenManagerDetail'))
@@ -54,7 +54,7 @@ export const protectedRoute = {
   dashboard: {
     name: 'Trang chủ',
     path: '/dashboard',
-    Component: Home,
+    Component: Dashboard,
     roles: [UserRole.ADMIN, UserRole.STAFF, UserRole.GARDEN_MANAGER]
   },
   gardenManagerList: {

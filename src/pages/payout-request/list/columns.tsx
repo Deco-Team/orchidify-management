@@ -1,11 +1,11 @@
 import Typography from '@mui/material/Typography'
 import { MRT_ColumnDef } from 'material-react-table'
 import RequestStatusTag from '~/components/tag/RequestStatusTag'
-import { PayoutRequestListResponseDto } from '~/data/payoutRequest.dto'
+import { PayoutRequestListItemDto } from '~/data/payoutRequest.dto'
 import { RequestStatus } from '~/global/app-status'
 import { formatCurrency } from '~/utils/format'
 
-export const PayoutRequestColumns: MRT_ColumnDef<PayoutRequestListResponseDto>[] = [
+export const PayoutRequestColumns: MRT_ColumnDef<PayoutRequestListItemDto>[] = [
   {
     accessorKey: 'createdBy.name',
     header: 'Tên giảng viên',

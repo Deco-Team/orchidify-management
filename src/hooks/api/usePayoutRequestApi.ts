@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { ListResponseDto, SuccessResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { PayoutRequestListItemDto, PayoutRequestListResponseDto } from '~/data/payoutRequest.dto'
+import { PayoutRequestListItemDto } from '~/data/payoutRequest.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useProtectedApi } from './useProtectedApi'
 
@@ -27,7 +27,7 @@ export const usePayoutRequestApi = () => {
       filters.forEach((filter) => {
         filtersFormat = Object.assign({ [filter.field]: filter.value }, filtersFormat)
       })
-      const result = await callAppProtectedApi<ListResponseDto<PayoutRequestListResponseDto>>(
+      const result = await callAppProtectedApi<ListResponseDto<PayoutRequestListItemDto>>(
         endpoint,
         'GET',
         {},
