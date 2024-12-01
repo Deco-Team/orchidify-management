@@ -91,7 +91,57 @@ const useGardenTimesheetApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getGardenTimesheet, updateGardenTimesheet, getInstructorTimesheet }
+  const getSlotList = useCallback(
+    async (date: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/garden-manager/slots`
+      const result = await callAppProtectedApi<{ docs: GardenTimesheetItemResponseDto[] }>(
+        endpoint,
+        'GET',
+        {},
+        { date },
+        {}
+      )
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data.docs, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('danh sách tiết học của nhà vườn') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  const getInactiveGardenTimesheet = useCallback(
+    async (gardenId: string, date: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/garden-manager/inactive-timesheets`
+      const result = await callAppProtectedApi<{ docs: GardenTimesheetItemResponseDto[] }>(
+        endpoint,
+        'GET',
+        {},
+        { gardenId, date },
+        {}
+      )
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data.docs, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('ngày nghỉ của nhà vườn') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return { getGardenTimesheet, updateGardenTimesheet, getInstructorTimesheet, getSlotList, getInactiveGardenTimesheet }
 }
 
 export default useGardenTimesheetApi

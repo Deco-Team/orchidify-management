@@ -1,8 +1,10 @@
 import { Typography } from '@mui/material'
 import useAuth from '~/auth/useAuth'
 import { UserRole } from '~/global/constants'
-import StaffStatisticSection from './components/StaffStatisticSection'
-import StaffChartSection from './components/StaffChartSection'
+import StaffStatisticSection from './components/staff/StaffStatisticSection'
+import StaffChartSection from './components/staff/StaffChartSection'
+import GardenManagerGardenInfoSection from './components/garden-manager/GardenManagerGardenInfoSection'
+import GardenManagerTimesheetSection from './components/garden-manager/GardenManagerTimesheetSection'
 
 export default function Dashboard() {
   const { userTokenPayload } = useAuth()
@@ -15,7 +17,7 @@ export default function Dashboard() {
     case UserRole.STAFF:
       return <StaffDashboard username={userTokenPayload.name || ''} />
     case UserRole.GARDEN_MANAGER:
-      return <GardenManagerDashboard />
+      return <GardenManagerDashboard username={userTokenPayload.name || ''} />
     default:
       return null
   }
@@ -45,10 +47,14 @@ const StaffDashboard = ({ username }: DashboardProps) => {
   )
 }
 
-const GardenManagerDashboard = () => {
+const GardenManagerDashboard = ({ username }: DashboardProps) => {
   return (
-    <div>
-      <h1>Garden Manager Dashboard</h1>
-    </div>
+    <>
+      <Typography variant='h1' fontSize='2.125rem' fontWeight='700' marginBottom='1.25rem'>
+        Xin chào, {username}
+      </Typography>
+      <GardenManagerGardenInfoSection />
+      <GardenManagerTimesheetSection />
+    </>
   )
 }

@@ -15,6 +15,12 @@ export type GardenTimesheetItemResponseDto = {
   classId?: string
   slotNumber?: number
   metadata?: BaseSlotMetadata
+  instructor?: {
+    name: string
+  }
+  garden?: {
+    name: string
+  }
 }
 
 export type InstructorTimesheetItemResponseDto = {
