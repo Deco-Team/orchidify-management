@@ -143,7 +143,13 @@ const ViewRecruitmentDetail = () => {
         <Field label='Cập nhật cuối' content={new Date(recruitment.updatedAt).toLocaleString('vi-VN')} />
         <Field label='Trạng thái' statusTag={recruitment.status} />
         {recruitment.status === RecruitmentStatus.INTERVIEWING ? (
-          <Field label='Đường dẫn cuộc họp' content={recruitment.meetingUrl} isLink={true} />
+          <>
+            <Field
+              label='Thời gian diễn ra cuộc họp'
+              content={new Date(recruitment.meetingDate).toLocaleString('VI-vn')}
+            />
+            <Field label='Đường dẫn cuộc họp' content={recruitment.meetingUrl} isLink={true} />
+          </>
         ) : null}
         {recruitment.rejectReason && (
           <Box marginY='1rem'>
@@ -180,6 +186,7 @@ const ViewRecruitmentDetail = () => {
       </Paper>
       <ProcessDialog
         recruitmentId={recruitment._id}
+        updatedAt={recruitment.updatedAt}
         open={openProcessDialog}
         onSuccess={reloadRecruitmentData}
         handleClose={() => setOpenProcessDialog(false)}

@@ -13,6 +13,7 @@ export const APP_MESSAGE = {
   INCORRECT_NUMBER_OF_FILES: (min: number, max: number) => `Số lượng file phải nằm trong khoảng từ ${min} đến ${max}.`,
   INVALID_VALUE: (valueList: string[]) =>
     `Chỉ chấp nhận${valueList.length > 1 ? ' các' : ''} giá trị ${valueList.join(', ')}`,
-  VALUE_OUT_OF_RANGE: (min: number, max: number) => `Giá trị phải nằm trong khoảng từ ${min} đến ${max}.`,
+  VALUE_OUT_OF_RANGE: (min: number | string, max: number | string) =>
+    `Giá trị phải nằm trong khoảng từ ${min} đến ${max}.`,
   WRONG_PHONE_FORMAT: 'Số điện thoại phải có 10 ký tự và bắt đầu bằng số 0.'
 }

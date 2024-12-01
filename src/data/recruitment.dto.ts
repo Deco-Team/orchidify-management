@@ -23,6 +23,7 @@ export type RecruitmentListItemResponseDto = {
 export type RecruitmentDetailResponseDto = {
   _id: string
   applicationInfo: ApplicationInfo
+  meetingDate: string
   meetingUrl: string
   status: RecruitmentStatus
   rejectReason?: string
