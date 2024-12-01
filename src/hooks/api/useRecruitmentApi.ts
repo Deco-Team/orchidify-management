@@ -8,6 +8,7 @@ import { RecruitmentDetailResponseDto, RecruitmentListItemResponseDto } from '~/
 const ROOT_ENDPOINT = '/recruitments/management'
 
 interface ApproveProcessApplicant {
+  meetingDate: string
   meetingUrl: string
 }
 
