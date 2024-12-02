@@ -1,3 +1,4 @@
+import { Check, Close } from '@mui/icons-material'
 import Typography from '@mui/material/Typography'
 import { MRT_ColumnDef } from 'material-react-table'
 import RequestStatusTag from '~/components/tag/RequestStatusTag'
@@ -8,13 +9,13 @@ import { formatCurrency } from '~/utils/format'
 export const PayoutRequestColumns: MRT_ColumnDef<PayoutRequestListItemDto>[] = [
   {
     accessorKey: 'createdBy.name',
-    header: 'Tên giảng viên',
-    size: 200
+    header: 'Tên giảng viên'
   },
   {
     accessorKey: 'amount',
     header: 'Số tiền',
     size: 150,
+    grow: false,
     Cell: ({ cell }) => {
       const price = cell.getValue() as number
       return formatCurrency(price)
@@ -33,7 +34,6 @@ export const PayoutRequestColumns: MRT_ColumnDef<PayoutRequestListItemDto>[] = [
             fontWeight: 400,
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
-            maxWidth: '250px',
             overflow: 'hidden'
           }}
         >
@@ -46,6 +46,12 @@ export const PayoutRequestColumns: MRT_ColumnDef<PayoutRequestListItemDto>[] = [
     accessorKey: 'createdAt',
     header: 'Thời gian tạo',
     size: 150,
+    muiTableBodyCellProps: {
+      style: {
+        flexDirection: 'column',
+        alignItems: 'flex-start'
+      }
+    },
     enableColumnFilter: false,
     Cell: ({ cell }) => {
       const date = cell.getValue() as string
@@ -65,6 +71,12 @@ export const PayoutRequestColumns: MRT_ColumnDef<PayoutRequestListItemDto>[] = [
     accessorKey: 'updatedAt',
     header: 'Cập nhật cuối',
     size: 150,
+    muiTableBodyCellProps: {
+      style: {
+        flexDirection: 'column',
+        alignItems: 'flex-start'
+      }
+    },
     enableColumnFilter: false,
     Cell: ({ cell }) => {
       const date = cell.getValue() as string
@@ -83,7 +95,8 @@ export const PayoutRequestColumns: MRT_ColumnDef<PayoutRequestListItemDto>[] = [
   {
     accessorKey: 'status',
     header: 'Trạng thái',
-    size: 150,
+    size: 130,
+    grow: false,
     Cell: ({ row }) => {
       const type = row.original.status
       return <RequestStatusTag type={type} />
@@ -98,9 +111,31 @@ export const PayoutRequestColumns: MRT_ColumnDef<PayoutRequestListItemDto>[] = [
     ]
   },
   {
+    accessorKey: 'hasMadePayout',
+    header: 'Đã thực hiện',
+    size: 120,
+    grow: false,
+    muiTableHeadCellProps: { align: 'center' },
+    muiTableBodyCellProps: { align: 'center' },
+    enableSorting: false,
+    filterVariant: 'select',
+    filterSelectOptions: [
+      { label: 'Đã thực hiện', value: true },
+      { label: 'Chưa chuyển', value: false }
+    ],
+    Cell: ({ row }) => {
+      return row.original.status === RequestStatus.APPROVED ? (
+        row.original.hasMadePayout ? (
+          <Check sx={{ color: '#34B233' }} />
+        ) : (
+          <Close sx={{ color: '#FF605C' }} />
+        )
+      ) : null
+    }
+  },
+  {
     accessorKey: 'rejectReason',
     header: 'Lý do từ chối',
-    size: 170,
     enableColumnFilter: false,
     Cell: ({ cell }) => {
       const reason = cell.getValue() as string
