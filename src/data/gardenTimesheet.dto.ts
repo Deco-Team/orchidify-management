@@ -15,6 +15,12 @@ export type GardenTimesheetItemResponseDto = {
   classId?: string
   slotNumber?: number
   metadata?: BaseSlotMetadata
+  instructor?: {
+    name: string
+  }
+  garden?: {
+    name: string
+  }
 }
 
 export type InstructorTimesheetItemResponseDto = {
@@ -25,4 +31,24 @@ export type InstructorTimesheetItemResponseDto = {
   classId?: string
   slotNumber?: number
   metadata?: BaseSlotMetadata
+}
+
+export type SlotDetailDto = {
+  _id: string
+  start: string
+  end: string
+  status: GardenTimesheetStatus
+  classId?: string
+  slotNumber?: number
+  metadata?: BaseSlotMetadata
+  garden?: {
+    name: string
+  }
+  class: {
+    code: string
+    title: string
+    learnerLimit: number
+    learnerQuantity: number
+    gardenRequiredToolkits: string
+  }
 }

@@ -32,7 +32,10 @@ const GardenTimesheet = () => {
   const navigate = useNavigate()
   const { getGardenById } = useGardenApi()
   const { getGardenTimesheet } = useGardenTimesheetApi()
-  const [classIdToolkitRequirements, setClassIdToolkitRequirements] = useState<string | null>(null)
+  const [classIdToolkitRequirements, setClassIdToolkitRequirements] = useState<{
+    classId: string
+    slotId: string
+  } | null>(null)
   const params = useParams()
   const { userTokenPayload } = useAuth()
   const gardenId = params.id
@@ -104,7 +107,8 @@ const GardenTimesheet = () => {
                 end: value[slotNumber].end,
                 title: `Tiết ${slotNumber} (${value[slotNumber].classQuantity})`,
                 display: 'block',
-                classId: value[slotNumber].classId
+                classId: value[slotNumber].classId,
+                slotId: value[slotNumber]._id
               }))
             )
           })
@@ -118,7 +122,8 @@ const GardenTimesheet = () => {
                   display: 'block',
                   backgroundColor: '#0ea5e919',
                   classNames: userTokenPayload?.role === UserRole.GARDEN_MANAGER ? 'clickable-event' : undefined,
-                  classId: slot.classId
+                  classId: slot.classId,
+                  slotId: slot._id
                 }
               : {
                   start: slot.start,
@@ -139,11 +144,18 @@ const GardenTimesheet = () => {
     event,
     view
   }: {
-    event: { extendedProps?: { classId?: string } }
+    event: { extendedProps?: { classId?: string; slotId?: string } }
     view: { type: string }
   }) => {
     if (mapViewTypeToApi(view.type) === CalendarType.WEEK && userTokenPayload?.role === UserRole.GARDEN_MANAGER) {
-      setClassIdToolkitRequirements(event.extendedProps?.classId ?? null)
+      if (event.extendedProps?.classId && event.extendedProps?.slotId) {
+        setClassIdToolkitRequirements({
+          classId: event.extendedProps.classId,
+          slotId: event.extendedProps.slotId
+        })
+      } else {
+        setClassIdToolkitRequirements(null)
+      }
     }
   }
 
@@ -195,7 +207,7 @@ const GardenTimesheet = () => {
       <ClassToolkitRequirementsDialog
         open={!!classIdToolkitRequirements}
         onClose={() => setClassIdToolkitRequirements(null)}
-        classId={classIdToolkitRequirements ?? ''}
+        data={classIdToolkitRequirements || { classId: '', slotId: '' }}
       />
     </>
   ) : (

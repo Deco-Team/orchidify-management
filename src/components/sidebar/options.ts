@@ -36,5 +36,5 @@ export const OptionsStaff = [
 
 export const OptionsGardenManager = [
   { id: 1, text: 'Trang chủ', link: protectedRoute.dashboard.path, Icon: Home },
-  { id: 2, text: 'Nhà vườn', link: protectedRoute.gardenList.path, Icon: ManageAccounts }
+  { id: 2, text: 'Nhà vườn', link: protectedRoute.gardenList.path, Icon: LocalFlorist }
 ]
