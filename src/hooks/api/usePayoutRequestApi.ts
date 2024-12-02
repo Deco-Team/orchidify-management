@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { ListResponseDto, SuccessResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { PayoutRequestListItemDto } from '~/data/payoutRequest.dto'
+import { PayoutRequestDetailDto, PayoutRequestListItemDto } from '~/data/payoutRequest.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useProtectedApi } from './useProtectedApi'
 
@@ -57,7 +57,7 @@ export const usePayoutRequestApi = () => {
   const getPayoutRequestById = useCallback(
     async (payoutRequestId: string) => {
       const endpoint = `${ROOT_ENDPOINT}/${payoutRequestId}`
-      const result = await callAppProtectedApi<PayoutRequestListItemDto>(endpoint, 'GET', {}, {}, {})
+      const result = await callAppProtectedApi<PayoutRequestDetailDto>(endpoint, 'GET', {}, {}, {})
 
       if (result) {
         const { data, error } = result

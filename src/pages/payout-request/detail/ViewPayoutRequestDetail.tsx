@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Loading from '~/components/loading/Loading'
 import RequestStatusTag from '~/components/tag/RequestStatusTag'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { PayoutRequestListItemDto } from '~/data/payoutRequest.dto'
+import { PayoutRequestDetailDto } from '~/data/payoutRequest.dto'
 import { RequestStatus } from '~/global/app-status'
 import { usePayoutRequestApi } from '~/hooks/api/usePayoutRequestApi'
 import { protectedRoute } from '~/routes/routes'
@@ -13,6 +13,7 @@ import { notifyError } from '~/utils/toastify'
 import ApproveRequestDialog from './components/ApproveRequestDialog'
 import Header from './components/Header'
 import RejectRequestDialog from './components/RejectRequestDialog'
+import { Check, Close } from '@mui/icons-material'
 
 interface FieldProps {
   label: string
@@ -47,7 +48,7 @@ const Field: React.FC<FieldProps> = ({ label, content, statusTag, isLink = false
 }
 
 const ViewPayoutRequestDetail = () => {
-  const [payoutRequest, setPayoutRequest] = useState<PayoutRequestListItemDto | null>(null)
+  const [payoutRequest, setPayoutRequest] = useState<PayoutRequestDetailDto | null>(null)
   const [error, setError] = useState<ErrorResponseDto | null>(null)
   const [openApproveDialog, setOpenApproveDialog] = useState<boolean>(false)
   const [openRejectDialog, setOpenRejectDialog] = useState<boolean>(false)
@@ -91,7 +92,7 @@ const ViewPayoutRequestDetail = () => {
         onApproveButtonClick={handleApproveButtonClick}
         onRejectButtonClick={() => setOpenRejectDialog(true)}
       />
-      <Paper sx={{ width: '100%', marginTop: '1.25rem', padding: '1.5rem' }}>
+      <Paper sx={{ width: '100%', marginTop: '1.25rem', padding: '1.5rem', marginBottom: '1.25rem' }}>
         <Box display='flex' alignItems='center' marginBottom='1.25rem'>
           <Typography variant='h2' sx={{ fontSize: '1.5rem', fontWeight: 700, paddingRight: '0.75rem' }}>
             Thông tin yêu cầu
@@ -122,6 +123,58 @@ const ViewPayoutRequestDetail = () => {
           </Typography>
         </Box>
       </Paper>
+      <Paper sx={{ width: '100%', marginTop: '1.25rem', padding: '1.5rem', marginBottom: '1.25rem' }}>
+        <Box display='flex' alignItems='center' marginBottom='1.25rem'>
+          <Typography variant='h2' sx={{ fontSize: '1.5rem', fontWeight: 700, paddingRight: '0.75rem' }}>
+            Thông tin TK rút tiền
+          </Typography>
+          <Divider sx={{ flexGrow: 1 }} />
+        </Box>
+
+        <Field
+          label='Tên ngân hàng'
+          content={`${payoutRequest.createdBy.paymentInfo.bankShortName} - ${payoutRequest.createdBy.paymentInfo.bankName}`}
+        />
+        <Field label='Tên TK' content={payoutRequest.createdBy.paymentInfo.accountName} />
+        <Field label='STK' content={payoutRequest.createdBy.paymentInfo.accountNumber} />
+      </Paper>
+      {payoutRequest.status === RequestStatus.APPROVED ? (
+        <Paper sx={{ width: '100%', marginTop: '1.25rem', padding: '1.5rem' }}>
+          <Box display='flex' alignItems='center' marginBottom='1.25rem'>
+            <Typography variant='h2' sx={{ fontSize: '1.5rem', fontWeight: 700, paddingRight: '0.75rem' }}>
+              Thông tin giao dịch
+            </Typography>
+            <Divider sx={{ flexGrow: 1 }} />
+          </Box>
+          <Box display='flex' marginY='0.25rem'>
+            <Typography variant='subtitle1' fontWeight={600} width={'180px'}>
+              Trạng thái:
+            </Typography>
+            {payoutRequest.hasMadePayout ? (
+              <>
+                Đã thực hiện <Check sx={{ marginLeft: '0.5rem', color: '#34B233' }} />
+              </>
+            ) : (
+              <>
+                Chưa thực hiện
+                <Close sx={{ marginLeft: '0.5rem', color: '#FF605C' }} />
+              </>
+            )}
+          </Box>
+          {payoutRequest.transactionCode ? (
+            <Field label='Mã giao dịch' content={payoutRequest.transactionCode} />
+          ) : null}
+          {payoutRequest.attachment ? (
+            <Box width='200px' height='200px'>
+              <img
+                src={payoutRequest.attachment.url}
+                alt='Hình ảnh thông tin giao dịch'
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }}
+              />
+            </Box>
+          ) : null}
+        </Paper>
+      ) : null}
       <ApproveRequestDialog
         payoutRequestId={payoutRequest._id}
         open={openApproveDialog}

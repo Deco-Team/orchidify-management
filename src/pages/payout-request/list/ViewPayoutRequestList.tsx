@@ -83,6 +83,7 @@ const ViewPayoutRequestList = () => {
           columns: PayoutRequestColumns,
           data: data.docs || [],
           rowCount: data.totalDocs,
+          layoutMode: 'grid',
           onPaginationChange: setPagination,
           onSortingChange: setSorting,
           onColumnFiltersChange: setColumnFilters,
