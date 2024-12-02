@@ -89,7 +89,7 @@ const GardenManagerGardenInfoSection = () => {
               <Box
                 sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px' }}
               >
-                <Typography variant='h6'>Yêu cầu lớp học đang chờ</Typography>
+                <Typography variant='h6'>Danh sách nhà vườn</Typography>
                 <Typography
                   variant='caption'
                   sx={{ color: 'inherit' }}

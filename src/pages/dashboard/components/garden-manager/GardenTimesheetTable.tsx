@@ -11,12 +11,16 @@ import ClassToolkitRequirementsDialog from '~/pages/garden/garden-timesheet/comp
 const GardenTimesheetTable = () => {
   const [slot, setSlot] = useState<GardenTimesheetItemResponseDto[]>([])
   const { getSlotList } = useGardenTimesheetApi()
-  const [classIdToolkitRequirements, setClassIdToolkitRequirements] = useState<string | null>(null)
+  const [classIdToolkitRequirements, setClassIdToolkitRequirements] = useState<{
+    classId: string
+    slotId: string
+  } | null>(null)
 
   useEffect(() => {
     ;(async () => {
       const { data: slot, error: apiError } = await getSlotList(dayjs().format('YYYY-MM-DD'))
       if (slot) {
+        console.log(slot)
         setSlot(
           slot.sort((a, b) => {
             const slotNumberComparison = (a.slotNumber ?? 0) - (b.slotNumber ?? 0)
@@ -69,7 +73,7 @@ const GardenTimesheetTable = () => {
           muiTableBodyRowProps: ({ row }) => ({
             onClick: () => {
               if (row.original.classId) {
-                setClassIdToolkitRequirements(row.original.classId)
+                setClassIdToolkitRequirements({ classId: row.original.classId, slotId: row.original._id })
               }
             },
             sx: {
@@ -81,7 +85,7 @@ const GardenTimesheetTable = () => {
       <ClassToolkitRequirementsDialog
         open={!!classIdToolkitRequirements}
         onClose={() => setClassIdToolkitRequirements(null)}
-        classId={classIdToolkitRequirements || ''}
+        data={classIdToolkitRequirements || { classId: '', slotId: '' }}
       />
     </>
   )

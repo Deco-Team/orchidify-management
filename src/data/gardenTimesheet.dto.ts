@@ -32,3 +32,23 @@ export type InstructorTimesheetItemResponseDto = {
   slotNumber?: number
   metadata?: BaseSlotMetadata
 }
+
+export type SlotDetailDto = {
+  _id: string
+  start: string
+  end: string
+  status: GardenTimesheetStatus
+  classId?: string
+  slotNumber?: number
+  metadata?: BaseSlotMetadata
+  garden?: {
+    name: string
+  }
+  class: {
+    code: string
+    title: string
+    learnerLimit: number
+    learnerQuantity: number
+    gardenRequiredToolkits: string
+  }
+}

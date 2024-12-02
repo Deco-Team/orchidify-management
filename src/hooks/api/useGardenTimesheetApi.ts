@@ -3,7 +3,11 @@ import { ErrorResponseDto } from '~/data/error.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useProtectedApi } from './useProtectedApi'
 import { ListResponseDto } from '~/data/common.dto'
-import { GardenTimesheetItemResponseDto, InstructorTimesheetItemResponseDto } from '~/data/gardenTimesheet.dto'
+import {
+  GardenTimesheetItemResponseDto,
+  InstructorTimesheetItemResponseDto,
+  SlotDetailDto
+} from '~/data/gardenTimesheet.dto'
 
 const ROOT_ENDPOINT = '/garden-timesheets/management'
 
@@ -141,7 +145,33 @@ const useGardenTimesheetApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getGardenTimesheet, updateGardenTimesheet, getInstructorTimesheet, getSlotList, getInactiveGardenTimesheet }
+  const getSlotDetail = useCallback(
+    async (slotId: string) => {
+      const endpoint = `${ROOT_ENDPOINT}/garden-manager/slots/${slotId}`
+      const result = await callAppProtectedApi<SlotDetailDto>(endpoint, 'GET', {}, {})
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('thông tin tiết học') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return {
+    getGardenTimesheet,
+    updateGardenTimesheet,
+    getInstructorTimesheet,
+    getSlotList,
+    getInactiveGardenTimesheet,
+    getSlotDetail
+  }
 }
 
 export default useGardenTimesheetApi
