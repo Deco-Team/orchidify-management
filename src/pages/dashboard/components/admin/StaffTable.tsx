@@ -6,6 +6,7 @@ import Table from '~/components/table/Table'
 import { ListResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { Staff } from '~/data/staff.dto'
+import { UserStatus } from '~/global/app-status'
 import { useStaffApi } from '~/hooks/api/useStaffApi'
 import { protectedRoute } from '~/routes/routes'
 import { notifyError } from '~/utils/toastify'
@@ -29,7 +30,12 @@ const StaffTable = () => {
 
   useEffect(() => {
     ;(async () => {
-      const { data: staffs, error: apiError } = await getAllStaffs(1, 5, [], [])
+      const { data: staffs, error: apiError } = await getAllStaffs(
+        1,
+        5,
+        [],
+        [{ field: 'status', value: UserStatus.ACTIVE }]
+      )
       if (staffs) {
         setData(staffs)
       } else {
