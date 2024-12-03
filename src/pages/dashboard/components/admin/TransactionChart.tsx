@@ -7,6 +7,7 @@ import { useReportAdminApi } from '~/hooks/api/useReportAdminApi'
 import { notifyError } from '~/utils/toastify'
 import Chart from 'react-apexcharts'
 import dayjs from 'dayjs'
+import { formatCurrency } from '~/utils/format'
 
 const TransactionChart = () => {
   const [selectedDate, setSelectedDate] = useState<string>(dayjs(new Date()).format('YYYY-MM-DD'))
@@ -152,6 +153,9 @@ const ChartDisplay = ({ data }: ChartDisplayProps) => {
         colors: ['#333333'],
         fontSize: '0.75rem',
         fontWeight: 400
+      },
+      formatter: (value: number) => {
+        return formatCurrency(value)
       },
       offsetY: -5
     },
