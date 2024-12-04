@@ -1,17 +1,15 @@
 import { Box, Paper, Typography } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import Chart from 'react-apexcharts'
-import { Link } from 'react-router-dom'
 import { ListResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
 import { ReportStaffByStatusListItemResponseDto } from '~/data/reportAdmin.dto'
 import { UserStatus } from '~/global/app-status'
-import { useReportAdminApi } from '~/hooks/api/useReportAdminApi'
-import { protectedRoute } from '~/routes/routes'
+import { useStatisticApi } from '~/hooks/api/useStatisticApi'
 import { notifyError } from '~/utils/toastify'
 
-const StaffChart = () => {
-  const { getReportStaffDataByStatus } = useReportAdminApi()
+const InstructorStatusChart = () => {
+  const { getReportInstructorDataByStatus } = useStatisticApi()
   const [chartData, setChartData] = useState<ListResponseDto<ReportStaffByStatusListItemResponseDto>>({
     docs: [],
     totalDocs: 0,
@@ -29,7 +27,7 @@ const StaffChart = () => {
 
   useEffect(() => {
     ;(async () => {
-      const { data: reportData, error: apiError } = await getReportStaffDataByStatus()
+      const { data: reportData, error: apiError } = await getReportInstructorDataByStatus()
       if (reportData) {
         setChartData(reportData)
       } else {
@@ -49,7 +47,7 @@ const StaffChart = () => {
       }
       setError(apiError)
     })()
-  }, [getReportStaffDataByStatus])
+  }, [getReportInstructorDataByStatus])
 
   if (error) {
     notifyError(error.message)
@@ -66,16 +64,7 @@ const StaffChart = () => {
         borderBottom='1px solid #0000001F'
       >
         <Typography fontSize='1.25rem' fontWeight='500'>
-          Báo cáo nhân viên
-        </Typography>
-        <Typography
-          variant='caption'
-          component={Link}
-          color='#000000DE'
-          to={protectedRoute.staffList.path}
-          sx={{ textDecoration: 'none' }}
-        >
-          Xem tất cả
+          Trạng thái giảng viên
         </Typography>
       </Box>
       <ChartDisplay data={chartData.docs} />
@@ -83,7 +72,7 @@ const StaffChart = () => {
   )
 }
 
-export default StaffChart
+export default InstructorStatusChart
 
 interface ChartDisplayProps {
   data: ReportStaffByStatusListItemResponseDto[]
@@ -134,5 +123,5 @@ const ChartDisplay = ({ data }: ChartDisplayProps) => {
     }
   }
 
-  return <Chart type='donut' options={chartOptions} series={chartSeries} height='321px' />
+  return <Chart type='donut' options={chartOptions} series={chartSeries} height='337px' />
 }
