@@ -1,0 +1,39 @@
+import { Grid, Typography } from '@mui/material'
+import ClassRateChart from './components/ClassRateChart'
+import ClassStatusChart from './components/ClassStatusChart'
+import CourseDataChart from './components/CourseDataChart'
+import CourseRateChart from './components/CourseRateChart'
+import InstructorChart from './components/InstructorChart'
+import InstructorStatusChart from './components/InstructorStatusChart'
+
+const Statistic = () => {
+  return (
+    <>
+      <Typography variant='h1' fontSize='2.125rem' fontWeight='700' marginBottom='1.25rem'>
+        Thống kê
+      </Typography>
+      <Grid container columnSpacing='1.875rem' rowSpacing='1.25rem'>
+        <Grid item xs={12} lg={6}>
+          <CourseDataChart />
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <CourseRateChart />
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <ClassStatusChart />
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <ClassRateChart />
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <InstructorChart />
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <InstructorStatusChart />
+        </Grid>
+      </Grid>
+    </>
+  )
+}
+
+export default Statistic

@@ -10,14 +10,16 @@ import {
   MenuBook,
   NoteAlt,
   RequestQuote,
-  School
+  School,
+  BarChart
 } from '@mui/icons-material'
 import { protectedRoute } from '~/routes/routes'
 
 export const OptionsAdmin = [
   { id: 1, text: 'Trang chủ', link: protectedRoute.dashboard.path, Icon: Home },
   { id: 2, text: 'Nhân viên', link: protectedRoute.staffList.path, Icon: ManageAccounts },
-  { id: 3, text: 'Giao dịch', link: protectedRoute.transactionList.path, Icon: CurrencyExchange }
+  { id: 3, text: 'Giao dịch', link: protectedRoute.transactionList.path, Icon: CurrencyExchange },
+  { id: 8, text: 'Thống kê', link: protectedRoute.statistic.path, Icon: BarChart }
 ]
 
 export const OptionsStaff = [

@@ -24,3 +24,20 @@ export type ReportRevenueByMonthListItemResponseDto = {
     total: number
   }
 }
+
+export type ReportCourseByMonthListItemResponseDto = {
+  course: {
+    quantity: number
+  }
+}
+
+export type ReportCourseByRateListItemResponseDto = {
+  _id: number
+  count: number
+}
+
+export type ReportInstructorByMonthListItemResponseDto = {
+  instructor: {
+    quantity: number
+  }
+}

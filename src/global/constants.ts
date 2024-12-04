@@ -89,3 +89,11 @@ export enum ReportTotalSummaryType {
   LearnerEnrolledSumByMonth = 'LearnerEnrolledSumByMonth',
   RevenueSumByMonth = 'RevenueSumByMonth'
 }
+
+export enum Rating {
+  ZERO = 0,
+  ONE = 1,
+  TWO = 2,
+  THREE = 3,
+  FOUR = 4
+}

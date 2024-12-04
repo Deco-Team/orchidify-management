@@ -72,13 +72,13 @@ export const useReportAdminApi = () => {
   )
 
   const getReportRevenueDataByMonth = useCallback(
-    async (date: number) => {
+    async (year: number) => {
       const endpoint = `${ROOT_ENDPOINT}/revenue-by-month`
       const result = await callAppProtectedApi<ListResponseDto<ReportRevenueByMonthListItemResponseDto>>(
         endpoint,
         'GET',
         {},
-        { date }
+        { year }
       )
 
       if (result) {
