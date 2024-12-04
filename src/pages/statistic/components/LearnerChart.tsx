@@ -1,17 +1,16 @@
-import { Box, MenuItem, Paper, Typography, Select } from '@mui/material'
+import { Box, MenuItem, Paper, Select, Typography } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
+import Chart from 'react-apexcharts'
 import { ListResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { ReportRevenueByMonthListItemResponseDto } from '~/data/reportAdmin.dto'
-import { useReportAdminApi } from '~/hooks/api/useReportAdminApi'
+import { ReportLearnerByMonthListItemResponseDto } from '~/data/reportAdmin.dto'
+import { useStatisticApi } from '~/hooks/api/useStatisticApi'
 import { notifyError } from '~/utils/toastify'
-import Chart from 'react-apexcharts'
-import { formatCurrency } from '~/utils/format'
 
-const RevenueChart = () => {
+const LearnerChart = () => {
   const [selectedYear, setSelectedYear] = useState<number>(2024)
-  const { getReportRevenueDataByMonth } = useReportAdminApi()
-  const [chartData, setChartData] = useState<ListResponseDto<ReportRevenueByMonthListItemResponseDto>>({
+  const { getReportLearnerByMonth } = useStatisticApi()
+  const [chartData, setChartData] = useState<ListResponseDto<ReportLearnerByMonthListItemResponseDto>>({
     docs: [],
     totalDocs: 0,
     offset: 0,
@@ -28,7 +27,7 @@ const RevenueChart = () => {
 
   useEffect(() => {
     ;(async () => {
-      const { data: reportData, error: apiError } = await getReportRevenueDataByMonth(selectedYear)
+      const { data: reportData, error: apiError } = await getReportLearnerByMonth(selectedYear)
       if (reportData) {
         setChartData(reportData)
       } else {
@@ -48,7 +47,7 @@ const RevenueChart = () => {
       }
       setError(apiError)
     })()
-  }, [getReportRevenueDataByMonth, selectedYear])
+  }, [getReportLearnerByMonth, selectedYear])
 
   if (error) {
     notifyError(error.message)
@@ -65,7 +64,7 @@ const RevenueChart = () => {
         borderBottom='1px solid #0000001F'
       >
         <Typography fontSize='1.25rem' fontWeight='500'>
-          Doanh thu
+          Học viên
         </Typography>
         <Select
           size='small'
@@ -88,20 +87,20 @@ const RevenueChart = () => {
   )
 }
 
-export default RevenueChart
+export default LearnerChart
 
 interface ChartDisplayProps {
-  data: ReportRevenueByMonthListItemResponseDto[]
+  data: ReportLearnerByMonthListItemResponseDto[]
 }
 
 const ChartDisplay = ({ data }: ChartDisplayProps) => {
   const chartSeries: ApexCharts.ApexOptions['series'] = useMemo(() => {
-    const revenue: number[] = []
+    const course: number[] = []
 
-    const series: ApexCharts.ApexOptions['series'] = [{ name: 'Doanh thu', data: revenue }]
+    const series: ApexCharts.ApexOptions['series'] = [{ name: 'Khóa học', color: '#F56767', data: course }]
 
     data.forEach((month) => {
-      revenue.push(month.revenue.total)
+      course.push(month.learner.quantity)
     })
 
     return series
@@ -109,62 +108,64 @@ const ChartDisplay = ({ data }: ChartDisplayProps) => {
 
   const chartOptions: ApexCharts.ApexOptions = {
     chart: {
-      id: 'revenue-by-month',
-      type: 'area',
-      toolbar: {
-        show: false
-      },
-      zoom: {
-        enabled: false
-      },
-      parentHeightOffset: 0,
-      animations: {
-        enabled: true
-      }
+      stacked: true,
+      toolbar: { show: false }
     },
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      curve: 'smooth'
-    },
-    labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
-    yaxis: {
-      max: Math.ceil(Math.max(...(data?.map((item) => item.revenue.total) || []), 1000000) / 1000000) * 1000000,
-      min: 0,
-      tickAmount: 5,
-      labels: {
-        formatter: (value: number) => {
-          return formatCurrency(value)
-        },
-        style: {
-          fontSize: '12px',
-          colors: ['#304758']
+    plotOptions: {
+      bar: {
+        dataLabels: {
+          position: 'top'
         }
       }
     },
-    markers: {
-      size: 5
+    dataLabels: {
+      enabled: true,
+      style: {
+        colors: ['#333333'],
+        fontSize: '0.75rem',
+        fontWeight: 400
+      },
+      offsetY: -5
     },
     grid: {
+      borderColor: '#CCCCCC',
+      position: 'back',
+      strokeDashArray: 3,
       xaxis: {
         lines: {
           show: true
         }
       },
-      strokeDashArray: 5
-    },
-    tooltip: {
-      enabled: true,
-      intersect: false,
-      y: {
-        formatter: (value: number) => {
-          return formatCurrency(value)
+      yaxis: {
+        lines: {
+          show: true
         }
       }
     },
-    colors: ['#2ec4b6']
+    xaxis: {
+      categories: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+      labels: {
+        style: {
+          colors: '#333333',
+          fontSize: '0.75rem',
+          fontWeight: 400
+        }
+      }
+    },
+    legend: {
+      fontSize: '12px',
+      labels: {
+        colors: '#333333'
+      },
+      markers: {
+        size: 8,
+        shape: 'circle'
+      },
+      itemMargin: {
+        horizontal: 12
+      }
+    }
   }
 
-  return <Chart type='area' options={chartOptions} series={chartSeries} height='326px' />
+  return <Chart type='bar' options={chartOptions} series={chartSeries} height='312px' />
 }

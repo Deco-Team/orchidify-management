@@ -5,6 +5,10 @@ import CourseDataChart from './components/CourseDataChart'
 import CourseRateChart from './components/CourseRateChart'
 import InstructorChart from './components/InstructorChart'
 import InstructorStatusChart from './components/InstructorStatusChart'
+import LearnerChart from './components/LearnerChart'
+import LearnerStatusChart from './components/LearnerStatusChart'
+import RevenueChart from '../dashboard/components/admin/RevenueChart'
+import TransactionChart from '../dashboard/components/admin/TransactionChart'
 
 const Statistic = () => {
   return (
@@ -30,6 +34,18 @@ const Statistic = () => {
         </Grid>
         <Grid item xs={12} lg={6}>
           <InstructorStatusChart />
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <LearnerChart />
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <LearnerStatusChart />
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <RevenueChart />
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <TransactionChart />
         </Grid>
       </Grid>
     </>

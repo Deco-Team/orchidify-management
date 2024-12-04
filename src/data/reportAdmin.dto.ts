@@ -1,4 +1,4 @@
-import { UserStatus } from '~/global/app-status'
+import { LearnerStatus, UserStatus } from '~/global/app-status'
 import { ReportTotalSummaryType } from '~/global/constants'
 
 export type ReportTotalSummaryListItemResponseDto = {
@@ -40,4 +40,15 @@ export type ReportInstructorByMonthListItemResponseDto = {
   instructor: {
     quantity: number
   }
+}
+
+export type ReportLearnerByMonthListItemResponseDto = {
+  learner: {
+    quantity: number
+  }
+}
+
+export type ReportLearnerByStatusListItemResponseDto = {
+  status: LearnerStatus
+  quantity: number
 }

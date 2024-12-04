@@ -6,6 +6,8 @@ import {
   ReportCourseByMonthListItemResponseDto,
   ReportCourseByRateListItemResponseDto,
   ReportInstructorByMonthListItemResponseDto,
+  ReportLearnerByMonthListItemResponseDto,
+  ReportLearnerByStatusListItemResponseDto,
   ReportStaffByStatusListItemResponseDto
 } from '~/data/reportAdmin.dto'
 import { APP_MESSAGE } from '~/global/app-message'
@@ -106,14 +108,14 @@ export const useStatisticApi = () => {
 
       return {
         data: null,
-        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('báo cáo số doanh thu trong tháng') } as ErrorResponseDto
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('báo cáo số giảng viên mới trong tháng') } as ErrorResponseDto
       }
     },
     [callAppProtectedApi]
   )
 
   const getReportInstructorDataByStatus = useCallback(async () => {
-    const endpoint = `${ROOT_ENDPOINT}/staff-by-status`
+    const endpoint = `${ROOT_ENDPOINT}/instructor-by-status`
     const result = await callAppProtectedApi<ListResponseDto<ReportStaffByStatusListItemResponseDto>>(endpoint, 'GET')
 
     if (result) {
@@ -124,56 +126,53 @@ export const useStatisticApi = () => {
 
     return {
       data: null,
-      error: { message: APP_MESSAGE.LOAD_DATA_FAILED('báo cáo số lượng nhân viên theo trạng thái') } as ErrorResponseDto
+      error: {
+        message: APP_MESSAGE.LOAD_DATA_FAILED('báo cáo số lượng giảng viên theo trạng thái')
+      } as ErrorResponseDto
     }
   }, [callAppProtectedApi])
-  //   const getReportTransactionDataByDate = useCallback(
-  //     async (date: string) => {
-  //       const endpoint = `${ROOT_ENDPOINT}/transaction-by-date`
-  //       const result = await callAppProtectedApi<ListResponseDto<ReportTransactionByDateListItemResponseDto>>(
-  //         endpoint,
-  //         'GET',
-  //         {},
-  //         { date }
-  //       )
 
-  //       if (result) {
-  //         const { data, error } = result
-  //         if (data) return { data: data, error: null }
-  //         if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
-  //       }
+  const getReportLearnerByMonth = useCallback(
+    async (year: number) => {
+      const endpoint = `${ROOT_ENDPOINT}/learner-by-month`
+      const result = await callAppProtectedApi<ListResponseDto<ReportLearnerByMonthListItemResponseDto>>(
+        endpoint,
+        'GET',
+        {},
+        { year }
+      )
 
-  //       return {
-  //         data: null,
-  //         error: { message: APP_MESSAGE.LOAD_DATA_FAILED('báo cáo số giao dịch trong ngày') } as ErrorResponseDto
-  //       }
-  //     },
-  //     [callAppProtectedApi]
-  //   )
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
 
-  //   const getReportRevenueDataByMonth = useCallback(
-  //     async (date: number) => {
-  //       const endpoint = `${ROOT_ENDPOINT}/revenue-by-month`
-  //       const result = await callAppProtectedApi<ListResponseDto<ReportRevenueByMonthListItemResponseDto>>(
-  //         endpoint,
-  //         'GET',
-  //         {},
-  //         { date }
-  //       )
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.LOAD_DATA_FAILED('báo cáo số học viên mới trong tháng') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
 
-  //       if (result) {
-  //         const { data, error } = result
-  //         if (data) return { data: data, error: null }
-  //         if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
-  //       }
+  const getReportLearnerDataByStatus = useCallback(async () => {
+    const endpoint = `${ROOT_ENDPOINT}/learner-by-status`
+    const result = await callAppProtectedApi<ListResponseDto<ReportLearnerByStatusListItemResponseDto>>(endpoint, 'GET')
 
-  //       return {
-  //         data: null,
-  //         error: { message: APP_MESSAGE.LOAD_DATA_FAILED('báo cáo số doanh thu trong tháng') } as ErrorResponseDto
-  //       }
-  //     },
-  //     [callAppProtectedApi]
-  //   )
+    if (result) {
+      const { data, error } = result
+      if (data) return { data: data, error: null }
+      if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+    }
+
+    return {
+      data: null,
+      error: {
+        message: APP_MESSAGE.LOAD_DATA_FAILED('báo cáo số lượng học viên theo trạng thái')
+      } as ErrorResponseDto
+    }
+  }, [callAppProtectedApi])
 
   return {
     getReportCourseByMonth,
@@ -181,6 +180,8 @@ export const useStatisticApi = () => {
     getReportClassByStatus,
     getReportClassByRate,
     getReportInstructorByMonth,
-    getReportInstructorDataByStatus
+    getReportInstructorDataByStatus,
+    getReportLearnerByMonth,
+    getReportLearnerDataByStatus
   }
 }

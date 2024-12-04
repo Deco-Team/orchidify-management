@@ -124,6 +124,7 @@ const ChartDisplay = ({ data }: ChartDisplayProps) => {
       pie: {
         donut: {
           labels: {
+            show: true,
             total: {
               show: true,
               label: 'Tổng'

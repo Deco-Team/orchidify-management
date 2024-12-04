@@ -3,14 +3,14 @@ import { useEffect, useMemo, useState } from 'react'
 import Chart from 'react-apexcharts'
 import { ListResponseDto } from '~/data/common.dto'
 import { ErrorResponseDto } from '~/data/error.dto'
-import { ReportStaffByStatusListItemResponseDto } from '~/data/reportAdmin.dto'
-import { UserStatus } from '~/global/app-status'
+import { ReportLearnerByStatusListItemResponseDto } from '~/data/reportAdmin.dto'
+import { LearnerStatus } from '~/global/app-status'
 import { useStatisticApi } from '~/hooks/api/useStatisticApi'
 import { notifyError } from '~/utils/toastify'
 
-const InstructorStatusChart = () => {
-  const { getReportInstructorDataByStatus } = useStatisticApi()
-  const [chartData, setChartData] = useState<ListResponseDto<ReportStaffByStatusListItemResponseDto>>({
+const LearnerStatusChart = () => {
+  const { getReportLearnerDataByStatus } = useStatisticApi()
+  const [chartData, setChartData] = useState<ListResponseDto<ReportLearnerByStatusListItemResponseDto>>({
     docs: [],
     totalDocs: 0,
     offset: 0,
@@ -27,7 +27,7 @@ const InstructorStatusChart = () => {
 
   useEffect(() => {
     ;(async () => {
-      const { data: reportData, error: apiError } = await getReportInstructorDataByStatus()
+      const { data: reportData, error: apiError } = await getReportLearnerDataByStatus()
       if (reportData) {
         setChartData(reportData)
       } else {
@@ -47,7 +47,7 @@ const InstructorStatusChart = () => {
       }
       setError(apiError)
     })()
-  }, [getReportInstructorDataByStatus])
+  }, [getReportLearnerDataByStatus])
 
   if (error) {
     notifyError(error.message)
@@ -64,7 +64,7 @@ const InstructorStatusChart = () => {
         borderBottom='1px solid #0000001F'
       >
         <Typography fontSize='1.25rem' fontWeight='500'>
-          Trạng thái giảng viên
+          Trạng thái học viên
         </Typography>
       </Box>
       <ChartDisplay data={chartData.docs} />
@@ -72,17 +72,18 @@ const InstructorStatusChart = () => {
   )
 }
 
-export default InstructorStatusChart
+export default LearnerStatusChart
 
 interface ChartDisplayProps {
-  data: ReportStaffByStatusListItemResponseDto[]
+  data: ReportLearnerByStatusListItemResponseDto[]
 }
 
 const ChartDisplay = ({ data }: ChartDisplayProps) => {
   const chartSeries: ApexCharts.ApexOptions['series'] = useMemo(() => {
     const series: ApexCharts.ApexOptions['series'] = [
-      data.find((item) => item.status === UserStatus.ACTIVE)?.quantity || 0,
-      data.find((item) => item.status === UserStatus.INACTIVE)?.quantity || 0
+      data.find((item) => item.status === LearnerStatus.UNVERIFIED)?.quantity || 0,
+      data.find((item) => item.status === LearnerStatus.ACTIVE)?.quantity || 0,
+      data.find((item) => item.status === LearnerStatus.INACTIVE)?.quantity || 0
     ]
 
     return series
@@ -92,8 +93,8 @@ const ChartDisplay = ({ data }: ChartDisplayProps) => {
     chart: {
       toolbar: { show: false }
     },
-    labels: ['Hoạt động', 'Vô hiệu hóa'],
-    colors: ['#20C017', '#F66868'],
+    labels: ['Chưa xác thực', 'Hoạt động', 'Vô hiệu hóa'],
+    colors: ['#707070', '#20C017', '#F66868'],
     legend: {
       position: 'bottom',
       fontSize: '12px',
