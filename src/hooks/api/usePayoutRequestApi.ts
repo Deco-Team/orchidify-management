@@ -4,11 +4,17 @@ import { ErrorResponseDto } from '~/data/error.dto'
 import { PayoutRequestDetailDto, PayoutRequestListItemDto } from '~/data/payoutRequest.dto'
 import { APP_MESSAGE } from '~/global/app-message'
 import { useProtectedApi } from './useProtectedApi'
+import { CloudinaryFileUploadedInfo } from '~/components/cloudinary/cloudinary-type'
 
 const ROOT_ENDPOINT = '/payout-requests/management'
 
 interface RejectClassRequest {
   rejectReason: string
+}
+
+interface MakePayout {
+  transactionCode: string
+  attachment: CloudinaryFileUploadedInfo
 }
 
 export const usePayoutRequestApi = () => {
@@ -111,5 +117,24 @@ export const usePayoutRequestApi = () => {
     [callAppProtectedApi]
   )
 
-  return { getAllPayoutRequests, getPayoutRequestById, approvePayoutRequest, rejectPayoutRequest }
+  const makePayoutRequest = useCallback(
+    async (payoutRequestId: string, data: MakePayout) => {
+      const endpoint = `${ROOT_ENDPOINT}/${payoutRequestId}/make-payout`
+      const result = await callAppProtectedApi<SuccessResponseDto>(endpoint, 'PATCH', {}, {}, data)
+
+      if (result) {
+        const { data, error } = result
+        if (data) return { data: data, error: null }
+        if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
+      }
+
+      return {
+        data: null,
+        error: { message: APP_MESSAGE.ACTION_FAILED('Cập nhật giao dịch') } as ErrorResponseDto
+      }
+    },
+    [callAppProtectedApi]
+  )
+
+  return { getAllPayoutRequests, getPayoutRequestById, approvePayoutRequest, rejectPayoutRequest, makePayoutRequest }
 }
