@@ -54,3 +54,9 @@ export enum TransactionStatus {
   DELETED = 'DELETED',
   REFUNDED = 'REFUNDED'
 }
+
+export enum LearnerStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  UNVERIFIED = 'UNVERIFIED'
+}
