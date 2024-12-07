@@ -20,7 +20,6 @@ const GardenTimesheetTable = () => {
     ;(async () => {
       const { data: slot, error: apiError } = await getSlotList(dayjs().format('YYYY-MM-DD'))
       if (slot) {
-        console.log(slot)
         setSlot(
           slot.sort((a, b) => {
             const slotNumberComparison = (a.slotNumber ?? 0) - (b.slotNumber ?? 0)

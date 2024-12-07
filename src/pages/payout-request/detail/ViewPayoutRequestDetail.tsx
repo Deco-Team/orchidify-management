@@ -14,6 +14,7 @@ import ApproveRequestDialog from './components/ApproveRequestDialog'
 import Header from './components/Header'
 import RejectRequestDialog from './components/RejectRequestDialog'
 import { Check, Close } from '@mui/icons-material'
+import MakePayoutDialog from './components/MakePayoutDialog'
 
 interface FieldProps {
   label: string
@@ -52,6 +53,7 @@ const ViewPayoutRequestDetail = () => {
   const [error, setError] = useState<ErrorResponseDto | null>(null)
   const [openApproveDialog, setOpenApproveDialog] = useState<boolean>(false)
   const [openRejectDialog, setOpenRejectDialog] = useState<boolean>(false)
+  const [openPayoutDialog, setOpenPayoutDialog] = useState<boolean>(false)
   const params = useParams()
   const navigate = useNavigate()
   const payoutRequestId = params.id
@@ -68,8 +70,12 @@ const ViewPayoutRequestDetail = () => {
     }
   }, [payoutRequestId, getPayoutRequestById])
 
-  const handleApproveButtonClick = async () => {
+  const handleApproveButtonClick = () => {
     setOpenApproveDialog(true)
+  }
+
+  const handlePayoutButtonClick = () => {
+    setOpenPayoutDialog(true)
   }
 
   const reloadClassRequestData = async () => {
@@ -88,9 +94,11 @@ const ViewPayoutRequestDetail = () => {
   return payoutRequest ? (
     <>
       <Header
-        classRequestStatus={payoutRequest.status}
+        payoutRequestStatus={payoutRequest.status}
         onApproveButtonClick={handleApproveButtonClick}
         onRejectButtonClick={() => setOpenRejectDialog(true)}
+        onPayoutButtonClick={handlePayoutButtonClick}
+        hasMadePayout={payoutRequest.hasMadePayout}
       />
       <Paper sx={{ width: '100%', marginTop: '1.25rem', padding: '1.5rem', marginBottom: '1.25rem' }}>
         <Box display='flex' alignItems='center' marginBottom='1.25rem'>
@@ -186,6 +194,12 @@ const ViewPayoutRequestDetail = () => {
         open={openRejectDialog}
         onSuccess={reloadClassRequestData}
         handleClose={() => setOpenRejectDialog(false)}
+      />
+      <MakePayoutDialog
+        requestId={payoutRequest._id}
+        open={openPayoutDialog}
+        onSuccess={reloadClassRequestData}
+        handleClose={() => setOpenPayoutDialog(false)}
       />
     </>
   ) : (
