@@ -50,7 +50,7 @@ export const useReportAdminApi = () => {
   const getReportTransactionDataByDate = useCallback(
     async (date: string) => {
       const endpoint = `${ROOT_ENDPOINT}/transaction-by-date`
-      const result = await callAppProtectedApi<ListResponseDto<ReportTransactionByDateListItemResponseDto>>(
+      const result = await callAppProtectedApi<{ docs: ReportTransactionByDateListItemResponseDto[] }>(
         endpoint,
         'GET',
         {},
@@ -59,7 +59,7 @@ export const useReportAdminApi = () => {
 
       if (result) {
         const { data, error } = result
-        if (data) return { data: data, error: null }
+        if (data) return { data: data.docs, error: null }
         if (error.response) return { data: null, error: error.response.data as ErrorResponseDto }
       }
 
