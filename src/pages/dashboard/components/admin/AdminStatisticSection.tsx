@@ -1,4 +1,4 @@
-import { CoPresentOutlined, ContactPageOutlined, MenuBookSharp, SchoolOutlined } from '@mui/icons-material'
+import { CoPresentOutlined, MenuBookSharp, SchoolOutlined, TrendingUp } from '@mui/icons-material'
 import { Grid } from '@mui/material'
 import { useEffect, useState } from 'react'
 import StatisticCard from '~/components/card/StatisticCard'
@@ -7,6 +7,7 @@ import { ErrorResponseDto } from '~/data/error.dto'
 import { ReportTotalSummaryListItemResponseDto } from '~/data/report.dto'
 import { ReportTotalSummaryType } from '~/global/constants'
 import { useReportAdminApi } from '~/hooks/api/useReportAdminApi'
+import { formatCurrency } from '~/utils/format'
 import { notifyError } from '~/utils/toastify'
 
 const AdminStatisticSection = () => {
@@ -95,8 +96,10 @@ const AdminStatisticSection = () => {
       <Grid item xs={6} lg={3}>
         <StatisticCard
           title='Doanh thu'
-          value={(data.docs.find((item) => item.type === ReportTotalSummaryType.RevenueSum)?.data.total as number) || 0}
-          Icon={ContactPageOutlined}
+          value={formatCurrency(
+            Number(data.docs.find((item) => item.type === ReportTotalSummaryType.RevenueSum)?.data.total) || 0
+          )}
+          Icon={TrendingUp}
           bgcolor='#20C01766'
           borderColor='#20C017'
           iconBgcolor='#20C017'
