@@ -144,7 +144,7 @@ const ChartDisplay = ({ data }: ChartDisplayProps) => {
       formatter: (value: number) => {
         return formatCurrency(value)
       },
-      offsetY: -5
+      offsetY: -15
     },
     grid: {
       borderColor: '#CCCCCC',
