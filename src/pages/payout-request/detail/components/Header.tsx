@@ -52,7 +52,9 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <Box display='flex' justifyContent='space-between' alignItems='center'>
       <PageHeader title='Chi tiết yêu cầu' breadcrumbsItems={breadcrumbsItems} />
-      {renderButtons()}
+      <Box display='flex' justifyContent='space-between' gap='1.5rem'>
+        {renderButtons()}
+      </Box>
     </Box>
   )
 }
