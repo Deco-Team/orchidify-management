@@ -17,11 +17,13 @@ export const InstructorColumns: MRT_ColumnDef<Instructor>[] = [
   {
     accessorKey: 'phone',
     header: 'Số điện thoại',
-    size: 100
+    size: 100,
+    enableColumnFilter: false
   },
   {
     accessorKey: 'dateOfBirth',
     header: 'Ngày sinh',
+    enableColumnFilter: false,
     size: 100,
     Cell: ({ cell }) => {
       const date = new Date(cell.getValue() as unknown as string)

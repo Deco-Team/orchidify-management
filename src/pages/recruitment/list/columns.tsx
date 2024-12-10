@@ -18,12 +18,14 @@ export const RecruitmentColumns: MRT_ColumnDef<RecruitmentListItemResponseDto>[]
   {
     accessorFn: (row) => row.applicationInfo.phone,
     header: 'Số điện thoại',
-    size: 100
+    size: 100,
+    enableColumnFilter: false
   },
   {
     accessorKey: 'createdAt',
     header: 'Thời gian tạo',
     size: 100,
+    enableColumnFilter: false,
     Cell: ({ cell }) => {
       const date = new Date(cell.getValue() as unknown as string)
       return (
@@ -42,6 +44,7 @@ export const RecruitmentColumns: MRT_ColumnDef<RecruitmentListItemResponseDto>[]
     accessorKey: 'updatedAt',
     header: 'Cập nhật cuối',
     size: 100,
+    enableColumnFilter: false,
     Cell: ({ cell }) => {
       const date = new Date(cell.getValue() as unknown as string)
       return (
@@ -59,7 +62,8 @@ export const RecruitmentColumns: MRT_ColumnDef<RecruitmentListItemResponseDto>[]
   {
     accessorKey: 'handledBy.name',
     header: 'Nhân viên duyệt',
-    size: 250
+    size: 250,
+    enableColumnFilter: false
   },
   {
     accessorKey: 'status',

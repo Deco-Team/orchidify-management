@@ -9,13 +9,15 @@ import { formatCurrency } from '~/utils/format'
 export const PayoutRequestColumns: MRT_ColumnDef<PayoutRequestListItemDto>[] = [
   {
     accessorKey: 'createdBy.name',
-    header: 'Tên giảng viên'
+    header: 'Tên giảng viên',
+    enableColumnFilter: false
   },
   {
     accessorKey: 'amount',
     header: 'Số tiền',
     size: 150,
     grow: false,
+    enableColumnFilter: false,
     Cell: ({ cell }) => {
       const price = cell.getValue() as number
       return formatCurrency(price)
@@ -25,6 +27,7 @@ export const PayoutRequestColumns: MRT_ColumnDef<PayoutRequestListItemDto>[] = [
     accessorKey: 'description',
     header: 'Mô tả yêu cầu',
     size: 250,
+    enableColumnFilter: false,
     Cell: ({ cell }) => {
       const description = cell.getValue() as string
       return (

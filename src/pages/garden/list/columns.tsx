@@ -18,6 +18,7 @@ export const GardenColumns: MRT_ColumnDef<Garden>[] = [
     accessorKey: 'maxClass',
     header: 'Số lớp học tối đa',
     size: 200,
+    enableColumnFilter: false,
     muiTableHeadCellProps: {
       align: 'right'
     },
@@ -28,7 +29,8 @@ export const GardenColumns: MRT_ColumnDef<Garden>[] = [
   {
     accessorFn: (row) => row.gardenManager?.[0]?.name || '',
     header: 'Người quản lý',
-    size: 300
+    size: 300,
+    enableColumnFilter: false
   },
   {
     accessorKey: 'status',

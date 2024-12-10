@@ -18,6 +18,7 @@ export const LearnerColumns: MRT_ColumnDef<Learner>[] = [
     accessorKey: 'phone',
     header: 'Số điện thoại',
     size: 100,
+    enableColumnFilter: false,
     Cell: ({ cell }) => {
       return (cell.getValue() as string) || 'Chưa cập nhật'
     }
@@ -25,6 +26,7 @@ export const LearnerColumns: MRT_ColumnDef<Learner>[] = [
   {
     accessorKey: 'dateOfBirth',
     header: 'Ngày sinh',
+    enableColumnFilter: false,
     size: 100,
     Cell: ({ cell }) => {
       return (

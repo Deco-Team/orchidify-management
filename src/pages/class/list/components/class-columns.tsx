@@ -7,13 +7,15 @@ export const classColumns: MRT_ColumnDef<ClassListItemResponseDto>[] = [
     accessorKey: 'code',
     header: 'Mã lớp học',
     size: 130,
-    grow: false
+    grow: false,
+    enableColumnFilter: false
   },
   {
     accessorKey: 'course.code',
     header: 'Mã khóa học',
     size: 140,
-    grow: false
+    grow: false,
+    enableColumnFilter: false
   },
   {
     accessorKey: 'title',
