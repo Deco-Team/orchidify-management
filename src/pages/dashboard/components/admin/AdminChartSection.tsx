@@ -13,10 +13,10 @@ const AdminChartSection = () => {
       <Grid item xs={12} lg={4}>
         <StaffChart />
       </Grid>
-      <Grid item xs={12} lg={6}>
+      <Grid item xs={12} lg={5}>
         <RevenueChart />
       </Grid>
-      <Grid item xs={12} lg={6}>
+      <Grid item xs={12} lg={7}>
         <TransactionChart />
       </Grid>
     </Grid>

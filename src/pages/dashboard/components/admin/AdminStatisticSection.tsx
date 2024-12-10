@@ -7,7 +7,7 @@ import { ErrorResponseDto } from '~/data/error.dto'
 import { ReportTotalSummaryListItemResponseDto } from '~/data/report.dto'
 import { ReportTotalSummaryType } from '~/global/constants'
 import { useReportAdminApi } from '~/hooks/api/useReportAdminApi'
-import { formatCurrency } from '~/utils/format'
+import { formatCurrencyDashboard } from '~/utils/format'
 import { notifyError } from '~/utils/toastify'
 
 const AdminStatisticSection = () => {
@@ -96,7 +96,7 @@ const AdminStatisticSection = () => {
       <Grid item xs={6} lg={3}>
         <StatisticCard
           title='Doanh thu'
-          value={formatCurrency(
+          value={formatCurrencyDashboard(
             Number(data.docs.find((item) => item.type === ReportTotalSummaryType.RevenueSum)?.data.total) || 0
           )}
           Icon={TrendingUp}
