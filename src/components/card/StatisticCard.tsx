@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 
 interface StatisticCardProps {
   title: string
-  value: number
+  value: number | string
   Icon: SvgIconComponent
   bgcolor: string
   borderColor: string
