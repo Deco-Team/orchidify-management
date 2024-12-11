@@ -41,6 +41,7 @@ const ViewCourseComboList = lazy(() => import('~/pages/course-combo/list/ViewCou
 const ViewCourseComboDetail = lazy(() => import('~/pages/course-combo/detail/ViewCourseComboDetail'))
 const ViewTransactionList = lazy(() => import('~/pages/transaction/list/ViewTransactionList'))
 const ViewTransactionDetail = lazy(() => import('~/pages/transaction/detail/ViewTransactionDetail'))
+const Statistic = lazy(() => import('~/pages/statistic/Statistic'))
 
 export const publicRoute = {
   login: {
@@ -283,6 +284,12 @@ export const protectedRoute = {
     name: 'Chi tiết giao dịch',
     path: '/transactions/:id',
     Component: ViewTransactionDetail,
+    roles: [UserRole.ADMIN]
+  },
+  statistic: {
+    name: 'Thống kê',
+    path: '/statistic',
+    Component: Statistic,
     roles: [UserRole.ADMIN]
   }
 }

@@ -5,6 +5,8 @@ import StaffStatisticSection from './components/staff/StaffStatisticSection'
 import StaffChartSection from './components/staff/StaffChartSection'
 import GardenManagerGardenInfoSection from './components/garden-manager/GardenManagerGardenInfoSection'
 import GardenManagerTimesheetSection from './components/garden-manager/GardenManagerTimesheetSection'
+import AdminStatisticSection from './components/admin/AdminStatisticSection'
+import AdminChartSection from './components/admin/AdminChartSection'
 
 export default function Dashboard() {
   const { userTokenPayload } = useAuth()
@@ -13,7 +15,7 @@ export default function Dashboard() {
 
   switch (userTokenPayload.role) {
     case UserRole.ADMIN:
-      return <AdminDashboard />
+      return <AdminDashboard username={userTokenPayload.name || ''} />
     case UserRole.STAFF:
       return <StaffDashboard username={userTokenPayload.name || ''} />
     case UserRole.GARDEN_MANAGER:
@@ -27,11 +29,15 @@ interface DashboardProps {
   username: string
 }
 
-const AdminDashboard = () => {
+const AdminDashboard = ({ username }: DashboardProps) => {
   return (
-    <div>
-      <h1>Admin Dashboard</h1>
-    </div>
+    <>
+      <Typography variant='h1' fontSize='2.125rem' fontWeight='700' marginBottom='1.25rem'>
+        Xin chào, {username}
+      </Typography>
+      <AdminStatisticSection />
+      <AdminChartSection />
+    </>
   )
 }
 
