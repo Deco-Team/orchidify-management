@@ -124,7 +124,7 @@ export const PayoutRequestColumns: MRT_ColumnDef<PayoutRequestListItemDto>[] = [
     filterVariant: 'select',
     filterSelectOptions: [
       { label: 'Đã thực hiện', value: true },
-      { label: 'Chưa chuyển', value: false }
+      { label: 'Chưa chuyển', value: 'false' }
     ],
     Cell: ({ row }) => {
       return row.original.status === RequestStatus.APPROVED ? (
