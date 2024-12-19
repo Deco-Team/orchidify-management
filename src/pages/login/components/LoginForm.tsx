@@ -29,7 +29,7 @@ const validationSchema = z.object({
     .string()
     .min(1, APP_MESSAGE.REQUIRED_FIELD('Chức vụ'))
     .refine((value) => UserRole[value as keyof typeof UserRole], {
-      message: APP_MESSAGE.INVALID_VALUE(['Staff', 'Garden Manager'])
+      message: APP_MESSAGE.INVALID_VALUE(['Nhân viên', 'Quản lí vườn'])
     }),
   email: z
     .string()
@@ -81,8 +81,8 @@ const LoginForm = () => {
         labelId='role-select-label'
         placeholder='Chọn chức vụ'
         items={[
-          { name: 'Staff', value: UserRole.STAFF },
-          { name: 'Garden Manager', value: UserRole.GARDEN_MANAGER }
+          { name: 'Nhân viên', value: UserRole.STAFF },
+          { name: 'Quản lí vườn', value: UserRole.GARDEN_MANAGER }
         ]}
         fullWidth
         sx={{ marginBottom: '0.7rem' }}
