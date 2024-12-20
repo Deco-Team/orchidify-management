@@ -50,6 +50,22 @@ export const classColumns: MRT_ColumnDef<ClassListItemResponseDto>[] = [
     }
   },
   {
+    accessorKey: 'progress',
+    size: 110,
+    grow: false,
+    header: 'Tiến độ',
+    enableColumnFilter: false,
+    muiTableHeadCellProps: {
+      align: 'right'
+    },
+    muiTableBodyCellProps: {
+      align: 'right'
+    },
+    Cell: ({ row }) => {
+      return `${row.original.progress?.percentage}% (${row.original.progress?.completed}/${row.original.progress?.total})`
+    }
+  },
+  {
     accessorKey: 'learnerQuantity',
     header: 'Số học viên',
     size: 140,

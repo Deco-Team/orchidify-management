@@ -23,6 +23,11 @@ export type ClassListItemResponseDto = {
   }
   createdAt: string
   updatedAt: string
+  progress?: {
+    completed: number
+    total: number
+    percentage: number
+  }
   rate?: number
 }
 
